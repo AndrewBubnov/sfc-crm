@@ -1,50 +1,15 @@
-# React + TypeScript + Vite
+This is a **SPA** that implements a dashboard for managing devices queried from a backend REST API. The application includes functionalities for listing devices, pagination, search, sorting, editing device attributes, and real-time updates via Server-Sent Events (SSE).
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features
 
-Currently, two official plugins are available:
+- **Resizable Columns**: The table columns are resizable, allowing the user to adjust the width of each column (e.g., `name`, `type`, `state`, `id`).
+- **List Devices**: Displays a list of devices with their attributes (name, type, state, and ID).
+- **Pagination**: Supports switching between pages of 10 devices.
+- **Search**: Allows filtering devices by parts of their name or ID (cross-page filtering).
+- **Sorting**: Sort devices by any attribute (name, type, state, or ID) in both ascending and descending order.
+- **Control Elements for Each Device**:
+  - Change device mode (Off, Standby, Charging).
+  - Action feedback is shown during loading (e.g., spinner).
+- **Rename Devices**: Users can change the name of each device, with action feedback on the operation's status.
+- **Real-time Updates**: The page is updated automatically when devices are created, updated, or deleted (via SSE from the backend).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
