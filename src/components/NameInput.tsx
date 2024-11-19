@@ -13,7 +13,7 @@ type CellInputProps = {
 
 export const NameInput = ({ deviceId, cellName }: CellInputProps) => {
 	const [name, setName] = useState<string>(cellName);
-	const renameMutation = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationFn: renameDevice,
 	});
 	const { toast } = useToast();
@@ -23,7 +23,7 @@ export const NameInput = ({ deviceId, cellName }: CellInputProps) => {
 	const renameHandler = async (evt: FormEvent) => {
 		evt.preventDefault();
 		if (!name.length || name === cellName) return;
-		renameMutation.mutate(
+		mutate(
 			{ deviceId, name },
 			{
 				onSuccess: () => toast({ title: 'Device name has been successfully changed' }),
@@ -43,9 +43,10 @@ export const NameInput = ({ deviceId, cellName }: CellInputProps) => {
 	};
 
 	return (
-		<form onSubmit={renameHandler}>
+		<form onSubmit={renameHandler} role="form">
 			<Tooltip text="Device name is editable. Press Enter to save the updated name.">
 				<Input
+					disabled={isPending}
 					onBlur={renameHandler}
 					className="border-none shadow-none"
 					value={name}
