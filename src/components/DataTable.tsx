@@ -11,7 +11,7 @@ import { Pagination } from '@/components/Pagination.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { searchResolver } from '@/constants.ts';
 
-export const  DataTable = () => {
+export const DataTable = () => {
 	const [searchString, setSearchString] = useState<string>('');
 	const [isSorted, setIsSorted] = useState<boolean>(false);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -107,4 +107,4 @@ export const  DataTable = () => {
 			<Pagination paginationData={paginationData} isLoading={isInitFetching} />
 		</>
 	);
-}
+};
