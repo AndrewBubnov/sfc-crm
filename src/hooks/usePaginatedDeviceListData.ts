@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Device, DeviceDataResponse } from '@/types.ts';
+import { Device, DeviceDataType } from '@/types.ts';
 import { BASE_LIMIT, BASE_URL } from '@/constants.ts';
 import { getDevicesData } from '@/api/getDevicesData.ts';
 import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ export const usePaginatedDeviceListData = ({ search, isSorted }: UseDeviceData) 
 	const queryClient = useQueryClient();
 	const [page, setPage] = useState<number>(1);
 
-	const { data, isFetching, refetch } = useQuery<DeviceDataResponse, Error>({
+	const { data, isFetching, refetch } = useQuery<DeviceDataType, Error>({
 		queryKey: [QueryKeys.Devices, page, search, isSorted],
 		queryFn: () => getDevicesData({ page, search, isSorted }),
 		placeholderData: keepPreviousData,
@@ -25,7 +25,7 @@ export const usePaginatedDeviceListData = ({ search, isSorted }: UseDeviceData) 
 
 		const updateDevice = (evt: MessageEvent) => {
 			const updatedDevice: Device = JSON.parse(evt.data);
-			queryClient.setQueryData([QueryKeys.Devices, page, search, isSorted], (oldData?: DeviceDataResponse) => {
+			queryClient.setQueryData([QueryKeys.Devices, page, search, isSorted], (oldData?: DeviceDataType) => {
 				if (!oldData) return oldData;
 				return {
 					...oldData,

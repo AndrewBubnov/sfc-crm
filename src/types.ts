@@ -25,13 +25,13 @@ export type Account = {
 	image: 'string';
 };
 
-export type DeviceDataResponse = {
+export type DeviceDataType = {
 	data: {
 		items: Device[];
 		total: number;
 	};
 };
 
-export type AccountDataResponse = {
+export type AccountDataType = {
 	data: Account;
 };

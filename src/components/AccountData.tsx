@@ -1,12 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { useQuery } from '@tanstack/react-query';
-import { AccountDataResponse } from '@/types.ts';
+import { AccountDataType } from '@/types.ts';
 import { getAccountData } from '@/api/getAccountData.ts';
 import { QueryKeys } from '@/queryKeys.ts';
 
 export const AccountData = () => {
-	const { data, isLoading } = useQuery<AccountDataResponse, Error>({
+	const { data, isLoading } = useQuery<AccountDataType, Error>({
 		queryKey: [QueryKeys.Account],
 		queryFn: getAccountData,
 	});
