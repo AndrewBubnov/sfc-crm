@@ -3,6 +3,7 @@ import { NameInput } from '@/components/NameInput.tsx';
 import { Mock, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renameDevice } from '@/api/renameDevice.ts';
+import { ReactNode } from 'react';
 
 const mockToast = vi.fn();
 
@@ -43,33 +44,25 @@ describe('NameInput', () => {
 		(renameDevice as Mock).mockResolvedValue({ success: true });
 	});
 
+	const wrapper = ({ children }: { children: ReactNode }) => (
+		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+	);
+
 	it('renders the input with the correct initial value', () => {
-		render(
-			<QueryClientProvider client={queryClient}>
-				<NameInput {...defaultProps} />
-			</QueryClientProvider>
-		);
+		render(<NameInput {...defaultProps} />, { wrapper });
 		const inputElement = screen.getByRole('textbox');
 		expect(inputElement).toHaveValue('Old Device Name');
 	});
 
 	it('updates the input value when typed into', () => {
-		render(
-			<QueryClientProvider client={queryClient}>
-				<NameInput {...defaultProps} />
-			</QueryClientProvider>
-		);
+		render(<NameInput {...defaultProps} />, { wrapper });
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
 		expect(inputElement).toHaveValue('New Device Name');
 	});
 
 	it('does not call mutate when the name is the same', async () => {
-		render(
-			<QueryClientProvider client={queryClient}>
-				<NameInput {...defaultProps} />
-			</QueryClientProvider>
-		);
+		render(<NameInput {...defaultProps} />, { wrapper });
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'Old Device Name' } });
 
@@ -77,11 +70,7 @@ describe('NameInput', () => {
 	});
 
 	it('calls mutate with the correct parameters when the name is changed', async () => {
-		render(
-			<QueryClientProvider client={queryClient}>
-				<NameInput {...defaultProps} />
-			</QueryClientProvider>
-		);
+		render(<NameInput {...defaultProps} />, { wrapper });
 
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
@@ -99,11 +88,7 @@ describe('NameInput', () => {
 	it('displays success toast on successful mutation', async () => {
 		(renameDevice as Mock).mockResolvedValueOnce({});
 
-		render(
-			<QueryClientProvider client={queryClient}>
-				<NameInput {...defaultProps} />
-			</QueryClientProvider>
-		);
+		render(<NameInput {...defaultProps} />, { wrapper });
 
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
@@ -119,11 +104,7 @@ describe('NameInput', () => {
 	it('displays error toast on failed mutation', async () => {
 		(renameDevice as Mock).mockRejectedValueOnce(new Error('Rename failed'));
 
-		render(
-			<QueryClientProvider client={queryClient}>
-				<NameInput {...defaultProps} />
-			</QueryClientProvider>
-		);
+		render(<NameInput {...defaultProps} />, { wrapper });
 
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
@@ -147,11 +128,7 @@ describe('NameInput', () => {
 
 		(renameDevice as Mock).mockImplementationOnce(() => promise);
 
-		render(
-			<QueryClientProvider client={queryClient}>
-				<NameInput {...defaultProps} />
-			</QueryClientProvider>
-		);
+		render(<NameInput {...defaultProps} />, { wrapper });
 
 		const inputElement = screen.getByRole('textbox');
 
