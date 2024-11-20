@@ -13,9 +13,28 @@ export const Pagination = ({
 	isLoading,
 }: PaginationProps) => {
 	const renderPagesList = () => {
-		if (page === 1) return [1, 2, 3];
-		if (page === lastPage) return [lastPage - 2, lastPage - 1, lastPage];
-		return [page - 1, page, page + 1];
+		const indexesList = () => {
+			if (page === 1) return [1, 2, 3];
+			if (page === lastPage) return [lastPage - 2, lastPage - 1, lastPage];
+			return [page - 1, page, page + 1];
+		};
+		return indexesList().map(pageIndex => {
+			if (pageIndex === page)
+				return (
+					<span
+						key={pageIndex}
+						className="text-lg cursor-pointer font-semibold"
+						onClick={() => setPage(pageIndex)}
+					>
+						{pageIndex}
+					</span>
+				);
+			return (
+				<span key={pageIndex} className="cursor-pointer text-xs" onClick={() => setPage(pageIndex)}>
+					{pageIndex}
+				</span>
+			);
+		});
 	};
 	return (
 		<div className="flex items-center justify-end space-x-4">
@@ -42,25 +61,7 @@ export const Pagination = ({
 						<ChevronLeft />
 					</Button>
 				</div>
-				<div className="flex items-center gap-4">
-					{renderPagesList().map(pageIndex => {
-						if (pageIndex === page)
-							return (
-								<span
-									key={pageIndex}
-									className="text-lg cursor-pointer font-semibold"
-									onClick={() => setPage(pageIndex)}
-								>
-									{pageIndex}
-								</span>
-							);
-						return (
-							<span key={pageIndex} className="cursor-pointer text-xs" onClick={() => setPage(pageIndex)}>
-								{pageIndex}
-							</span>
-						);
-					})}
-				</div>
+				<div className="flex items-center gap-4">{renderPagesList()}</div>
 				<div className="flex items-center">
 					<Button
 						variant="ghost"
