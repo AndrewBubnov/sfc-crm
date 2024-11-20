@@ -27,13 +27,13 @@ describe('useDebounced', () => {
 		const { getByTestId, rerender } = render(<TestComponent value="test" delay={500} />);
 
 		rerender(<TestComponent value="updated" delay={500} />);
-		expect(getByTestId('debounced').textContent).toBe('test'); // Пока старое значение
+		expect(getByTestId('debounced').textContent).toBe('test');
 
 		act(() => {
-			vi.advanceTimersByTime(500); // Ждем таймера
+			vi.advanceTimersByTime(500);
 		});
 
-		expect(getByTestId('debounced').textContent).toBe('updated'); // Новое значение
+		expect(getByTestId('debounced').textContent).toBe('updated');
 		vi.useRealTimers();
 	});
 
@@ -47,8 +47,8 @@ describe('useDebounced', () => {
 			vi.advanceTimersByTime(500);
 		});
 
-		expect(getByTestId('debounced').textContent).toBe('test'); // Значение не обновилось
-		expect(resolver).toHaveBeenCalledWith('new'); // Проверяем вызов resolver
+		expect(getByTestId('debounced').textContent).toBe('test');
+		expect(resolver).toHaveBeenCalledWith('new');
 		vi.useRealTimers();
 	});
 

@@ -1,5 +1,5 @@
 import 'eventsource-polyfill';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DataTable } from '@/components/DataTable';
 import { setupServer } from 'msw/node';
@@ -42,6 +42,16 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('DataTable', () => {
+	it('should show loading skeleton during data fetch', async () => {
+		render(<DataTable />, { wrapper });
+
+		expect(screen.getAllByTestId('skeleton')).toHaveLength(3);
+
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+
+		expect(screen.queryByTestId('skeleton')).not.toBeInTheDocument();
+	});
+
 	it('should render table with column headers', async () => {
 		render(<DataTable />, { wrapper });
 
@@ -80,13 +90,87 @@ describe('DataTable', () => {
 		});
 	});
 
-	it.todo('should show loading skeleton during data fetch', async () => {
-		render(<DataTable />, { wrapper });
+	it('should sort data by ascending order when a `Id` ascending sort icon is clicked once', async () => {
+		server.use(
+			http.get(`${BASE_URL}/devices`, async ({ request }) => {
+				const url = new URL(request.url);
+				const sortBy = url.searchParams.get('sortBy');
+				const sortDesc = url.searchParams.get('sortDesc');
 
-		expect(screen.getAllByTestId('skeleton')).toHaveLength(3);
+				const sortedDevices = [...mockDevices.items];
+
+				if (sortBy === 'id') {
+					sortedDevices.sort((a, b) => {
+						const comparison = a.id.localeCompare(b.id);
+						return sortDesc === 'true' ? -comparison : comparison;
+					});
+				}
+
+				return HttpResponse.json({
+					items: sortedDevices,
+					total: mockDevices.total,
+					limit: mockDevices.limit,
+					offset: mockDevices.offset,
+				});
+			})
+		);
+
+		render(<DataTable />, { wrapper });
 
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
-		expect(screen.queryByTestId('skeleton')).not.toBeInTheDocument();
+		const [sortButton] = screen.getAllByTestId('sort-switch-asc');
+		expect(sortButton).toBeInTheDocument();
+
+		sortButton && fireEvent.click(sortButton);
+
+		await waitFor(() => {
+			const rows = screen.getAllByRole('row').slice(1);
+			const ids = rows.map(row => {
+				const idCell = row.querySelector('td:first-child');
+				return idCell ? idCell.textContent : '';
+			});
+
+			const sortedIds = [...mockDevices.items].sort((a, b) => a.id.localeCompare(b.id)).map(device => device.id);
+
+			expect(ids).toStrictEqual(sortedIds);
+		});
+	});
+
+	it('should disable sorting when the same sort icon is clicked twice', async () => {
+		server.use(
+			http.get(`${BASE_URL}/devices`, async ({ request }) => {
+				const url = new URL(request.url);
+				const sortBy = url.searchParams.get('sortBy');
+				if (sortBy) {
+					return HttpResponse.json(mockDevices);
+				}
+
+				return HttpResponse.json(mockDevices);
+			})
+		);
+
+		render(<DataTable />, { wrapper });
+
+		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
+
+		const [ascSortButton] = screen.getAllByTestId('sort-switch-asc');
+		expect(ascSortButton).toBeInTheDocument();
+
+		fireEvent.click(ascSortButton);
+
+		fireEvent.click(ascSortButton);
+
+		await waitFor(() => {
+			const rows = screen.getAllByRole('row').slice(1);
+			const ids = rows.map(row => {
+				const idCell = row.querySelector('td:first-child');
+				return idCell ? idCell.textContent : '';
+			});
+
+			const originalIds = mockDevices.items.map(device => device.id);
+
+			expect(ids).toStrictEqual(originalIds);
+		});
 	});
 });

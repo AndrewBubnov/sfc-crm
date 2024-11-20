@@ -25,6 +25,7 @@ export const SortSwitch = ({ id, sortBy, sortDesc, onSortChange }: SortSwitchPro
 						'opacity-20 cursor-pointer hover:opacity-100 transition hover:duration-300',
 						id === sortBy && !sortDesc && 'opacity-100'
 					)}
+					data-testid="sort-switch-asc"
 				/>
 				<ArrowDownAZ
 					size={16}
@@ -33,6 +34,7 @@ export const SortSwitch = ({ id, sortBy, sortDesc, onSortChange }: SortSwitchPro
 						'opacity-20 cursor-pointer hover:opacity-100 transition hover:duration-300',
 						id === sortBy && sortDesc && 'opacity-100'
 					)}
+					data-testid="sort-switch-desc"
 				/>
 			</div>
 		</div>
