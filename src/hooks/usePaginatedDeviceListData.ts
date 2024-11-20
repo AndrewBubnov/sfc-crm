@@ -71,7 +71,15 @@ export const usePaginatedDeviceListData = ({ search, sortBy, sortDesc }: UseDevi
 		() => ({
 			data: data?.data.items || [],
 			isInitFetching: isFetching && !data,
-			paginationData: { setNextPage, setPrevPage, page, isPrevStepDisabled, isNextStepDisabled },
+			paginationData: {
+				setPage,
+				setNextPage,
+				setPrevPage,
+				page,
+				isPrevStepDisabled,
+				isNextStepDisabled,
+				lastPage: Math.floor((data?.data.total ?? 0) / BASE_LIMIT),
+			},
 		}),
 		[data, isFetching, isNextStepDisabled, isPrevStepDisabled, page, setNextPage, setPrevPage]
 	);

@@ -1,5 +1,5 @@
 import 'eventsource-polyfill';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DataTable } from '@/components/DataTable';
 import { setupServer } from 'msw/node';
@@ -77,26 +77,6 @@ describe('DataTable', () => {
 
 		await waitFor(() => {
 			expect(screen.getByText('No results.')).toBeInTheDocument();
-		});
-	});
-
-	it.todo('should handle pagination correctly', async () => {
-		render(<DataTable />, { wrapper });
-
-		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
-
-		const nextPageButton = screen.getByRole('button', { name: /Next/i });
-		fireEvent.click(nextPageButton);
-
-		await waitFor(() => {
-			expect(screen.getByText(mockDevices.items[0].name)).toBeInTheDocument();
-		});
-
-		const prevPageButton = screen.getByRole('button', { name: /Previous/i });
-		fireEvent.click(prevPageButton);
-
-		await waitFor(() => {
-			expect(screen.getByText(mockDevices.items[0].name)).toBeInTheDocument();
 		});
 	});
 
