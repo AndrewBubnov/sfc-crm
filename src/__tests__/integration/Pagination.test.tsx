@@ -23,29 +23,31 @@ describe('Pagination', () => {
 		isLoading: false,
 	};
 
-	it('renders Previous and Next buttons correctly', () => {
+	it('renders `first`, `previous`, `next` and `last` buttons correctly', () => {
 		render(<Pagination {...defaultProps} />);
-		expect(screen.getByText('Previous')).toBeInTheDocument();
-		expect(screen.getByText('Next')).toBeInTheDocument();
+		expect(screen.getByTestId('pagination-first-button')).toBeInTheDocument();
+		expect(screen.getByTestId('pagination-previous-button')).toBeInTheDocument();
+		expect(screen.getByTestId('pagination-next-button')).toBeInTheDocument();
+		expect(screen.getByTestId('pagination-last-button')).toBeInTheDocument();
 	});
 
-	it('calls setPrevPage when Previous button is clicked', () => {
+	it('calls `setPrevPage` when `previous` button is clicked', () => {
 		render(<Pagination {...defaultProps} />);
 
-		const prevButton = screen.getByText('Previous');
+		const prevButton = screen.getByTestId('pagination-previous-button');
 		fireEvent.click(prevButton);
 		expect(mockSetPrevPage).toHaveBeenCalled();
 	});
 
-	it('calls setNextPage when Next button is clicked', () => {
+	it('calls `setNextPage` when `next` button is clicked', () => {
 		render(<Pagination {...defaultProps} />);
 
-		const nextButton = screen.getByText('Next');
+		const nextButton = screen.getByTestId('pagination-next-button');
 		fireEvent.click(nextButton);
 		expect(mockSetNextPage).toHaveBeenCalled();
 	});
 
-	it('disables Previous button when isPrevStepDisabled is true', () => {
+	it('disables `previous` button when isPrevStepDisabled is true', () => {
 		render(
 			<Pagination
 				{...{
@@ -55,11 +57,11 @@ describe('Pagination', () => {
 			/>
 		);
 
-		const prevButton = screen.getByText('Previous');
+		const prevButton = screen.getByTestId('pagination-previous-button');
 		expect(prevButton).toBeDisabled();
 	});
 
-	it('disables Next button when isNextStepDisabled is true', () => {
+	it('disables `next` button when isNextStepDisabled is true', () => {
 		render(
 			<Pagination
 				{...{
@@ -69,17 +71,17 @@ describe('Pagination', () => {
 			/>
 		);
 
-		const nextButton = screen.getByText('Next');
+		const nextButton = screen.getByTestId('pagination-next-button');
 		expect(nextButton).toBeDisabled();
 	});
 
-	it('displays Skeleton loader when isLoading is true', () => {
+	it('displays `Skeleton` loader when isLoading is true', () => {
 		render(<Pagination {...{ ...defaultProps, isLoading: true }} />);
 
 		expect(screen.getByTestId('skeleton')).toBeInTheDocument();
 	});
 
-	it('does not display Skeleton loader when isLoading is false', () => {
+	it('does not display `Skeleton` loader when isLoading is false', () => {
 		render(<Pagination {...defaultProps} />);
 		expect(screen.queryByTestId('skeleton')).not.toBeInTheDocument();
 	});

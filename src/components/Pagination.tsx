@@ -27,6 +27,7 @@ export const Pagination = ({
 						onClick={() => setPage(1)}
 						disabled={page === 1}
 						className="bg-transparent hover:border-transparent"
+						data-testid="pagination-first-button"
 					>
 						<ChevronFirst />
 					</Button>
@@ -36,6 +37,7 @@ export const Pagination = ({
 						onClick={setPrevPage}
 						disabled={isPrevStepDisabled}
 						className="bg-transparent hover:border-transparent"
+						data-testid="pagination-previous-button"
 					>
 						<ChevronLeft />
 					</Button>
@@ -66,6 +68,7 @@ export const Pagination = ({
 						onClick={setNextPage}
 						disabled={isNextStepDisabled}
 						className="bg-transparent hover:border-transparent"
+						data-testid="pagination-next-button"
 					>
 						<ChevronRight />
 					</Button>
@@ -75,6 +78,7 @@ export const Pagination = ({
 						onClick={() => setPage(lastPage)}
 						disabled={page === lastPage}
 						className="bg-transparent hover:border-transparent"
+						data-testid="pagination-last-button"
 					>
 						<ChevronLast />
 					</Button>

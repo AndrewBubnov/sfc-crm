@@ -66,7 +66,7 @@ export const usePaginatedDeviceListData = ({ search, sortBy, sortDesc }: UseDevi
 	const onChangeLimit = useCallback(
 		(limitNumber: number) =>
 			setLimit(prevLimit => {
-				setPage(prevPage => Math.floor(prevPage * (prevLimit / limitNumber)));
+				setPage(prevPage => Math.floor(prevPage * (prevLimit / limitNumber)) || 1);
 				return limitNumber;
 			}),
 		[]
