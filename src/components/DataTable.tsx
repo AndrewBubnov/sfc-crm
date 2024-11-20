@@ -9,6 +9,7 @@ import { Pagination } from '@/components/Pagination.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { searchResolver } from '@/constants.ts';
 import { SearchInput } from '@/components/SearchInput.tsx';
+import { LimitManager } from '@/components/LimitManager.tsx';
 
 export const DataTable = () => {
 	const [searchString, setSearchString] = useState<string>('');
@@ -104,7 +105,10 @@ export const DataTable = () => {
 					</Table>
 				</Skeleton>
 			</div>
-			<Pagination paginationData={paginationData} isLoading={isInitFetching} />
+			<div className="flex items-center gap-8">
+				<LimitManager limit={paginationData.limit} onLimitChange={paginationData.onChangeLimit} />
+				<Pagination paginationData={paginationData} isLoading={isInitFetching} />
+			</div>
 		</>
 	);
 };

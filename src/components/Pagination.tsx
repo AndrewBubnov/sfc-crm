@@ -45,6 +45,7 @@ export const Pagination = ({
 						if (pageIndex === page)
 							return (
 								<span
+									key={pageIndex}
 									className="text-lg cursor-pointer font-semibold"
 									onClick={() => setPage(pageIndex)}
 								>
@@ -52,7 +53,7 @@ export const Pagination = ({
 								</span>
 							);
 						return (
-							<span className="cursor-pointer text-xs" onClick={() => setPage(pageIndex)}>
+							<span key={pageIndex} className="cursor-pointer text-xs" onClick={() => setPage(pageIndex)}>
 								{pageIndex}
 							</span>
 						);

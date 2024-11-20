@@ -15,21 +15,22 @@ type UseDeviceData = {
 export const usePaginatedDeviceListData = ({ search, sortBy, sortDesc }: UseDeviceData) => {
 	const queryClient = useQueryClient();
 	const [page, setPage] = useState<number>(1);
+	const [limit, setLimit] = useState<number>(BASE_LIMIT);
 
 	const { data, isFetching, refetch } = useQuery<DeviceDataType, Error>({
-		queryKey: [QueryKeys.Devices, page, search, sortBy, sortDesc],
-		queryFn: () => getDevicesData({ page, search, sortBy, sortDesc }),
+		queryKey: [QueryKeys.Devices, page, search, sortBy, sortDesc, limit],
+		queryFn: () => getDevicesData({ page, search, sortBy, sortDesc, limit }),
 		placeholderData: keepPreviousData,
 	});
 
-	const paramsRef = useLatest({ page, search, sortBy, sortDesc }); // to avoid re-subscribe to SSE on change page or sort
+	const paramsRef = useLatest({ page, search, sortBy, sortDesc, limit }); // to avoid re-subscribe to SSE on change page or sort
 
 	const updateDevice = useCallback(
 		(evt: MessageEvent) => {
 			const updatedDevice: Device = JSON.parse(evt.data);
-			const { page, search, sortBy, sortDesc } = paramsRef.current;
+			const { page, search, sortBy, sortDesc, limit } = paramsRef.current;
 			queryClient.setQueryData(
-				[QueryKeys.Devices, page, search, sortBy, sortDesc],
+				[QueryKeys.Devices, page, search, sortBy, sortDesc, limit],
 				(oldData?: DeviceDataType) => {
 					if (!oldData) return oldData;
 					return {
@@ -62,10 +63,19 @@ export const usePaginatedDeviceListData = ({ search, sortBy, sortDesc }: UseDevi
 		};
 	}, [refetch, updateDevice]);
 
+	const onChangeLimit = useCallback(
+		(limitNumber: number) =>
+			setLimit(prevLimit => {
+				setPage(prevPage => Math.floor(prevPage * (prevLimit / limitNumber)));
+				return limitNumber;
+			}),
+		[]
+	);
+
 	const setNextPage = useCallback(() => setPage(prevState => prevState + 1), []);
 	const setPrevPage = useCallback(() => setPage(prevState => prevState - 1), []);
 	const isPrevStepDisabled = isFetching || page === 1;
-	const isNextStepDisabled = isFetching || (data?.data.total ?? 0) <= (page + 1) * BASE_LIMIT;
+	const isNextStepDisabled = isFetching || (data?.data.total ?? 0) <= (page + 1) * limit;
 
 	return useMemo(
 		() => ({
@@ -78,9 +88,11 @@ export const usePaginatedDeviceListData = ({ search, sortBy, sortDesc }: UseDevi
 				page,
 				isPrevStepDisabled,
 				isNextStepDisabled,
-				lastPage: Math.floor((data?.data.total ?? 0) / BASE_LIMIT),
+				lastPage: Math.floor((data?.data.total ?? 0) / limit),
+				limit,
+				onChangeLimit,
 			},
 		}),
-		[data, isFetching, isNextStepDisabled, isPrevStepDisabled, page, setNextPage, setPrevPage]
+		[data, isFetching, isNextStepDisabled, isPrevStepDisabled, page, setNextPage, setPrevPage, limit]
 	);
 };
