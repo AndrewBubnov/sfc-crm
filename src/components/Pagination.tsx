@@ -38,7 +38,7 @@ export const Pagination = ({
 	};
 	return (
 		<div className="flex items-center justify-end space-x-4">
-			<Skeleton isLoading={isLoading} className="w-[95vw] h-8 rounded-md">
+			<Skeleton isLoading={isLoading} className="w-[20vw] h-8 rounded-md">
 				<div className="flex items-center">
 					<Button
 						variant="ghost"

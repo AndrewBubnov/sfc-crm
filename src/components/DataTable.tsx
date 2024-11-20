@@ -1,6 +1,6 @@
 import { flexRender, getCoreRowModel, useReactTable, VisibilityState } from '@tanstack/react-table';
 import { useCallback, useMemo, useState } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table.tsx';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
 import { createColumns } from '@/columns.tsx';
 import { useDebounced } from '@/hooks/useDebounced.ts';
@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/Skeleton.tsx';
 import { searchResolver } from '@/constants.ts';
 import { SearchInput } from '@/components/SearchInput.tsx';
 import { LimitManager } from '@/components/LimitManager.tsx';
+import { DataTableHeader } from '@/components/DataTableHeader.tsx';
 
 export const DataTable = () => {
 	const [searchString, setSearchString] = useState<string>('');
@@ -47,7 +48,7 @@ export const DataTable = () => {
 	return (
 		<>
 			<div className="flex items-center justify-between gap-4">
-				<Skeleton isLoading={isInitFetching} className="w-[95vw] h-8 rounded-md">
+				<Skeleton isLoading={isInitFetching} className="w-full h-8 rounded-md">
 					<SearchInput
 						placeholder="Search by name or id"
 						value={searchString}
@@ -58,34 +59,9 @@ export const DataTable = () => {
 				</Skeleton>
 			</div>
 			<div className="rounded-md border">
-				<Skeleton isLoading={isInitFetching} className="w-[95vw] h-[568px] rounded-md">
-					<Table className="w-[95vw]">
-						<TableHeader>
-							{table.getHeaderGroups().map(headerGroup => (
-								<TableRow key={headerGroup.id}>
-									{headerGroup.headers.map((header, index) => {
-										const width = header.getSize();
-										return (
-											<TableHead
-												key={header.id}
-												style={{ width }}
-												className="relative border border-gray-100 border-x-1 border-y-0"
-											>
-												{header.isPlaceholder
-													? null
-													: flexRender(header.column.columnDef.header, header.getContext())}
-												{index < headerGroup.headers.length - 1 && (
-													<div
-														onMouseDown={header.getResizeHandler()}
-														className="absolute top-0 -right-[2px] h-full w-[4px] bg-gray-transparent cursor-col-resize select-none touch-none hover:bg-gray-300 transition-colors"
-													/>
-												)}
-											</TableHead>
-										);
-									})}
-								</TableRow>
-							))}
-						</TableHeader>
+				<Skeleton isLoading={isInitFetching} className="w-full h-[568px] rounded-md">
+					<Table>
+						<DataTableHeader headerGroups={table.getHeaderGroups()} />
 						<TableBody>
 							{table.getRowModel().rows?.length ? (
 								table.getRowModel().rows.map(row => (
@@ -108,8 +84,12 @@ export const DataTable = () => {
 					</Table>
 				</Skeleton>
 			</div>
-			<div className="flex items-center gap-8">
-				<LimitManager limit={paginationData.limit} onLimitChange={paginationData.onChangeLimit} />
+			<div className="flex items-center justify-end gap-8">
+				<LimitManager
+					limit={paginationData.limit}
+					onLimitChange={paginationData.onChangeLimit}
+					isLoading={isInitFetching}
+				/>
 				<Pagination paginationData={paginationData} isLoading={isInitFetching} />
 			</div>
 		</>
