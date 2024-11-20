@@ -5,6 +5,8 @@ import { Pagination } from '@/components/Pagination';
 describe('Pagination', () => {
 	const mockSetNextPage = vi.fn();
 	const mockSetPrevPage = vi.fn();
+	const mockSetPage = vi.fn();
+	const mockOnChangeLimit = vi.fn();
 
 	const defaultProps = {
 		paginationData: {
@@ -13,6 +15,10 @@ describe('Pagination', () => {
 			setPrevPage: mockSetPrevPage,
 			isPrevStepDisabled: false,
 			isNextStepDisabled: false,
+			setPage: mockSetPage,
+			lastPage: 10,
+			limit: 10,
+			onChangeLimit: mockOnChangeLimit,
 		},
 		isLoading: false,
 	};
