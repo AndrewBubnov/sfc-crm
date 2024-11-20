@@ -25,12 +25,15 @@ export const DataTable = () => {
 		sortDesc,
 	});
 
-	const onSortByChange = useCallback((sort: string) => setSortBy(prevState => (prevState === sort ? '' : sort)), []);
-
-	const columns = useMemo(
-		() => createColumns({ sortBy, sortDesc, onSortByChange, onSortDescChange: setSortDesc }),
-		[sortBy, sortDesc, onSortByChange]
+	const onSortChange = useCallback(
+		({ sortedBy, sortedDesc }: { sortedBy: string; sortedDesc: boolean }) => {
+			setSortBy(prevState => (prevState === sortedBy && sortedDesc === sortDesc ? '' : sortedBy));
+			setSortDesc(sortedDesc);
+		},
+		[sortDesc]
 	);
+
+	const columns = useMemo(() => createColumns({ sortBy, sortDesc, onSortChange }), [sortBy, sortDesc, onSortChange]);
 
 	const table = useReactTable({
 		data,

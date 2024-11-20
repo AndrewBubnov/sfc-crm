@@ -8,64 +8,26 @@ import { SortSwitch } from '@/components/SortSwitch.tsx';
 type CreateColumn = {
 	sortBy: string;
 	sortDesc: boolean;
-	onSortByChange: (arg: string) => void;
-	onSortDescChange: (arg: boolean) => void;
+	onSortChange(arg: { sortedBy: string; sortedDesc: boolean }): void;
 };
 
-export const createColumns = ({
-	sortBy,
-	sortDesc,
-	onSortByChange,
-	onSortDescChange,
-}: CreateColumn): ColumnDef<Device>[] => [
+export const createColumns = ({ sortBy, sortDesc, onSortChange }: CreateColumn): ColumnDef<Device>[] => [
 	{
 		accessorKey: 'id',
-		header: () => (
-			<SortSwitch
-				id="id"
-				onSortByChange={onSortByChange}
-				sortBy={sortBy}
-				sortDesc={sortDesc}
-				onSortDescChange={onSortDescChange}
-			/>
-		),
+		header: () => <SortSwitch id="id" onSortChange={onSortChange} sortBy={sortBy} sortDesc={sortDesc} />,
 	},
 	{
 		accessorKey: 'name',
-		header: () => (
-			<SortSwitch
-				id="name"
-				onSortByChange={onSortByChange}
-				sortBy={sortBy}
-				sortDesc={sortDesc}
-				onSortDescChange={onSortDescChange}
-			/>
-		),
+		header: () => <SortSwitch id="name" onSortChange={onSortChange} sortBy={sortBy} sortDesc={sortDesc} />,
 		cell: ({ row }) => <NameInput cellName={row.getValue('name')} deviceId={row.getValue('id')} />,
 	},
 	{
 		accessorKey: 'type',
-		header: () => (
-			<SortSwitch
-				id="type"
-				onSortByChange={onSortByChange}
-				sortBy={sortBy}
-				sortDesc={sortDesc}
-				onSortDescChange={onSortDescChange}
-			/>
-		),
+		header: () => <SortSwitch id="type" onSortChange={onSortChange} sortBy={sortBy} sortDesc={sortDesc} />,
 	},
 	{
 		accessorKey: 'state',
-		header: () => (
-			<SortSwitch
-				id="state"
-				onSortByChange={onSortByChange}
-				sortBy={sortBy}
-				sortDesc={sortDesc}
-				onSortDescChange={onSortDescChange}
-			/>
-		),
+		header: () => <SortSwitch id="state" onSortChange={onSortChange} sortBy={sortBy} sortDesc={sortDesc} />,
 		cell: ({ row }) => {
 			const state = row.getValue('state') as string;
 			return <p className={cn('font-semibold', state === 'error' && 'text-red-400')}>{state}</p>;

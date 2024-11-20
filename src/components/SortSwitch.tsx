@@ -6,20 +6,13 @@ type SortSwitchProps = {
 	id: string;
 	sortBy: string;
 	sortDesc: boolean;
-	onSortByChange(sortBy: string): void;
-	onSortDescChange(sortDesc: boolean): void;
+	onSortChange(arg: { sortedBy: string; sortedDesc: boolean }): void;
 };
 
-export const SortSwitch = ({ id, sortBy, sortDesc, onSortByChange, onSortDescChange }: SortSwitchProps) => {
-	const upSortHandler = () => {
-		onSortByChange(id);
-		onSortDescChange(false);
-	};
+export const SortSwitch = ({ id, sortBy, sortDesc, onSortChange }: SortSwitchProps) => {
+	const upSortHandler = () => onSortChange({ sortedBy: id, sortedDesc: false });
 
-	const downSortHandler = () => {
-		onSortByChange(id);
-		onSortDescChange(true);
-	};
+	const downSortHandler = () => onSortChange({ sortedBy: id, sortedDesc: true });
 
 	return (
 		<div className="flex items-center justify-between">
