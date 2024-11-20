@@ -1,27 +1,35 @@
 import { flexRender, getCoreRowModel, useReactTable, VisibilityState } from '@tanstack/react-table';
-import { useState } from 'react';
-import { Input } from '@/components/ui/input.tsx';
+import { useCallback, useMemo, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
-import { Button } from '@/components/ui/button.tsx';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
-import { columns } from '@/columns.tsx';
+import { createColumns } from '@/columns.tsx';
 import { useDebounced } from '@/hooks/useDebounced.ts';
 import { ColumnManager } from '@/components/ColumnManager.tsx';
 import { Pagination } from '@/components/Pagination.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { searchResolver } from '@/constants.ts';
+import { SearchInput } from '@/components/SearchInput.tsx';
 
 export const DataTable = () => {
 	const [searchString, setSearchString] = useState<string>('');
-	const [isSorted, setIsSorted] = useState<boolean>(false);
+	const [sortBy, setSortBy] = useState<string>('');
+	const [sortDesc, setSortDesc] = useState<boolean>(false);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
 	const debouncedSearchString = useDebounced(searchString, searchResolver);
 
 	const { data, paginationData, isInitFetching } = usePaginatedDeviceListData({
 		search: debouncedSearchString,
-		isSorted,
+		sortBy,
+		sortDesc,
 	});
+
+	const onSortByChange = useCallback((sort: string) => setSortBy(prevState => (prevState === sort ? '' : sort)), []);
+
+	const columns = useMemo(
+		() => createColumns({ sortBy, sortDesc, onSortByChange, onSortDescChange: setSortDesc }),
+		[sortBy, sortDesc, onSortByChange]
+	);
 
 	const table = useReactTable({
 		data,
@@ -36,20 +44,12 @@ export const DataTable = () => {
 		<>
 			<div className="flex items-center justify-between gap-4">
 				<Skeleton isLoading={isInitFetching} className="w-[95vw] h-8 rounded-md">
-					<Input
-						placeholder="Search by name..."
+					<SearchInput
+						placeholder="Search by name or id"
 						value={searchString}
 						onChange={event => setSearchString(event.target.value)}
-						className="max-w-sm"
+						className="w-[50%]"
 					/>
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => setIsSorted(prevState => !prevState)}
-						className="hover:border-transparent"
-					>
-						{isSorted ? 'Disable sorting' : 'Enable sorting'}
-					</Button>
 					<ColumnManager columns={table.getAllColumns()} />
 				</Skeleton>
 			</div>

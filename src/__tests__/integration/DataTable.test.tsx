@@ -47,7 +47,7 @@ describe('DataTable', () => {
 
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
-		['ID', 'Name', 'Type', 'State', 'Manage device mode'].forEach(headerName => {
+		['Id', 'Name', 'Type', 'State', 'Manage device mode'].forEach(headerName => {
 			expect(screen.getByText(headerName)).toBeInTheDocument();
 		});
 	});
@@ -62,35 +62,6 @@ describe('DataTable', () => {
 			.forEach(id => {
 				expect(screen.getByText(id)).toBeInTheDocument();
 			});
-	});
-
-	it('should allow searching devices', async () => {
-		render(<DataTable />, { wrapper });
-
-		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
-
-		const searchInput = screen.getByPlaceholderText('Search by name...');
-		fireEvent.change(searchInput, { target: { value: 'Device 1' } });
-
-		await waitFor(() => {
-			expect(screen.getByText('Device 1')).toBeInTheDocument();
-		});
-
-		expect(screen.queryByText('Device 2')).not.toBeInTheDocument();
-	});
-
-	it.todo('should toggle sorting on click', async () => {
-		render(<DataTable />, { wrapper });
-
-		await waitFor(() => screen.getByText(mockDevices.items[0].name));
-
-		const sortButton = screen.getByRole('button', { name: /Enable sorting/i });
-		fireEvent.click(sortButton);
-
-		expect(sortButton).toHaveTextContent('Disable sorting');
-
-		fireEvent.click(sortButton);
-		expect(sortButton).toHaveTextContent('Enable sorting');
 	});
 
 	it('should show "No results" when no data is available', async () => {

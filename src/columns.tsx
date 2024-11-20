@@ -3,24 +3,69 @@ import { Device } from '@/types.ts';
 import { NameInput } from '@/components/NameInput.tsx';
 import { cn } from '@/lib/utils.ts';
 import { ModeManger } from '@/components/ModeManager.tsx';
+import { SortSwitch } from '@/components/SortSwitch.tsx';
 
-export const columns: ColumnDef<Device>[] = [
+type CreateColumn = {
+	sortBy: string;
+	sortDesc: boolean;
+	onSortByChange: (arg: string) => void;
+	onSortDescChange: (arg: boolean) => void;
+};
+
+export const createColumns = ({
+	sortBy,
+	sortDesc,
+	onSortByChange,
+	onSortDescChange,
+}: CreateColumn): ColumnDef<Device>[] => [
 	{
 		accessorKey: 'id',
-		header: 'ID',
+		header: () => (
+			<SortSwitch
+				id="id"
+				onSortByChange={onSortByChange}
+				sortBy={sortBy}
+				sortDesc={sortDesc}
+				onSortDescChange={onSortDescChange}
+			/>
+		),
 	},
 	{
 		accessorKey: 'name',
-		header: 'Name',
+		header: () => (
+			<SortSwitch
+				id="name"
+				onSortByChange={onSortByChange}
+				sortBy={sortBy}
+				sortDesc={sortDesc}
+				onSortDescChange={onSortDescChange}
+			/>
+		),
 		cell: ({ row }) => <NameInput cellName={row.getValue('name')} deviceId={row.getValue('id')} />,
 	},
 	{
 		accessorKey: 'type',
-		header: 'Type',
+		header: () => (
+			<SortSwitch
+				id="type"
+				onSortByChange={onSortByChange}
+				sortBy={sortBy}
+				sortDesc={sortDesc}
+				onSortDescChange={onSortDescChange}
+			/>
+		),
 	},
 	{
 		accessorKey: 'state',
-		header: 'State',
+		header: () => (
+			<SortSwitch
+				id="state"
+				onSortByChange={onSortByChange}
+				sortBy={sortBy}
+				sortDesc={sortDesc}
+				onSortDescChange={onSortDescChange}
+			/>
+		),
 		cell: ({ row }) => {
 			const state = row.getValue('state') as string;
 			return <p className={cn('font-semibold', state === 'error' && 'text-red-400')}>{state}</p>;

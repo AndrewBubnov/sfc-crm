@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button.tsx';
-import { DeviceMode, DeviceState } from '@/types.ts';
+import { Device, DeviceMode, DeviceState } from '@/types.ts';
 import { changeDeviceMode } from '@/api/changeDeviceMode.ts';
 import { useToast } from '@/hooks/useToast.ts';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Tooltip } from '@/components/Tooltip.tsx';
 import { useMutation } from '@tanstack/react-query';
@@ -21,18 +21,33 @@ export const ModeManger = ({ deviceId, state }: ModeMangerProps) => {
 
 	const deviceMode = useRef<DeviceMode | null>(null);
 
+	const showSuccessToast = useCallback(
+		(mode: DeviceMode) => toast({ title: `Device ${deviceId} mode has been successfully changed to '${mode}'` }),
+		[deviceId, toast]
+	);
+	const showErrorToast = useCallback(
+		() =>
+			toast({
+				variant: 'destructive',
+				title: 'Uh oh! Something went wrong.',
+				description: 'There was a problem with the device mode change',
+			}),
+		[toast]
+	);
+
 	const modeHandler = (mode: DeviceMode) => async () => {
 		deviceMode.current = mode;
 		mutate(
 			{ deviceId, mode },
 			{
-				onSuccess: () => toast({ title: `Device ${deviceId} mode has been successfully changed to '${mode}'` }),
-				onError: () =>
-					toast({
-						variant: 'destructive',
-						title: 'Uh oh! Something went wrong.',
-						description: 'There was a problem with the device mode change',
-					}),
+				onSuccess: (data: Record<'data', Device>) => {
+					if (data.data.state !== 'error') {
+						showSuccessToast(mode);
+						return;
+					}
+					showErrorToast();
+				},
+				onError: showErrorToast,
 				onSettled: () => {
 					deviceMode.current = null;
 				},
