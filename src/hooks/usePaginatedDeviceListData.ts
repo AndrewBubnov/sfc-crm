@@ -72,10 +72,11 @@ export const usePaginatedDeviceListData = ({ search, sortBy, sortDesc }: UseDevi
 		[]
 	);
 
+	const lastPage = Math.ceil((data?.data.total ?? 0) / limit);
 	const setNextPage = useCallback(() => setPage(prevState => prevState + 1), []);
 	const setPrevPage = useCallback(() => setPage(prevState => prevState - 1), []);
 	const isPrevStepDisabled = isFetching || page === 1;
-	const isNextStepDisabled = isFetching || (data?.data.total ?? 0) <= (page + 1) * limit;
+	const isNextStepDisabled = isFetching || page === lastPage;
 
 	return useMemo(
 		() => ({
@@ -88,11 +89,11 @@ export const usePaginatedDeviceListData = ({ search, sortBy, sortDesc }: UseDevi
 				page,
 				isPrevStepDisabled,
 				isNextStepDisabled,
-				lastPage: Math.floor((data?.data.total ?? 0) / limit),
+				lastPage,
 				limit,
 				onChangeLimit,
 			},
 		}),
-		[data, isFetching, isNextStepDisabled, isPrevStepDisabled, page, setNextPage, setPrevPage, limit]
+		[data, isFetching, setNextPage, setPrevPage, page, isPrevStepDisabled, isNextStepDisabled, lastPage, limit, onChangeLimit]
 	);
 };
