@@ -37,8 +37,11 @@ export const usePaginatedDeviceListData = ({ search, sortBy, sortDesc }: UseDevi
 						...oldData,
 						data: {
 							...oldData.data,
-							items: oldData.data.items.map(device =>
-								device.id === updatedDevice.id ? updatedDevice : device
+							items: oldData.data.items.map(device => {
+									console.log(device.id === updatedDevice.id)
+								return device.id === updatedDevice.id ? updatedDevice : device
+							}
+
 							),
 						},
 					};

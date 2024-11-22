@@ -1,4 +1,4 @@
-This is a **SPA** that implements a dashboard for managing devices queried from a backend REST API. The application includes functionalities for listing devices, pagination, search, sorting, editing device attributes, and real-time updates via Server-Sent Events (SSE).
+This is full stack project that implements a dashboard for managing devices queried from a backend REST API. The application includes functionalities for listing devices, pagination, search, sorting, editing device attributes, and real-time updates via Server-Sent Events (SSE).
 
 ## Features
 
