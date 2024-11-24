@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { RegisterDeviceForm } from '@/components/RegisterDeviceForm.tsx';
 import { useDeviceRegister } from '@/hooks/useDeviceRegister.ts';
 import { RegisterDeviceSchemaType } from '@/schemas.ts';
-import { useState } from 'react';
+import { Plus } from 'lucide-react';
 
 export const RegisterDeviceSheet = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +17,8 @@ export const RegisterDeviceSheet = () => {
 	return (
 		<Sheet open={isOpen} onOpenChange={setIsOpen}>
 			<SheetTrigger className="bg-transparent hover:border-transparent" asChild>
-				<Button variant="outline" className="ml-auto">
+				<Button variant="ghost">
+					<Plus />
 					Register device
 				</Button>
 			</SheetTrigger>

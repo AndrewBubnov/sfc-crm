@@ -15,28 +15,25 @@ export const SortSwitch = ({ id, sortBy, sortDesc, onSortChange }: SortSwitchPro
 	const downSortHandler = () => onSortChange({ sortedBy: id, sortedDesc: true });
 
 	return (
-		<div className="flex items-center justify-between">
-			<p>{`${id.charAt(0).toUpperCase()}${id.slice(1)}`}</p>
-			<div className="flex items-center gap-4">
-				<ArrowUpAZ
-					size={16}
-					onClick={upSortHandler}
-					className={cn(
-						'opacity-20 cursor-pointer hover:opacity-100 transition hover:duration-300',
-						id === sortBy && !sortDesc && 'opacity-100'
-					)}
-					data-testid="sort-switch-asc"
-				/>
-				<ArrowDownAZ
-					size={16}
-					onClick={downSortHandler}
-					className={cn(
-						'opacity-20 cursor-pointer hover:opacity-100 transition hover:duration-300',
-						id === sortBy && sortDesc && 'opacity-100'
-					)}
-					data-testid="sort-switch-desc"
-				/>
-			</div>
+		<div className="flex items-center gap-4">
+			<ArrowUpAZ
+				size={16}
+				onClick={upSortHandler}
+				className={cn(
+					'opacity-20 cursor-pointer hover:opacity-100 transition hover:duration-300',
+					id === sortBy && !sortDesc && 'opacity-100'
+				)}
+				data-testid="sort-switch-asc"
+			/>
+			<ArrowDownAZ
+				size={16}
+				onClick={downSortHandler}
+				className={cn(
+					'opacity-20 cursor-pointer hover:opacity-100 transition hover:duration-300',
+					id === sortBy && sortDesc && 'opacity-100'
+				)}
+				data-testid="sort-switch-desc"
+			/>
 		</div>
 	);
 };

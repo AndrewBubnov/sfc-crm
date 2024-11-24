@@ -43,12 +43,10 @@ export const sortDevices = (devices: Device[], sortBy?: keyof Device, sortDesc?:
 	});
 };
 
-export const filterDevices = (devices: Device[], filterBy?: string): Device[] => {
-	if (!filterBy) return devices;
+export const filterDevices = (devices: Device[], filterBy?: string, filter_field?: keyof Device): Device[] => {
+	if (!filterBy || !filter_field) return devices;
 
 	const lowerFilter = filterBy.toLowerCase();
 
-	return devices.filter(
-		device => device.id.toLowerCase().includes(lowerFilter) || device.name.toLowerCase().includes(lowerFilter)
-	);
+	return devices.filter(device => device[filter_field].toLowerCase().includes(lowerFilter));
 };

@@ -1,20 +1,20 @@
 import { flexRender, getCoreRowModel, useReactTable, VisibilityState } from '@tanstack/react-table';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table.tsx';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
-import { createColumns } from '@/columns.tsx';
+import { columns } from '@/columns.tsx';
 import { useDebounced } from '@/hooks/useDebounced.ts';
 import { ColumnManager } from '@/components/ColumnManager.tsx';
 import { Pagination } from '@/components/Pagination.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { searchResolver } from '@/constants.ts';
-import { SearchInput } from '@/components/SearchInput.tsx';
 import { LimitManager } from '@/components/LimitManager.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
 
 export const DataTable = () => {
 	const [searchString, setSearchString] = useState<string>('');
+	const [searchField, setSearchField] = useState<string>('');
 	const [sortBy, setSortBy] = useState<string>('');
 	const [sortDesc, setSortDesc] = useState<boolean>(false);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -25,6 +25,7 @@ export const DataTable = () => {
 		search: debouncedSearchString,
 		sortBy,
 		sortDesc,
+		searchField,
 	});
 
 	const onSortChange = useCallback(
@@ -35,7 +36,10 @@ export const DataTable = () => {
 		[sortDesc]
 	);
 
-	const columns = useMemo(() => createColumns({ sortBy, sortDesc, onSortChange }), [sortBy, sortDesc, onSortChange]);
+	const onFilterChange = useCallback(({ search, field }: { search: string; field: string }) => {
+		setSearchString(search);
+		setSearchField(field);
+	}, []);
 
 	const table = useReactTable({
 		data,
@@ -46,16 +50,14 @@ export const DataTable = () => {
 		columnResizeMode: 'onChange', // to make columns resizable
 	});
 
+	useEffect(() => {
+		if (!searchString.length) setSearchField('');
+	}, [searchString.length]);
+
 	return (
 		<>
 			<div className="flex items-center justify-between">
 				<Skeleton isLoading={isInitFetching} className="w-full h-8 rounded-md">
-					<SearchInput
-						placeholder="Search by name or id"
-						value={searchString}
-						onChange={event => setSearchString(event.target.value)}
-						className="w-[40%]"
-					/>
 					<RegisterDeviceSheet />
 					<ColumnManager columns={table.getAllColumns()} />
 				</Skeleton>
@@ -63,7 +65,15 @@ export const DataTable = () => {
 			<div className="rounded-md border">
 				<Skeleton isLoading={isInitFetching} className="w-full h-[568px] rounded-md">
 					<Table>
-						<DataTableHeader headerGroups={table.getHeaderGroups()} />
+						<DataTableHeader
+							headerGroups={table.getHeaderGroups()}
+							onFilterChange={onFilterChange}
+							searchString={searchString}
+							sortBy={sortBy}
+							sortDesc={sortDesc}
+							onSortChange={onSortChange}
+							searchField={searchField}
+						/>
 						<TableBody>
 							{table.getRowModel().rows?.length ? (
 								table.getRowModel().rows.map(row => (
