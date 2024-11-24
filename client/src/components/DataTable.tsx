@@ -11,6 +11,7 @@ import { searchResolver } from '@/constants.ts';
 import { SearchInput } from '@/components/SearchInput.tsx';
 import { LimitManager } from '@/components/LimitManager.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
+import { RegisterDevice } from '@/components/RegisterDevice.tsx';
 
 export const DataTable = () => {
 	const [searchString, setSearchString] = useState<string>('');
@@ -47,14 +48,15 @@ export const DataTable = () => {
 
 	return (
 		<>
-			<div className="flex items-center justify-between gap-4">
+			<div className="flex items-center justify-between">
 				<Skeleton isLoading={isInitFetching} className="w-full h-8 rounded-md">
 					<SearchInput
 						placeholder="Search by name or id"
 						value={searchString}
 						onChange={event => setSearchString(event.target.value)}
-						className="w-[50%]"
+						className="w-[40%]"
 					/>
+					<RegisterDevice />
 					<ColumnManager columns={table.getAllColumns()} />
 				</Skeleton>
 			</div>

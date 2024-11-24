@@ -15,7 +15,7 @@ type ColumnManagerProps = {
 export const ColumnManager = ({ columns }: ColumnManagerProps) => (
 	<DropdownMenu>
 		<DropdownMenuTrigger asChild>
-			<Button variant="outline" className="ml-auto">
+			<Button variant="outline" className="ml-auto hover:border-transparent">
 				Columns
 			</Button>
 		</DropdownMenuTrigger>

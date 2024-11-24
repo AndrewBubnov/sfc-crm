@@ -1,6 +1,8 @@
 export enum DeviceType {
-	EfoyPro800 = 'efoy_pro_800',
-	Efoy80 = 'efoy_80',
+	Type1 = 'type1',
+	Type2 = 'type2',
+	Type3 = 'type3',
+	Type4 = 'type4',
 }
 
 export enum DeviceMode {
