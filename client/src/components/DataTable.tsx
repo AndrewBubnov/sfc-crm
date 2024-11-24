@@ -11,7 +11,7 @@ import { searchResolver } from '@/constants.ts';
 import { SearchInput } from '@/components/SearchInput.tsx';
 import { LimitManager } from '@/components/LimitManager.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
-import { RegisterDevice } from '@/components/RegisterDevice.tsx';
+import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
 
 export const DataTable = () => {
 	const [searchString, setSearchString] = useState<string>('');
@@ -56,7 +56,7 @@ export const DataTable = () => {
 						onChange={event => setSearchString(event.target.value)}
 						className="w-[40%]"
 					/>
-					<RegisterDevice />
+					<RegisterDeviceSheet />
 					<ColumnManager columns={table.getAllColumns()} />
 				</Skeleton>
 			</div>

@@ -17,7 +17,7 @@ export type Device = {
 	id: string;
 	type: DeviceType;
 	name: string;
-	state: DeviceState | null;
+	state: DeviceState;
 };
 
 export type RenameDeviceParams = {
@@ -26,6 +26,12 @@ export type RenameDeviceParams = {
 
 export type RenameDeviceBody = {
 	name: string;
+};
+
+export type RegisterDeviceBody = {
+	type: DeviceType;
+	state: DeviceMode;
+	name?: string;
 };
 
 export type QueryParams = {
