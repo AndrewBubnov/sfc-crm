@@ -33,7 +33,7 @@ export const createDevices = (): Device[] => Array.from({ length: 93 }, createDe
 export const sortDevices = (devices: Device[], sortBy?: keyof Device, sortDesc?: boolean): Device[] => {
 	if (!sortBy) return devices;
 
-	return devices.sort((a, b) => {
+	return [...devices].sort((a, b) => {
 		const aVal = a[sortBy];
 		const bVal = b[sortBy];
 

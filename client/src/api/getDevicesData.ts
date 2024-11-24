@@ -11,10 +11,8 @@ type GetDevicesData = {
 };
 
 export const getDevicesData = async ({ page, limit, sortBy, sortDesc, searchField, search = '' }: GetDevicesData) => {
-	const sortedBy = sortBy ? `&sort_by=${sortBy}` : '';
-	if (search)
-		return axios(
-			`${BASE_URL}/devices?filter_by=${search}&filter_field=${searchField}${sortedBy}&sort_desc=${sortDesc}&limit=${limit}`
-		);
-	return axios(`${BASE_URL}/devices?offset=${page * limit}${sortedBy}&sort_desc=${sortDesc}&limit=${limit}`);
+	const sorted = sortBy ? `&sort_by=${sortBy}&sort_desc=${sortDesc}` : '';
+	const base = `${BASE_URL}/devices?offset=${page * limit}${sorted}&limit=${limit}`;
+	if (search) return axios(`${base}&filter_by=${search}&filter_field=${searchField}`);
+	return axios(base);
 };
