@@ -55,7 +55,7 @@ export const DataTable = () => {
 	}, [searchString.length]);
 
 	return (
-		<>
+		<div className="flex flex-col gap-2">
 			<div className="flex items-center justify-between">
 				<Skeleton isLoading={isInitFetching} className="w-full h-8 rounded-md">
 					<RegisterDeviceSheet />
@@ -104,6 +104,6 @@ export const DataTable = () => {
 				/>
 				<Pagination paginationData={paginationData} isLoading={isInitFetching} />
 			</div>
-		</>
+		</div>
 	);
 };

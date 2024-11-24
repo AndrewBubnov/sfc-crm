@@ -8,11 +8,11 @@ const queryClient = new QueryClient();
 const App = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<div className="flex flex-col gap-3 p-4">
+			<div className="flex flex-col gap-10 p-4">
 				<AccountData />
 				<DataTable />
-				<Toaster />
 			</div>
+			<Toaster />
 		</QueryClientProvider>
 	);
 };
