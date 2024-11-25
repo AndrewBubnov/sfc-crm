@@ -71,6 +71,7 @@ export const Statistics = () => {
 					innerRadius={60}
 					outerRadius={80}
 					label={entry => capitalize(entry.name)}
+					cornerRadius={4}
 				/>
 			</PieChart>
 			<div className="flex flex-col gap-6 justify-center">
