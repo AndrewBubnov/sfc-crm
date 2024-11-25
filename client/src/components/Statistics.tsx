@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '@/constants.ts';
 import { Pie, PieChart } from 'recharts';
+import { capitalize } from '@/utils.ts';
 
 type GraphData = {
 	name: string;
@@ -69,7 +70,7 @@ export const Statistics = () => {
 					cy="50%"
 					innerRadius={60}
 					outerRadius={80}
-					label={entry => entry.name}
+					label={entry => capitalize(entry.name)}
 				/>
 			</PieChart>
 			<div className="flex flex-col gap-6 justify-center">
@@ -77,7 +78,7 @@ export const Statistics = () => {
 					.filter(el => el.name !== 'total')
 					.map(element => (
 						<p key={element.name} style={{ color: GraphFillDto[element.name] }}>
-							{`${element.name.charAt(0).toUpperCase()}${element.name.slice(1)}`}: {element.value}
+							{capitalize(element.name)}: {element.value}
 						</p>
 					))}
 				<p>Total: {total}</p>

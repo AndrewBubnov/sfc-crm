@@ -13,3 +13,5 @@ export const createIndexesList = (page: number, lastPage: number) => {
 		return page + 1;
 	});
 };
+
+export const capitalize = (text: string) => `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
