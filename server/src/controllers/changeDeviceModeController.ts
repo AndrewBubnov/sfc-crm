@@ -25,7 +25,6 @@ export const changeDeviceModeController = (req: Request, res: Response) => {
 
 		addDeviceUpdateEvent({
 			id,
-			mode,
 			name: devices[deviceIndex].name,
 			state: devices[deviceIndex].state,
 			type: devices[deviceIndex].type,

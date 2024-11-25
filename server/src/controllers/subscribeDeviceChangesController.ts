@@ -1,6 +1,6 @@
 import { clients } from '../services/updateEventsService.js';
-import { createDevice } from '../utils.js';
-import { devices, updateDevices } from '../services/deviceService.js';
+import { createDevice, getStats } from '../utils.js';
+import { devices, filteredDevices, updateDevices } from '../services/deviceService.js';
 import { clearInterval } from 'node:timers';
 import { Request, Response } from 'express';
 import { Device } from '../models/device.js';
@@ -23,7 +23,7 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 	});
 
 	res.write(`event: connected\n`);
-	res.write(`data: {"message": "Subscribed successfully"}\n\n`);
+	res.write(`data: ${JSON.stringify({ stats: getStats(filteredDevices, devices.length) })}\n\n`);
 
 	clients.push(res);
 
@@ -55,7 +55,9 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 		updateDevicesList(event);
 
 		res.write(`event: ${event.type}\n`);
-		res.write(`data: ${JSON.stringify(event.payload)}\n\n`);
+		res.write(
+			`data: ${JSON.stringify({ event: event.payload, stats: getStats(filteredDevices, devices.length) })}\n\n`
+		);
 	};
 
 	const intervalId = setInterval(sendEvent, AUTO_EVENTS_INTERVAL);

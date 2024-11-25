@@ -21,7 +21,7 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 
 	const updateDevice = useCallback(
 		(evt: MessageEvent) => {
-			const updatedDevice: Device = JSON.parse(evt.data);
+			const updatedDevice: Device = JSON.parse(evt.data).event;
 			const { page, search, sortBy, sortDesc, limit, searchField } = paramsRef.current;
 			queryClient.setQueryData(
 				[QueryKeys.Devices, page, sortBy, sortDesc, limit, search, searchField],

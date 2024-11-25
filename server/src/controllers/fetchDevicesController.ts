@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { Device, QueryParams } from '../models/device.js';
-import { filterDevices, sortDevices } from '../utils.js';
-import { devices } from '../services/deviceService.js';
+import { QueryParams } from '../models/device.js';
+import { getStats, sortDevices } from '../utils.js';
+import { devices, filterDevices, filteredDevices } from '../services/deviceService.js';
+import { clients } from '../services/updateEventsService.js';
 
 export const fetchDevicesController = (req: Request<{}, {}, {}, QueryParams>, res: Response) => {
 	let { offset = '0', limit = '10', sort_by, sort_desc, filter_by, filter_field } = req.query;
@@ -10,9 +11,9 @@ export const fetchDevicesController = (req: Request<{}, {}, {}, QueryParams>, re
 	const parsedLimit = [10, 20].includes(parseInt(limit, 10)) ? parseInt(limit, 10) : 10;
 	const parsedSortDesc = sort_desc === 'true';
 
-	let result = filterDevices(devices, filter_by, filter_field as keyof Device);
+	filterDevices(filter_by, filter_field);
 
-	result = sortDevices(result, sort_by, parsedSortDesc);
+	let result = sortDevices(filteredDevices, sort_by, parsedSortDesc);
 
 	const total = result.length;
 	result = result.slice(
@@ -25,5 +26,10 @@ export const fetchDevicesController = (req: Request<{}, {}, {}, QueryParams>, re
 		offset: parsedOffset,
 		limit: parsedLimit,
 		total,
+	});
+
+	clients.forEach(client => {
+		client.write(`event: connected\n`);
+		client.write(`data: ${JSON.stringify({ stats: getStats(filteredDevices, devices.length) })}\n\n`);
 	});
 };
