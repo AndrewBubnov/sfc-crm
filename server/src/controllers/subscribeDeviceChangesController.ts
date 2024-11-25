@@ -1,8 +1,18 @@
 import { clients } from '../services/updateEventsService.js';
 import { createDevice } from '../utils.js';
-import { devices } from '../services/deviceService.js';
+import { devices, updateDevices } from '../services/deviceService.js';
 import { clearInterval } from 'node:timers';
 import { Request, Response } from 'express';
+import { Device } from '../models/device.js';
+
+enum AutoEventType {
+	Created = 'deviceCreated',
+	Deleted = 'deviceDeleted',
+}
+
+type AutoEvent =
+	| { type: AutoEventType.Created; payload: { device: Device; id?: undefined } }
+	| { type: AutoEventType.Deleted; payload: { id: string | null; device?: undefined } };
 
 export const subscribeDeviceChangesController = (req: Request, res: Response) => {
 	res.writeHead(200, {
@@ -16,21 +26,32 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 
 	clients.push(res);
 
+	const updateDevicesList = (event: AutoEvent) => {
+		if (event.type === AutoEventType.Created) {
+			devices.push(event.payload.device as Device);
+		}
+		if (event.type === AutoEventType.Deleted) {
+			updateDevices(devices.filter(device => device.id !== event.payload.id));
+		}
+	};
+
 	const sendEvent = () => {
-		const events = [
+		const events: AutoEvent[] = [
 			{
-				type: 'deviceCreated',
+				type: AutoEventType.Created,
 				payload: { device: createDevice() },
 			},
 			{
-				type: 'deviceDeleted',
+				type: AutoEventType.Deleted,
 				payload: {
-					deviceId: devices.length ? devices[Math.floor(Math.random() * devices.length)].id : null,
+					id: devices.length ? devices[Math.floor(Math.random() * devices.length)].id : null,
 				},
 			},
 		];
 
 		const event = events[Math.floor(Math.random() * events.length)];
+
+		updateDevicesList(event);
 
 		res.write(`event: ${event.type}\n`);
 		res.write(`data: ${JSON.stringify(event.payload)}\n\n`);

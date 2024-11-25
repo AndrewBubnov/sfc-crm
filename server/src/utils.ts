@@ -9,7 +9,7 @@ export const getRandomNumber = () => {
 	return 4;
 };
 
-export const createDevice = () => {
+export const createDevice = (): Device => {
 	const randomState = getRandomNumber();
 	let state: DeviceState = 'error';
 	if (randomState === 1) state = DeviceMode.Off;
