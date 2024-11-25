@@ -4,8 +4,7 @@ import { BASE_LIMIT } from '@/constants.ts';
 import { getDevicesData } from '@/api/getDevicesData.ts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '@/queryKeys.ts';
-import { useLatest } from '@/hooks/useLatest.ts';
-import { useSubscribe } from '@/hooks/useSubscribe.ts';
+import { useSubscribeAutoEvents } from '@/hooks/useSubscribeAutoEvents.ts';
 
 type UseDeviceData = {
 	sortBy: string;
@@ -24,9 +23,7 @@ export const usePaginatedDeviceListData = ({ search, searchField, sortBy, sortDe
 		placeholderData: keepPreviousData,
 	});
 
-	const paramsRef = useLatest({ page, search, sortBy, sortDesc, limit, searchField }); // to avoid re-subscribe to SSE on change page or sort
-
-	useSubscribe({ paramsRef, refetch });
+	useSubscribeAutoEvents(refetch);
 
 	useEffect(() => {
 		if (search?.length) setPage(1);

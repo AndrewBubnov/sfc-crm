@@ -5,7 +5,7 @@ import { useToast } from '@/hooks/useToast.ts';
 import { useCallback, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Tooltip } from '@/components/Tooltip.tsx';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type ModeMangerProps = {
 	deviceId: string;
@@ -13,6 +13,7 @@ type ModeMangerProps = {
 };
 
 export const ModeManger = ({ deviceId, state }: ModeMangerProps) => {
+	const queryClient = useQueryClient();
 	const { mutate, isPending } = useMutation({
 		mutationFn: changeDeviceMode,
 	});
@@ -43,6 +44,7 @@ export const ModeManger = ({ deviceId, state }: ModeMangerProps) => {
 				onSuccess: (data: Record<'data', Device>) => {
 					if (data.data.state !== 'error') {
 						showSuccessToast(mode);
+						queryClient.invalidateQueries({ queryKey: ['devices'] });
 						return;
 					}
 					showErrorToast();
