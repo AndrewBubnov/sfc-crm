@@ -37,3 +37,9 @@ export type DeviceDataType = {
 export type AccountDataType = {
 	data: Account;
 };
+
+export type GraphData = {
+	name: string;
+	value: number;
+	fill: string;
+};

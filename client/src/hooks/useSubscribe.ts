@@ -1,8 +1,9 @@
-import { MutableRefObject, useCallback, useEffect } from 'react';
+import { MutableRefObject, useCallback, useContext, useEffect } from 'react';
 import { Device, DeviceDataType } from '@/types.ts';
 import { QueryKeys } from '@/queryKeys.ts';
 import { BASE_URL } from '@/constants.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 
 type UseSubscribe = {
 	paramsRef: MutableRefObject<{
@@ -18,6 +19,7 @@ type UseSubscribe = {
 
 export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 	const queryClient = useQueryClient();
+	const { updateStatistics } = useContext(StatisticsContext);
 
 	const updateDevice = useCallback(
 		(evt: MessageEvent) => {
@@ -45,15 +47,27 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 	useEffect(() => {
 		const eventSource = new EventSource(`${BASE_URL}/subscribe-device-changes`);
 
-		eventSource.addEventListener('deviceCreated', refetch as EventListener);
-		eventSource.addEventListener('deviceDeleted', refetch as EventListener);
-		eventSource.addEventListener('deviceUpdate', updateDevice);
+		const autoEventListener = (event: MessageEvent) => {
+			updateStatistics(event);
+			refetch();
+		};
+
+		const updateListener = (event: MessageEvent) => {
+			updateStatistics(event);
+			updateDevice(event);
+		};
+
+		eventSource.addEventListener('connected', updateStatistics);
+		eventSource.addEventListener('deviceCreated', autoEventListener);
+		eventSource.addEventListener('deviceDeleted', autoEventListener);
+		eventSource.addEventListener('deviceUpdate', updateListener);
 
 		return () => {
 			eventSource.close();
-			eventSource.removeEventListener('deviceCreated', refetch as EventListener);
-			eventSource.removeEventListener('deviceDeleted', refetch as EventListener);
-			eventSource.removeEventListener('deviceUpdate', updateDevice);
+			eventSource.removeEventListener('connected', updateStatistics);
+			eventSource.removeEventListener('deviceCreated', autoEventListener);
+			eventSource.removeEventListener('deviceDeleted', autoEventListener);
+			eventSource.removeEventListener('deviceUpdate', updateListener);
 		};
-	}, [refetch, updateDevice]);
+	}, [refetch, updateDevice, updateStatistics]);
 };

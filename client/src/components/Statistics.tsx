@@ -1,82 +1,31 @@
-import { useEffect, useState } from 'react';
-import { BASE_URL } from '@/constants.ts';
+import { useContext } from 'react';
+import { GraphFillDto } from '@/constants.ts';
 import { Pie, PieChart } from 'recharts';
 import { capitalize } from '@/utils.ts';
-
-type GraphData = {
-	name: string;
-	value: number;
-	fill: string;
-};
-
-const GraphFillDto: Record<string, string> = {
-	error: 'tomato',
-	off: 'indigo',
-	standby: 'limegreen',
-	charging: 'green',
-	all: 'lightgray',
-};
+import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 
 export const Statistics = () => {
-	const [data, setData] = useState<GraphData[]>([]);
-	const [total, setTotal] = useState<number>(0);
-
-	useEffect(() => {
-		const eventSource = new EventSource(`${BASE_URL}/subscribe-device-changes`);
-		const listener = (evt: MessageEvent) => {
-			const { stats } = JSON.parse(evt.data);
-			const total: number = stats.total;
-			setTotal(total);
-			delete stats.total;
-			setData(() => {
-				const keys = Object.keys(stats);
-				if (keys.length === 1) {
-					const [key] = keys;
-					return [
-						{ name: key, value: stats[key], fill: GraphFillDto[key] },
-						{ name: 'total', value: total, fill: GraphFillDto['all'] },
-					];
-				}
-				return keys.map(key => ({
-					name: key,
-					value: stats[key],
-					fill: GraphFillDto[key],
-				}));
-			});
-		};
-
-		eventSource.addEventListener('connected', listener);
-		eventSource.addEventListener('deviceCreated', listener);
-		eventSource.addEventListener('deviceDeleted', listener);
-		eventSource.addEventListener('deviceUpdate', listener);
-
-		return () => {
-			eventSource.close();
-			eventSource.removeEventListener('connected', listener);
-			eventSource.removeEventListener('deviceCreated', listener);
-			eventSource.removeEventListener('deviceDeleted', listener);
-			eventSource.removeEventListener('deviceUpdate', listener);
-		};
-	}, []);
+	const { statistics, total } = useContext(StatisticsContext);
+	const isLabelsRendered = statistics.length > 2;
 
 	return (
 		<div className="flex gap-2">
-			<PieChart width={350} height={240}>
+			<PieChart width={330} height={240}>
 				<Pie
-					data={data}
+					data={statistics}
 					dataKey="value"
 					nameKey="name"
 					cx="50%"
 					cy="50%"
 					innerRadius={60}
 					outerRadius={80}
-					label={entry => capitalize(entry.name)}
+					label={isLabelsRendered ? entry => capitalize(entry.name) : undefined}
 					cornerRadius={4}
 				/>
 			</PieChart>
 			<div className="flex flex-col gap-6 justify-center">
-				{data
-					.filter(el => el.name !== 'total')
+				{statistics
+					.filter(el => el.name !== 'total' && el.name !== 'rest')
 					.map(element => (
 						<p key={element.name} style={{ color: GraphFillDto[element.name] }}>
 							{capitalize(element.name)}: {element.value}

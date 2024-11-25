@@ -5,3 +5,11 @@ export const MAX_SEARCH_STRING_LENGTH = 50;
 
 export const searchResolver = (text: string) =>
 	!text.length || (text.length >= MIN_SEARCH_STRING_LENGTH && text.length <= MAX_SEARCH_STRING_LENGTH);
+
+export const GraphFillDto: Record<string, string> = {
+	error: 'tomato',
+	off: 'indigo',
+	standby: 'limegreen',
+	charging: 'green',
+	all: 'lightgray',
+};
