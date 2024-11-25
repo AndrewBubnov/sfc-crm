@@ -10,20 +10,20 @@ export const Statistics = () => {
 
 	return (
 		<div className="flex gap-2">
-			<PieChart width={330} height={240}>
+			<PieChart width={300} height={200}>
 				<Pie
 					data={statistics}
 					dataKey="value"
 					nameKey="name"
 					cx="50%"
 					cy="50%"
-					innerRadius={60}
-					outerRadius={80}
+					innerRadius={50}
+					outerRadius={60}
 					label={isLabelsRendered ? entry => capitalize(entry.name) : undefined}
 					cornerRadius={4}
 				/>
 			</PieChart>
-			<div className="flex flex-col gap-6 justify-center">
+			<div className="flex flex-col gap-2 justify-center">
 				{statistics
 					.filter(el => el.name !== 'total' && el.name !== 'rest')
 					.map(element => (

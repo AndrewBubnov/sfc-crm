@@ -11,7 +11,7 @@ const App = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<StatisticsProvider>
-				<div className="flex flex-col gap-10 p-4">
+				<div className="flex flex-col p-4">
 					<div className="flex justify-between">
 						<Statistics />
 						<AccountData />
