@@ -3,6 +3,8 @@ import { DeviceMode } from '../models/device.js';
 import { devices } from '../services/deviceService.js';
 import { addDeviceUpdateEvent } from '../services/updateEventsService.js';
 
+const UPDATE_MODE_DELAY = 2_000;
+
 export const changeDeviceModeController = (req: Request, res: Response) => {
 	const { id } = req.params;
 	const { mode } = req.body as { mode: DeviceMode };
@@ -27,5 +29,5 @@ export const changeDeviceModeController = (req: Request, res: Response) => {
 			state: devices[deviceIndex].state,
 			type: devices[deviceIndex].type,
 		});
-	}, 2000);
+	}, UPDATE_MODE_DELAY);
 };

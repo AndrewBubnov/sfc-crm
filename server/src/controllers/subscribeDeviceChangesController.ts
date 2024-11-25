@@ -4,6 +4,7 @@ import { devices, updateDevices } from '../services/deviceService.js';
 import { clearInterval } from 'node:timers';
 import { Request, Response } from 'express';
 import { Device } from '../models/device.js';
+import { AUTO_EVENTS_INTERVAL } from '../constants.js';
 
 enum AutoEventType {
 	Created = 'deviceCreated',
@@ -57,7 +58,7 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 		res.write(`data: ${JSON.stringify(event.payload)}\n\n`);
 	};
 
-	const intervalId = setInterval(sendEvent, 10000);
+	const intervalId = setInterval(sendEvent, AUTO_EVENTS_INTERVAL);
 
 	req.on('close', () => {
 		clearInterval(intervalId);

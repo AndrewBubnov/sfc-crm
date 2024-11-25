@@ -24,7 +24,7 @@ export const usePaginatedDeviceListData = ({ search, searchField, sortBy, sortDe
 		placeholderData: keepPreviousData,
 	});
 
-	const paramsRef = useLatest({ page, search, sortBy, sortDesc, limit, searchField }); // to avoid re-subscribe to SSE on change page or sort
+	const paramsRef = useLatest({ page, search, sortBy, sortDesc, limit, searchField });
 
 	useSubscribe({ paramsRef, refetch });
 
