@@ -5,6 +5,7 @@ export const clients: Array<Response> = [];
 
 export const addDeviceUpdateEvent = (event: {
 	id: string;
+	name: string;
 	mode: DeviceMode;
 	state: string | null;
 	type: DeviceType;
