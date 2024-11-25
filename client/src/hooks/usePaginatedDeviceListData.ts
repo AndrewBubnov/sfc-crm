@@ -19,7 +19,7 @@ export const usePaginatedDeviceListData = ({ search, searchField, sortBy, sortDe
 	const [limit, setLimit] = useState<number>(BASE_LIMIT);
 
 	const { data, isFetching, refetch } = useQuery<DeviceDataType, Error>({
-		queryKey: [QueryKeys.Devices, page, search, sortBy, sortDesc, limit],
+		queryKey: [QueryKeys.Devices, page, sortBy, sortDesc, limit, search, searchField],
 		queryFn: () => getDevicesData({ page, search, sortBy, sortDesc, limit, searchField }),
 		placeholderData: keepPreviousData,
 	});

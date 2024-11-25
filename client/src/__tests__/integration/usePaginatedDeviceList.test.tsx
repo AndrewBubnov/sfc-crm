@@ -28,7 +28,10 @@ describe('usePaginatedDeviceListData', () => {
 	afterAll(() => server.close());
 
 	it('should fetch initial device data', async () => {
-		const { result } = renderHook(() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false }), { wrapper });
+		const { result } = renderHook(
+			() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false, searchField: '' }),
+			{ wrapper }
+		);
 
 		await waitFor(() => {
 			expect(result.current.data).toHaveLength(mockDevices.items.length);
@@ -38,7 +41,10 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should update device data on `deviceUpdate` event', async () => {
-		const { result } = renderHook(() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false }), { wrapper });
+		const { result } = renderHook(
+			() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false, searchField: '' }),
+			{ wrapper }
+		);
 
 		act(() => {
 			const event = new MessageEvent('deviceUpdate', {
@@ -54,7 +60,10 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should handle pagination correctly', async () => {
-		const { result } = renderHook(() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false }), { wrapper });
+		const { result } = renderHook(
+			() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false, searchField: '' }),
+			{ wrapper }
+		);
 
 		act(() => {
 			result.current.paginationData.setNextPage();
@@ -74,7 +83,10 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should re-fetch data on deviceCreated event', async () => {
-		const { result } = renderHook(() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false }), { wrapper });
+		const { result } = renderHook(
+			() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false, searchField: '' }),
+			{ wrapper }
+		);
 
 		act(() => {
 			const event = new Event('deviceCreated');

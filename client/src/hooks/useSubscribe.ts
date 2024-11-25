@@ -24,7 +24,7 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 			const updatedDevice: Device = JSON.parse(evt.data);
 			const { page, search, sortBy, sortDesc, limit, searchField } = paramsRef.current;
 			queryClient.setQueryData(
-				[QueryKeys.Devices, page, search, sortBy, sortDesc, limit, searchField],
+				[QueryKeys.Devices, page, sortBy, sortDesc, limit, search, searchField],
 				(oldData?: DeviceDataType) => {
 					if (!oldData) return oldData;
 					return {

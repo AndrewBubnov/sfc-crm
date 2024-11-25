@@ -28,7 +28,7 @@ export const columns: ColumnDef<Device>[] = [
 	},
 	{
 		accessorKey: 'mode',
-		header: () => <p className="pl-10">Change device mode</p>,
+		header: () => <p className="pl-10">Manage device mode</p>,
 		cell: ({ row }) => <ModeManger deviceId={row.getValue('id')} state={row.getValue('state')} />,
 	},
 ];

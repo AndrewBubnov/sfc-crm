@@ -57,7 +57,7 @@ describe('DataTable', () => {
 
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
-		['Id', 'Name', 'Type', 'State', 'Manage device mode'].forEach(headerName => {
+		['ID', 'Name', 'Type', 'State', 'Manage device mode'].forEach(headerName => {
 			expect(screen.getByText(headerName)).toBeInTheDocument();
 		});
 	});
