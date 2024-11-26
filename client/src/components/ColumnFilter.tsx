@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 import { Search } from 'lucide-react';
 import { SearchInput } from '@/components/SearchInput.tsx';
@@ -6,7 +7,7 @@ import { cn } from '@/lib/utils.ts';
 type ColumnFilterProps = {
 	value: string;
 	onChange(value: string): void;
-	onOpenChange(): void;
+	onOpenChange(evt: MouseEvent): void;
 	isSearchEnabled: boolean;
 };
 

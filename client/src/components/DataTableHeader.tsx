@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
 import { flexRender, HeaderGroup } from '@tanstack/react-table';
 import { ColumnFilter } from '@/components/ColumnFilter.tsx';
@@ -27,6 +28,11 @@ export const DataTableHeader = <T,>({
 			<TableRow key={headerGroup.id}>
 				{headerGroup.headers.map((header, index) => {
 					const width = header.getSize();
+					const isSearchEnabled = searchField === header.id && Boolean(searchString.length);
+					const onOpenChange = (evt: MouseEvent) => {
+						if (isSearchEnabled) evt.preventDefault();
+						onFilterChange({ field: header.id, search: '' });
+					};
 					return (
 						<TableHead
 							key={header.id}
@@ -41,9 +47,9 @@ export const DataTableHeader = <T,>({
 									<>
 										<div className="flex gap-4 items-center">
 											<ColumnFilter
-												isSearchEnabled={searchField === header.id}
+												isSearchEnabled={isSearchEnabled}
 												value={searchString}
-												onOpenChange={() => onFilterChange({ field: header.id, search: '' })}
+												onOpenChange={onOpenChange}
 												onChange={search => onFilterChange({ field: header.id, search })}
 											/>
 											<SortSwitch
