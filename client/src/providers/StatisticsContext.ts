@@ -2,7 +2,8 @@ import { createContext } from 'react';
 import { GraphData } from '@/types.ts';
 
 type StatisticsContextProps = {
-	statistics: GraphData[];
+	stateStats: GraphData[];
+	typeStats: GraphData[];
 	total: number;
 	updateStatistics(evt: MessageEvent): void;
 };

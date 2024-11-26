@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { QueryParams } from '../models/device.js';
-import { getStats, sortDevices } from '../utils.js';
+import { getStateStats, getTypeStats, sortDevices } from '../utils.js';
 import { devices, filterDevices, filteredDevices } from '../services/deviceService.js';
 import { clients } from '../services/updateEventsService.js';
 
@@ -30,6 +30,10 @@ export const fetchDevicesController = (req: Request<{}, {}, {}, QueryParams>, re
 
 	clients.forEach(client => {
 		client.write(`event: connected\n`);
-		client.write(`data: ${JSON.stringify({ stats: getStats(filteredDevices, devices.length) })}\n\n`);
+		client.write(
+			`data: ${JSON.stringify({
+				stats: { state: getStateStats(filteredDevices, devices.length), type: getTypeStats(filteredDevices) },
+			})}\n\n`
+		);
 	});
 };

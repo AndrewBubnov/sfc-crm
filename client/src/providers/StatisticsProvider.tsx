@@ -1,44 +1,36 @@
 import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
-import { GraphFillDto } from '@/constants.ts';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 import { GraphData } from '@/types.ts';
+import { setGraphData } from '@/utils.ts';
+import { StateGraphFillDto, TypeGraphFillDto } from '@/constants.ts';
 
 type StatisticsProviderProps = {
 	children: ReactNode;
 };
 
 export const StatisticsProvider = ({ children }: StatisticsProviderProps) => {
-	const [statistics, setStatistics] = useState<GraphData[]>([]);
+	const [stateStats, setStateStats] = useState<GraphData[]>([]);
+	const [typeStats, setTypeStats] = useState<GraphData[]>([]);
 	const total = useRef<number>(0);
 
 	const updateStatistics = useCallback((evt: MessageEvent) => {
-		const { stats } = JSON.parse(evt.data);
-		total.current = stats.total;
-		delete stats.total;
-		setStatistics(() => {
-			const keys = Object.keys(stats);
-			if (keys.length === 1) {
-				const [key] = keys;
-				return [
-					{ name: key, value: stats[key], fill: GraphFillDto[key] },
-					{ name: 'rest', value: total.current - stats[key], fill: GraphFillDto['all'] },
-				];
-			}
-			return keys.map(key => ({
-				name: key,
-				value: stats[key],
-				fill: GraphFillDto[key],
-			}));
-		});
+		const {
+			stats: { state: stateStatistics, type: typeStatistics },
+		} = JSON.parse(evt.data);
+		total.current = stateStatistics.total;
+		delete stateStatistics.total;
+		setStateStats(setGraphData(stateStatistics, total.current, StateGraphFillDto));
+		setTypeStats(setGraphData(typeStatistics, total.current, TypeGraphFillDto));
 	}, []);
 
 	const value = useMemo(
 		() => ({
-			statistics,
+			stateStats,
+			typeStats,
 			total: total.current,
 			updateStatistics,
 		}),
-		[statistics, updateStatistics]
+		[stateStats, typeStats, updateStatistics]
 	);
 
 	return <StatisticsContext.Provider value={value}>{children}</StatisticsContext.Provider>;

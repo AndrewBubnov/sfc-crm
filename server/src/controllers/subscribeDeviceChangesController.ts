@@ -1,5 +1,5 @@
 import { clients } from '../services/updateEventsService.js';
-import { createDevice, getStats } from '../utils.js';
+import { createDevice, getStateStats, getTypeStats } from '../utils.js';
 import { devices, filteredDevices, updateDevices } from '../services/deviceService.js';
 import { clearInterval } from 'node:timers';
 import { Request, Response } from 'express';
@@ -23,7 +23,11 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 	});
 
 	res.write(`event: connected\n`);
-	res.write(`data: ${JSON.stringify({ stats: getStats(filteredDevices, devices.length) })}\n\n`);
+	res.write(
+		`data: ${JSON.stringify({
+			stats: { state: getStateStats(filteredDevices, devices.length), type: getTypeStats(filteredDevices) },
+		})}\n\n`
+	);
 
 	clients.push(res);
 
@@ -56,7 +60,10 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 
 		res.write(`event: ${event.type}\n`);
 		res.write(
-			`data: ${JSON.stringify({ event: event.payload, stats: getStats(filteredDevices, devices.length) })}\n\n`
+			`data: ${JSON.stringify({
+				event: event.payload,
+				stats: getStateStats(filteredDevices, devices.length),
+			})}\n\n`
 		);
 	};
 

@@ -51,7 +51,7 @@ export const getFilteredDevices = (devices: Device[], filterBy?: string, filter_
 	return devices.filter(device => device[filter_field].toLowerCase().includes(lowerFilter));
 };
 
-export const getStats = (filteredDevices: Device[], total: number) => {
+export const getStateStats = (filteredDevices: Device[], total: number) => {
 	const reducedData = filteredDevices.reduce(
 		(acc, cur) => {
 			acc[cur.state] = (acc[cur.state] || 0) + 1;
@@ -60,4 +60,14 @@ export const getStats = (filteredDevices: Device[], total: number) => {
 		{} as Record<DeviceState, number>
 	);
 	return { ...reducedData, total };
+};
+
+export const getTypeStats = (filteredDevices: Device[]) => {
+	return filteredDevices.reduce(
+		(acc, cur) => {
+			acc[cur.type] = (acc[cur.type] || 0) + 1;
+			return acc;
+		},
+		{} as Record<DeviceType, number>
+	);
 };

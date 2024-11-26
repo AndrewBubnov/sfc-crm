@@ -47,7 +47,7 @@ export const DataTable = () => {
 		state: { columnVisibility },
 		onColumnVisibilityChange: setColumnVisibility,
 		getCoreRowModel: getCoreRowModel(),
-		columnResizeMode: 'onChange', // to make columns resizable
+		columnResizeMode: 'onChange',
 	});
 
 	useEffect(() => {
