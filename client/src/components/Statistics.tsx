@@ -8,8 +8,8 @@ export const Statistics = () => {
 
 	return (
 		<div className="flex w-[70vw] justify-between">
-			<Chart data={stateStats} total={total} dto={StateGraphFillDto} name="state" />
 			<Chart data={typeStats} total={total} dto={TypeGraphFillDto} name="type" />
+			<Chart data={stateStats} total={total} dto={StateGraphFillDto} name="state" />
 		</div>
 	);
 };

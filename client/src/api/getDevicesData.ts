@@ -1,6 +1,7 @@
 import { BASE_URL } from '@/constants.ts';
 import axios from 'axios';
 import { Filter } from '@/types.ts';
+import { createFilterQueryString } from '@/utils.ts';
 
 type GetDevicesData = {
 	page: number;
@@ -8,23 +9,6 @@ type GetDevicesData = {
 	sortBy: string;
 	sortDesc: boolean;
 	filters: Filter[];
-};
-
-const createFilterQueryString = (filters: Filter[]) => {
-	const filtersToFetch = filters.filter(el => Boolean(el.search));
-	const searchQueryString = filtersToFetch
-		.map(el => el.search)
-		.reduce((acc, cur) => {
-			acc = `${acc}&filter_by=${cur}`;
-			return acc;
-		}, '');
-	const searchFieldQueryString = filtersToFetch
-		.map(el => el.field)
-		.reduce((acc, cur) => {
-			acc = `${acc}&filter_field=${cur}`;
-			return acc;
-		}, '');
-	return `${searchQueryString}${searchFieldQueryString}`;
 };
 
 export const getDevicesData = async ({ page, limit, sortBy, sortDesc, filters }: GetDevicesData) => {

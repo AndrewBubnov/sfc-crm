@@ -1,3 +1,5 @@
+import { Filter } from '@/types.ts';
+
 export const createIndexesList = (page: number, lastPage: number) => {
 	const length = Math.min(lastPage, 3);
 	if (page === 1) return Array.from({ length }, (_, index) => index + 1);
@@ -30,4 +32,21 @@ export const setGraphData = (statistics: Record<string, number>, total: number, 
 		value: statistics[key],
 		fill: dto[key],
 	}));
+};
+
+export const createFilterQueryString = (filters: Filter[]) => {
+	const filtersToFetch = filters.filter(el => Boolean(el.search));
+	const searchQueryString = filtersToFetch
+		.map(el => el.search)
+		.reduce((acc, cur) => {
+			acc = `${acc}&filter_by=${cur}`;
+			return acc;
+		}, '');
+	const searchFieldQueryString = filtersToFetch
+		.map(el => el.field)
+		.reduce((acc, cur) => {
+			acc = `${acc}&filter_field=${cur}`;
+			return acc;
+		}, '');
+	return `${searchQueryString}${searchFieldQueryString}`;
 };
