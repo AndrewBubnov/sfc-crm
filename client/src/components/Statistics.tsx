@@ -8,7 +8,7 @@ export const Statistics = () => {
 	const { stateStats, typeStats, total } = useContext(StatisticsContext);
 
 	return (
-		<div className="flex gap-2 flex-1 justify-evenly">
+		<div className="flex gap-2 w-[70vw] justify-between">
 			<div className="flex">
 				<PieChart width={300} height={180}>
 					<Pie
