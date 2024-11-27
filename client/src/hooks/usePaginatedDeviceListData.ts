@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DeviceDataType } from '@/types.ts';
+import { DeviceDataType, Filter } from '@/types.ts';
 import { BASE_LIMIT } from '@/constants.ts';
 import { getDevicesData } from '@/api/getDevicesData.ts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -10,27 +10,26 @@ import { useSubscribe } from '@/hooks/useSubscribe.ts';
 type UseDeviceData = {
 	sortBy: string;
 	sortDesc: boolean;
-	searchField: string;
-	search?: string;
+	filters: Filter[];
 };
 
-export const usePaginatedDeviceListData = ({ search, searchField, sortBy, sortDesc }: UseDeviceData) => {
+export const usePaginatedDeviceListData = ({ filters, sortBy, sortDesc }: UseDeviceData) => {
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(BASE_LIMIT);
 
 	const { data, isFetching, refetch } = useQuery<DeviceDataType, Error>({
-		queryKey: [QueryKeys.Devices, page, sortBy, sortDesc, limit, search, searchField],
-		queryFn: () => getDevicesData({ page, search, sortBy, sortDesc, limit, searchField }),
+		queryKey: [QueryKeys.Devices, page, sortBy, sortDesc, limit, filters],
+		queryFn: () => getDevicesData({ page, sortBy, sortDesc, limit, filters }),
 		placeholderData: keepPreviousData,
 	});
 
-	const paramsRef = useLatest({ page, search, sortBy, sortDesc, limit, searchField });
+	const paramsRef = useLatest({ page, sortBy, sortDesc, limit, filters });
 
 	useSubscribe({ paramsRef, refetch });
 
 	useEffect(() => {
-		if (search?.length) setPage(1);
-	}, [search?.length]);
+		if (filters.length) setPage(1);
+	}, [filters.length]);
 
 	const onChangeLimit = useCallback(
 		(limitNumber: number) =>

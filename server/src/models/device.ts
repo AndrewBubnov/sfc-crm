@@ -39,6 +39,6 @@ export type QueryParams = {
 	limit?: string;
 	sort_by?: keyof Device;
 	sort_desc?: string;
-	filter_by?: string;
-	filter_field?: string;
+	filter_by?: string | string[];
+	filter_field?: string | string[];
 };

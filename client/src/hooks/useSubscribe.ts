@@ -1,5 +1,5 @@
 import { MutableRefObject, useCallback, useContext, useEffect } from 'react';
-import { Device, DeviceDataType } from '@/types.ts';
+import { Device, DeviceDataType, Filter } from '@/types.ts';
 import { QueryKeys } from '@/queryKeys.ts';
 import { BASE_URL } from '@/constants.ts';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -8,11 +8,10 @@ import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 type UseSubscribe = {
 	paramsRef: MutableRefObject<{
 		page: number;
-		search: string | undefined;
+		filters: Filter[];
 		sortBy: string;
 		sortDesc: boolean;
 		limit: number;
-		searchField: string;
 	}>;
 	refetch: ReturnType<typeof useQuery>['refetch'];
 };
@@ -24,9 +23,9 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 	const updateDevice = useCallback(
 		(evt: MessageEvent) => {
 			const updatedDevice: Device = JSON.parse(evt.data).event;
-			const { page, search, sortBy, sortDesc, limit, searchField } = paramsRef.current;
+			const { page, sortBy, sortDesc, limit, filters } = paramsRef.current;
 			queryClient.setQueryData(
-				[QueryKeys.Devices, page, sortBy, sortDesc, limit, search, searchField],
+				[QueryKeys.Devices, page, sortBy, sortDesc, limit, filters],
 				(oldData?: DeviceDataType) => {
 					if (!oldData) return oldData;
 					return {

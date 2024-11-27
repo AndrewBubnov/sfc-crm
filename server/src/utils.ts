@@ -43,12 +43,18 @@ export const sortDevices = (devices: Device[], sortBy?: keyof Device, sortDesc?:
 	});
 };
 
-export const getFilteredDevices = (devices: Device[], filterBy?: string, filter_field?: keyof Device): Device[] => {
-	if (!filterBy || !filter_field) return devices;
-
-	const lowerFilter = filterBy.toLowerCase();
-
-	return devices.filter(device => device[filter_field].toLowerCase().includes(lowerFilter));
+export const getFilteredDevices = (
+	devices: Device[],
+	filter_by?: string | string[],
+	filter_field?: string | Array<keyof Device>
+): Device[] => {
+	if (!filter_by?.length || !filter_field?.length) return devices;
+	const filterBy = Array.isArray(filter_by) ? filter_by : [filter_by];
+	const filterField = (Array.isArray(filter_field) ? filter_field : [filter_field]) as Array<keyof Device>;
+	return filterField.reduce((acc, cur, index) => {
+		acc = acc.filter(el => el[cur].toLowerCase().includes(filterBy[index]));
+		return acc;
+	}, devices);
 };
 
 export const getStateStats = (filteredDevices: Device[], total: number) => {

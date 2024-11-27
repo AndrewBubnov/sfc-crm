@@ -43,3 +43,5 @@ export type GraphData = {
 	value: number;
 	fill: string;
 };
+
+export type Filter = { search: string; field: string };
