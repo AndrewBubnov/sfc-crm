@@ -44,7 +44,7 @@ export const Chart = ({ data, dto, total, name }: ChartProps) => {
 				</PieChart>
 				{isFilteredData && (
 					<SearchX
-						className="absolute z-50 text-gray-500 cursor-pointer"
+						className="absolute z-50 text-gray-500 pl-1 cursor-pointer"
 						onClick={() => onFilterChange({ field: name, search: '' })}
 					/>
 				)}
