@@ -17,6 +17,7 @@ export const StatisticsProvider = ({ children }: StatisticsProviderProps) => {
 		const {
 			stats: { state: stateStatistics, type: typeStatistics },
 		} = JSON.parse(evt.data);
+
 		total.current = stateStatistics.total;
 		delete stateStatistics.total;
 		setStateStats(setGraphData(stateStatistics, total.current, StateGraphFillDto));

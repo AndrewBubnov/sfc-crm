@@ -62,7 +62,7 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 		res.write(
 			`data: ${JSON.stringify({
 				event: event.payload,
-				stats: getStateStats(filteredDevices, devices.length),
+				stats: { state: getStateStats(filteredDevices, devices.length), type: getTypeStats(filteredDevices) },
 			})}\n\n`
 		);
 	};

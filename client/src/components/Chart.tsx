@@ -24,7 +24,7 @@ export const Chart = ({ data, dto, total, name }: ChartProps) => (
 				cornerRadius={4}
 			/>
 		</PieChart>
-		<div className="flex flex-col gap-2 justify-center">
+		<div className="flex flex-col gap-2 justify-center text-sm">
 			<p className="font-semibold">{capitalize(name)}</p>
 			{data
 				.filter(el => el.name !== 'total' && el.name !== 'rest')

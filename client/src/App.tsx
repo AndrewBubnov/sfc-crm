@@ -4,21 +4,24 @@ import { DataTable } from '@/components/DataTable.tsx';
 import { Toaster } from '@/components/ui/toaster';
 import { Statistics } from '@/components/Statistics.tsx';
 import { StatisticsProvider } from '@/providers/StatisticsProvider.tsx';
+import { FilteringProvider } from '@/providers/FilteringProvider.tsx';
 
 const queryClient = new QueryClient();
 
 const App = () => {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<StatisticsProvider>
-				<div className="flex flex-col p-4">
-					<div className="flex justify-between">
-						<Statistics />
-						<AccountData />
+			<FilteringProvider>
+				<StatisticsProvider>
+					<div className="flex flex-col p-4">
+						<div className="flex justify-between">
+							<Statistics />
+							<AccountData />
+						</div>
+						<DataTable />
 					</div>
-					<DataTable />
-				</div>
-			</StatisticsProvider>
+				</StatisticsProvider>
+			</FilteringProvider>
 			<Toaster />
 		</QueryClientProvider>
 	);

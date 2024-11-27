@@ -3,26 +3,19 @@ import { useCallback, useState } from 'react';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table.tsx';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
 import { columns } from '@/columns.tsx';
-import { useDebounced } from '@/hooks/useDebounced.ts';
 import { ColumnManager } from '@/components/ColumnManager.tsx';
 import { Pagination } from '@/components/Pagination.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
-import { filterResolver, initialFilters } from '@/constants.ts';
 import { LimitManager } from '@/components/LimitManager.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
-import { Filter } from '@/types.ts';
 
 export const DataTable = () => {
-	const [filtersList, setFiltersList] = useState<Filter[]>(initialFilters);
 	const [sortBy, setSortBy] = useState<string>('');
 	const [sortDesc, setSortDesc] = useState<boolean>(false);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
-	const debouncedFiltersList = useDebounced(filtersList, filterResolver);
-
 	const { data, paginationData, isInitFetching } = usePaginatedDeviceListData({
-		filters: debouncedFiltersList,
 		sortBy,
 		sortDesc,
 	});
@@ -33,20 +26,6 @@ export const DataTable = () => {
 			setSortDesc(sortedDesc);
 		},
 		[sortDesc]
-	);
-
-	const onFilterChange = useCallback(
-		({ search, field }: Filter) => {
-			console.log({ search, field });
-			return setFiltersList(prevState =>
-				prevState.map(el => {
-					if (el.field === field) return { search, field };
-					return el;
-				})
-			);
-		},
-
-		[]
 	);
 
 	const table = useReactTable({
@@ -71,8 +50,6 @@ export const DataTable = () => {
 					<Table>
 						<DataTableHeader
 							headerGroups={table.getHeaderGroups()}
-							filters={filtersList}
-							onFilterChange={onFilterChange}
 							sortBy={sortBy}
 							sortDesc={sortDesc}
 							onSortChange={onSortChange}
