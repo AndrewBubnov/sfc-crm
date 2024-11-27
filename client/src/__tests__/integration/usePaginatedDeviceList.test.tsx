@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData';
-import { BASE_URL } from '@/constants';
+import { BASE_URL, initialFilters } from '@/constants';
 import { ReactNode } from 'react';
 import { mockDevices } from '@/mocks/mockDevices.ts';
 
@@ -17,6 +17,8 @@ const server = setupServer(
 	})
 );
 
+const defaultArgs = { sortBy: '', sortDesc: false, filters: initialFilters };
+
 describe('usePaginatedDeviceListData', () => {
 	const queryClient = new QueryClient();
 	const wrapper = ({ children }: { children: ReactNode }) => (
@@ -28,10 +30,9 @@ describe('usePaginatedDeviceListData', () => {
 	afterAll(() => server.close());
 
 	it('should fetch initial device data', async () => {
-		const { result } = renderHook(
-			() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false, searchField: '' }),
-			{ wrapper }
-		);
+		const { result } = renderHook(() => usePaginatedDeviceListData(defaultArgs), {
+			wrapper,
+		});
 
 		await waitFor(() => {
 			expect(result.current.data).toHaveLength(mockDevices.items.length);
@@ -41,10 +42,9 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should update device data on `deviceUpdate` event', async () => {
-		const { result } = renderHook(
-			() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false, searchField: '' }),
-			{ wrapper }
-		);
+		const { result } = renderHook(() => usePaginatedDeviceListData(defaultArgs), {
+			wrapper,
+		});
 
 		act(() => {
 			const event = new MessageEvent('deviceUpdate', {
@@ -60,10 +60,9 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should handle pagination correctly', async () => {
-		const { result } = renderHook(
-			() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false, searchField: '' }),
-			{ wrapper }
-		);
+		const { result } = renderHook(() => usePaginatedDeviceListData(defaultArgs), {
+			wrapper,
+		});
 
 		act(() => {
 			result.current.paginationData.setNextPage();
@@ -83,10 +82,9 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should re-fetch data on deviceCreated event', async () => {
-		const { result } = renderHook(
-			() => usePaginatedDeviceListData({ sortBy: '', sortDesc: false, searchField: '' }),
-			{ wrapper }
-		);
+		const { result } = renderHook(() => usePaginatedDeviceListData(defaultArgs), {
+			wrapper,
+		});
 
 		act(() => {
 			const event = new Event('deviceCreated');

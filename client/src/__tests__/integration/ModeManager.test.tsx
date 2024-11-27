@@ -44,8 +44,7 @@ describe('ModeManger', () => {
 
 	it('disables current state button', () => {
 		render(<ModeManger {...defaultProps} />, { wrapper });
-
-		const offButton = screen.getByText('off');
+		const offButton = screen.getByRole('button', { name: 'off' });
 		expect(offButton).toBeDisabled();
 	});
 
@@ -54,7 +53,7 @@ describe('ModeManger', () => {
 
 		render(<ModeManger {...defaultProps} />, { wrapper });
 
-		const chargingButton = screen.getByText('charging');
+		const chargingButton = screen.getByRole('button', { name: 'charging' });
 		fireEvent.click(chargingButton);
 
 		await waitFor(() => {

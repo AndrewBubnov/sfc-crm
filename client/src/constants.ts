@@ -22,3 +22,10 @@ export const TypeGraphFillDto: Record<string, string> = {
 	type4: '#dab600',
 	all: 'lightgray',
 };
+
+export const initialFilters: Filter[] = [
+	{ field: 'id', search: '' },
+	{ field: 'name', search: '' },
+	{ field: 'type', search: '' },
+	{ field: 'state', search: '' },
+];

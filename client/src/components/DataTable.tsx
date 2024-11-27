@@ -7,19 +7,14 @@ import { useDebounced } from '@/hooks/useDebounced.ts';
 import { ColumnManager } from '@/components/ColumnManager.tsx';
 import { Pagination } from '@/components/Pagination.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
-import { filterResolver } from '@/constants.ts';
+import { filterResolver, initialFilters } from '@/constants.ts';
 import { LimitManager } from '@/components/LimitManager.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
 import { Filter } from '@/types.ts';
 
 export const DataTable = () => {
-	const [filtersList, setFiltersList] = useState<Filter[]>([
-		{ field: 'id', search: '' },
-		{ field: 'name', search: '' },
-		{ field: 'type', search: '' },
-		{ field: 'state', search: '' },
-	]);
+	const [filtersList, setFiltersList] = useState<Filter[]>(initialFilters);
 	const [sortBy, setSortBy] = useState<string>('');
 	const [sortDesc, setSortDesc] = useState<boolean>(false);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
