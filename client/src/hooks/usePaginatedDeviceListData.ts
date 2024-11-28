@@ -36,10 +36,14 @@ export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) 
 	const onChangeLimit = useCallback(
 		(limitNumber: number) =>
 			setLimit(prevLimit => {
-				setPage(prevPage => Math.floor(prevPage * (prevLimit / limitNumber)) || 1);
+				setPage(prevPage => {
+					const newPage = Math.floor(prevPage * (prevLimit / limitNumber)) || 1;
+					const maxPages = Math.ceil((data?.data.total || 0) / limitNumber);
+					return Math.min(newPage, maxPages) || 1;
+				});
 				return limitNumber;
 			}),
-		[]
+		[data?.data.total]
 	);
 
 	const lastPage = Math.ceil((data?.data.total ?? 0) / limit);
