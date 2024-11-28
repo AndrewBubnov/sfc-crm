@@ -1,18 +1,22 @@
 import { Filter } from '@/types.ts';
 
 export const createIndexesList = (page: number, lastPage: number) => {
+	const currentPage = Math.min(page, lastPage);
 	const length = Math.min(lastPage, 3);
-	if (page === 1) return Array.from({ length }, (_, index) => index + 1);
-	if (page === lastPage)
+	if (currentPage === 1) {
+		return Array.from({ length }, (_, index) => index + 1);
+	}
+	if (currentPage === lastPage) {
 		return Array.from({ length }, (_, index) => {
-			if (index === length - 1) return page;
-			if (index === length - 2) return page - 1;
-			return page - 2;
+			if (index === length - 1) return currentPage;
+			if (index === length - 2) return currentPage - 1;
+			return currentPage - 2;
 		});
+	}
 	return Array.from({ length }, (_, index) => {
-		if (!index) return page - 1;
-		if (index === 1) return page;
-		return page + 1;
+		if (!index) return currentPage - 1;
+		if (index === 1) return currentPage;
+		return currentPage + 1;
 	});
 };
 
@@ -35,7 +39,7 @@ export const setGraphData = (statistics: Record<string, number>, total: number, 
 };
 
 export const createFilterQueryString = (filters: Filter[]) => {
-	const filtersToFetch = filters.filter(el => Boolean(el.search));
+	const filtersToFetch = filters.filter(el => Boolean(el.field) && Boolean(el.search));
 	const searchQueryString = filtersToFetch
 		.map(el => el.search)
 		.reduce((acc, cur) => {
