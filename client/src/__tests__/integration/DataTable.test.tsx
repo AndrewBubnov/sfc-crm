@@ -1,12 +1,13 @@
 import 'eventsource-polyfill';
+import { ReactNode } from 'react';
+import { FilteringContext } from '@/providers/FilteringContext';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DataTable } from '@/components/DataTable';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { BASE_URL } from '@/constants';
+import { BASE_URL, initialFilters } from '@/constants';
 import { mockDevices } from '@/mocks/mockDevices.ts';
-import { ReactNode } from 'react';
 
 const server = setupServer(
 	http.get(`${BASE_URL}/devices`, async ({ request }) => {
@@ -28,13 +29,24 @@ const server = setupServer(
 			});
 		}
 		return HttpResponse.json(mockDevices);
+	}),
+	http.get(`${BASE_URL}/subscribe-device-changes`, () => {
+		return new Response(null, {
+			headers: {
+				'Content-Type': 'text/event-stream',
+			},
+		});
 	})
 );
 
 const queryClient = new QueryClient();
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-	<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+	<QueryClientProvider client={queryClient}>
+		<FilteringContext.Provider value={{ filters: initialFilters, onFilterChange: vi.fn() }}>
+			{children}
+		</FilteringContext.Provider>
+	</QueryClientProvider>
 );
 
 beforeAll(() => server.listen());

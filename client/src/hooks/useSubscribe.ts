@@ -47,13 +47,21 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 		const eventSource = new EventSource(`${BASE_URL}/subscribe-device-changes`);
 
 		const autoEventListener = (event: MessageEvent) => {
-			updateStatistics(event);
-			refetch();
+			try {
+				updateStatistics(event);
+				refetch();
+			} catch (error) {
+				console.error('Error handling autoEventListener:', error);
+			}
 		};
 
 		const updateListener = (event: MessageEvent) => {
-			updateStatistics(event);
-			updateDevice(event);
+			try {
+				updateStatistics(event);
+				updateDevice(event);
+			} catch (error) {
+				console.error('Error handling updateListener:', error);
+			}
 		};
 
 		eventSource.addEventListener('connected', updateStatistics);
