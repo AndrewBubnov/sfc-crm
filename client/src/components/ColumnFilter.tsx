@@ -13,7 +13,10 @@ type ColumnFilterProps = {
 
 export const ColumnFilter = ({ value, onChange, onOpenChange, isSearchEnabled }: ColumnFilterProps) => (
 	<Popover>
-		<PopoverTrigger className="bg-transparent border-none hover:border-none" onClick={onOpenChange}>
+		<PopoverTrigger
+			className="bg-transparent border-none hover:border-none focus:outline-none"
+			onClick={onOpenChange}
+		>
 			<Search
 				size={16}
 				className={cn(
