@@ -7,8 +7,9 @@ export const Statistics = () => {
 	const { stateStats, typeStats, total } = useContext(StatisticsContext);
 
 	return (
-		<div className="flex w-[70vw] justify-between">
+		<div className="flex w-[75vw] justify-between items-center">
 			<Chart data={typeStats} total={total} dto={TypeGraphFillDto} name="type" />
+			<div className="h-[50%] w-[1px] bg-gray-300" />
 			<Chart data={stateStats} total={total} dto={StateGraphFillDto} name="state" />
 		</div>
 	);

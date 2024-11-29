@@ -23,6 +23,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+*,*:focus, *:hover {
+  outline: none;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
