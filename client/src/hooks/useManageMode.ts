@@ -33,7 +33,7 @@ export const useManageMode = (deviceMode: MutableRefObject<DeviceMode | null>) =
 			}
 			showErrorToast(DEVICE_ERROR_DESCRIPTION);
 		},
-		onError: (description: string = COMMON_ERROR_DESCRIPTION) => showErrorToast(description),
+		onError: () => showErrorToast(),
 		onSettled: () => {
 			deviceMode.current = null;
 		},

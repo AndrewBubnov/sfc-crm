@@ -52,7 +52,11 @@ export type CreateQuery<T> = QueryParams & { previousData?: T };
 export type Options<TData, TVariables> = Partial<{
 	onSuccess: (data: TData, variables: TVariables) => Promise<unknown> | void | unknown;
 	onError: (error: Error, variables: TVariables) => Promise<unknown> | void | unknown;
-	onSettled: (data: TData | undefined, error: Error | undefined, variables: TVariables) => Promise<unknown> | void;
+	onSettled: (
+		data: TData | undefined,
+		error: Error | undefined,
+		variables: TVariables
+	) => Promise<unknown> | void | unknown;
 }>;
 
 export type MutateFunction<TData, TVariables> = (variables: TVariables, options?: Options<TData, TVariables>) => void;

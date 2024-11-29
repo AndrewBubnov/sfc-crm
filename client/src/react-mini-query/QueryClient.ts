@@ -1,14 +1,4 @@
-import {
-	Query,
-	QueryState,
-	QueryStatus,
-	QueryKey,
-	GetQuery,
-	CreateQuery,
-	QueryClientProps,
-	Updater,
-	QueryStateUpdater,
-} from './types.ts';
+import { Query, QueryState, QueryStatus, QueryKey, GetQuery, CreateQuery, QueryClientProps } from './types.ts';
 import { isEqual } from './utils.ts';
 import { getPreviousQueryKeyHash } from './PreviousDataStore.ts';
 
