@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react';
 import { FilteringContext } from '@/providers/FilteringContext.ts';
-import { Pie, PieChart } from 'recharts';
+import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { SearchX } from 'lucide-react';
 import { capitalize } from '@/utils.ts';
 import { GraphData } from '@/types.ts';
@@ -15,7 +15,7 @@ type ChartProps = {
 };
 
 export const Chart = ({ data, dto, total, name }: ChartProps) => {
-	const [currentIndex, setCurrentIndex] = useState(0);
+	const [activeIndex, setActiveIndex] = useState(0);
 	const { onFilterChange } = useContext(FilteringContext);
 
 	const clickHandler = useCallback(
@@ -28,24 +28,26 @@ export const Chart = ({ data, dto, total, name }: ChartProps) => {
 
 	return (
 		<div className="flex">
-			<div className="flex items-center justify-center">
-				<PieChart width={380} height={220}>
-					<Pie
-						data={data}
-						dataKey="value"
-						nameKey="name"
-						cx="50%"
-						cy="50%"
-						activeIndex={currentIndex}
-						activeShape={ActiveShape}
-						innerRadius={50}
-						outerRadius={60}
-						cornerRadius={4}
-						onClick={isFullData ? clickHandler : undefined}
-						className={cn(isFullData && 'cursor-pointer')}
-						onMouseEnter={(_: unknown, index: number) => setCurrentIndex(index)}
-					/>
-				</PieChart>
+			<div className="flex items-center justify-center w-[33vw]">
+				<ResponsiveContainer height={220} width="100%">
+					<PieChart>
+						<Pie
+							data={data}
+							dataKey="value"
+							nameKey="name"
+							cx="50%"
+							cy="50%"
+							activeIndex={activeIndex}
+							activeShape={ActiveShape}
+							innerRadius={50}
+							outerRadius={60}
+							cornerRadius={4}
+							onClick={isFullData ? clickHandler : undefined}
+							className={cn(isFullData && 'cursor-pointer')}
+							onMouseEnter={(_: unknown, index: number) => setActiveIndex(index)}
+						/>
+					</PieChart>
+				</ResponsiveContainer>
 				{isFilteredData && (
 					<SearchX
 						className="absolute z-50 text-gray-300 pl-1 cursor-pointer"
