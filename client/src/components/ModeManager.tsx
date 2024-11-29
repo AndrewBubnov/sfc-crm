@@ -13,7 +13,7 @@ type ModeMangerProps = {
 export const ModeManger = ({ deviceId, state }: ModeMangerProps) => {
 	const deviceMode = useRef<DeviceMode | null>(null);
 
-	const { mutate, isPending } = useManageMode(deviceMode);
+	const { mutate, isLoading } = useManageMode(deviceMode);
 
 	const modeHandler = (mode: DeviceMode) => async () => {
 		deviceMode.current = mode;
@@ -23,17 +23,17 @@ export const ModeManger = ({ deviceId, state }: ModeMangerProps) => {
 	return (
 		<div className="flex" defaultValue="off">
 			{Object.values(DeviceMode).map(mode => {
-				const isLoading = isPending && mode === deviceMode.current;
+				const isPending = isLoading && mode === deviceMode.current;
 				return (
 					<Tooltip key={mode} text={`Click to change mode to '${mode}'`}>
 						<Button
-							disabled={isPending || mode === state}
+							disabled={isLoading || mode === state}
 							variant="ghost"
 							className="bg-transparent w-[100px] font-normal border-none hover:border-none"
 							onClick={modeHandler(mode)}
 						>
-							{!isLoading && <span>{mode}</span>}
-							{isLoading && <Loader className="animate-spin" />}
+							{!isPending && <span>{mode}</span>}
+							{isPending && <Loader className="animate-spin" />}
 						</Button>
 					</Tooltip>
 				);

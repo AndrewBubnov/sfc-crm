@@ -1,12 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { registerDevice } from '@/api/registerDevice.ts';
+import { useMutation, useQueryClient } from '@/react-mini-query';
 
 export const useDeviceRegister = () => {
 	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: registerDevice,
-		onSuccess: async () => {
-			await queryClient.invalidateQueries({ queryKey: ['devices'] });
-		},
+	return useMutation(registerDevice, {
+		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['devices'] }),
 	}).mutate;
 };
