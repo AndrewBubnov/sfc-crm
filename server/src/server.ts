@@ -6,6 +6,7 @@ import { changeDeviceModeRoute } from './routes/changeDeviceModeRoute.js';
 import { subscribeDeviceChangesRoute } from './routes/subscribeDeviceChangesRoute.js';
 import { fetchAccountRoute } from './routes/fetchAccountRoute.js';
 import { registerDeviceRoute } from './routes/registerDeviceRoute.js';
+import { deleteDevicesRoute } from './routes/deleteDevicesRoute.js';
 import { PORT } from './constants.js';
 
 const app = express();
@@ -14,7 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/devices', fetchDevicesRoute);
 app.use('/devices', renameDeviceRoute);
-app.use('/device-register', registerDeviceRoute);
+app.use('/devices/register', registerDeviceRoute);
+app.use('/devices/delete', deleteDevicesRoute);
 app.use('/devices', changeDeviceModeRoute);
 app.use('/subscribe-device-changes', subscribeDeviceChangesRoute);
 app.use('/account', fetchAccountRoute);

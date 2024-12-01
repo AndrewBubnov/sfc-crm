@@ -49,7 +49,6 @@ export const Pagination = ({
 								size="sm"
 								onClick={() => setPage(1)}
 								disabled={page === 1}
-								className="bg-transparent hover:border-transparent"
 								data-testid="pagination-first-button"
 							>
 								<ChevronFirst />
@@ -59,7 +58,6 @@ export const Pagination = ({
 								size="sm"
 								onClick={setPrevPage}
 								disabled={isPrevStepDisabled}
-								className="bg-transparent hover:border-transparent"
 								data-testid="pagination-previous-button"
 							>
 								<ChevronLeft />

@@ -11,3 +11,7 @@ export const filterDevices = (filter_by?: string | string[], filter_field?: stri
 export const updateDevices = (updatedDevices: Device[]) => {
 	devices = updatedDevices;
 };
+
+export const updateFilteredDevices = (updatedDevices: Device[]) => {
+	filteredDevices = updatedDevices;
+};

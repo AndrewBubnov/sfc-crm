@@ -1,15 +1,11 @@
-import { clients } from '../services/updateEventsService.js';
 import { createDevice, getStateStats, getTypeStats } from '../utils.js';
 import { devices, filteredDevices, updateDevices } from '../services/deviceService.js';
 import { clearInterval } from 'node:timers';
 import { Request, Response } from 'express';
 import { Device } from '../models/device.js';
 import { AUTO_EVENTS_INTERVAL } from '../constants.js';
-
-enum AutoEventType {
-	Created = 'deviceCreated',
-	Deleted = 'deviceDeleted',
-}
+import { AutoEventType } from '../models/autoEventType.js';
+import { clients } from '../models/clients.js';
 
 type AutoEvent =
 	| { type: AutoEventType.Created; payload: { device: Device; id?: undefined } }

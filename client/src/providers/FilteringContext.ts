@@ -1,8 +1,9 @@
-import { createContext } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
 import { Filter } from '@/types.ts';
 
 type FilteringContextProps = {
 	filters: Filter[];
+	setFilters: Dispatch<SetStateAction<Filter[]>>;
 	onFilterChange(arg: Filter): void;
 };
 

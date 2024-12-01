@@ -16,7 +16,7 @@ type ColumnManagerProps = {
 export const ColumnManager = ({ columns }: ColumnManagerProps) => (
 	<DropdownMenu>
 		<DropdownMenuTrigger asChild>
-			<Button variant="ghost" className="bg-transparent hover:border-transparent">
+			<Button variant="ghost">
 				<Settings />
 				Edit columns
 			</Button>

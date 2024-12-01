@@ -23,6 +23,7 @@ export const FilteringProvider = ({ children }: FilteringProviderProps) => {
 	const value = useMemo(
 		() => ({
 			filters,
+			setFilters,
 			onFilterChange,
 		}),
 		[filters, onFilterChange]

@@ -3,8 +3,22 @@ import { Device } from '@/types.ts';
 import { NameInput } from '@/components/NameInput.tsx';
 import { cn } from '@/lib/utils.ts';
 import { ModeManger } from '@/components/ModeManager.tsx';
+import { Checkbox } from '@/components/ui/checkbox.tsx';
+import { DeleteManager } from '@/components/DeleteManager.tsx';
 
 export const columns: ColumnDef<Device>[] = [
+	{
+		id: 'select-col',
+		size: 30,
+		header: ({ table }) => <DeleteManager table={table} />,
+		cell: ({ row }) => (
+			<Checkbox
+				checked={row.getIsSelected()}
+				disabled={!row.getCanSelect()}
+				onCheckedChange={row.getToggleSelectedHandler()}
+			/>
+		),
+	},
 	{
 		accessorKey: 'id',
 		header: 'ID',

@@ -1,4 +1,4 @@
-import { flexRender, getCoreRowModel, useReactTable, VisibilityState } from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, RowSelectionState, useReactTable, VisibilityState } from '@tanstack/react-table';
 import { useCallback, useState } from 'react';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table.tsx';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
@@ -9,11 +9,13 @@ import { Skeleton } from '@/components/Skeleton.tsx';
 import { LimitManager } from '@/components/LimitManager.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
+import { ClearFilters } from '@/components/ClearFilters.tsx';
 
 export const DataTable = () => {
 	const [sortBy, setSortBy] = useState<string>('');
 	const [sortDesc, setSortDesc] = useState<boolean>(false);
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
 	const { data, paginationData, isInitFetching } = usePaginatedDeviceListData({
 		sortBy,
@@ -31,17 +33,21 @@ export const DataTable = () => {
 	const table = useReactTable({
 		data,
 		columns,
-		state: { columnVisibility },
+		state: { columnVisibility, rowSelection },
 		onColumnVisibilityChange: setColumnVisibility,
 		getCoreRowModel: getCoreRowModel(),
 		columnResizeMode: 'onChange',
+		onRowSelectionChange: setRowSelection,
 	});
 
 	return (
 		<div className="flex flex-col gap-2">
 			<div className="flex items-center justify-between">
 				<Skeleton isLoading={isInitFetching} className="w-full h-8 rounded-md">
-					<RegisterDeviceSheet />
+					<div className="flex items-center gap-[100px]">
+						<RegisterDeviceSheet />
+						<ClearFilters />
+					</div>
 					<ColumnManager columns={table.getAllColumns()} />
 				</Skeleton>
 			</div>

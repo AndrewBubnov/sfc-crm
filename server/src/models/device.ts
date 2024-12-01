@@ -24,6 +24,10 @@ export type RenameDeviceParams = {
 	id: string;
 };
 
+export type DeleteDeviceBody = {
+	ids: string[];
+};
+
 export type RenameDeviceBody = {
 	name: string;
 };

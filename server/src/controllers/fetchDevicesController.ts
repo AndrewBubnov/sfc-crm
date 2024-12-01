@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { QueryParams } from '../models/device.js';
 import { getStateStats, getTypeStats, sortDevices } from '../utils.js';
 import { devices, filterDevices, filteredDevices } from '../services/deviceService.js';
-import { clients } from '../services/updateEventsService.js';
+
+import { clients } from '../models/clients.js';
 
 export const fetchDevicesController = (req: Request<{}, {}, {}, QueryParams>, res: Response) => {
 	let { offset = '0', limit = '10', sort_by, sort_desc, filter_by, filter_field } = req.query;

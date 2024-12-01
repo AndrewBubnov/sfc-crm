@@ -9,5 +9,5 @@ type RegisterDevice = {
 };
 
 export const registerDevice = async (body: RegisterDevice) => {
-	return axios.post(`${BASE_URL}/device-register`, body);
+	return axios.post(`${BASE_URL}/devices/register`, body);
 };

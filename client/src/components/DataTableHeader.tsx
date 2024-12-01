@@ -37,7 +37,7 @@ export const DataTableHeader = <T,>({ headerGroups, onSortChange, sortBy, sortDe
 									{header.isPlaceholder
 										? null
 										: flexRender(header.column.columnDef.header, header.getContext())}
-									{index < headerGroup.headers.length - 1 && (
+									{index && index < headerGroup.headers.length - 1 ? (
 										<>
 											<div className="flex gap-4 items-center">
 												<ColumnFilter
@@ -58,7 +58,7 @@ export const DataTableHeader = <T,>({ headerGroups, onSortChange, sortBy, sortDe
 												className="absolute top-0 -right-[2px] h-full w-[4px] bg-gray-transparent cursor-col-resize select-none touch-none hover:bg-gray-300 transition-colors"
 											/>
 										</>
-									)}
+									) : null}
 								</div>
 							</TableHead>
 						);
