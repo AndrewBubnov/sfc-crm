@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { Filter } from '@/types.ts';
-import { initialFilters } from '@/constants.ts';
 import { FilteringContext } from '@/providers/FilteringContext.ts';
+import { initialFilters } from '@/constants.ts';
+import { Filter } from '@/types.ts';
 
 type FilteringProviderProps = {
 	children: ReactNode;

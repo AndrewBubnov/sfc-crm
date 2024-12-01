@@ -1,6 +1,5 @@
 import { DeviceMode, DeviceState } from '@/types.ts';
 import { useRef } from 'react';
-import { Tooltip } from '@/components/Tooltip.tsx';
 import { useManageMode } from '@/hooks/useManageMode.ts';
 import { LoaderButton } from '@/components/LoaderButton.tsx';
 
@@ -24,16 +23,15 @@ export const ModeManger = ({ deviceId, state }: ModeMangerProps) => {
 			{Object.values(DeviceMode).map(mode => {
 				const isLoading = isPending && mode === deviceMode.current;
 				return (
-					<Tooltip key={mode} text={`Click to change mode to '${mode}'`}>
-						<LoaderButton
-							isLoading={isLoading}
-							disabled={isPending || mode === state}
-							onClick={modeHandler(mode)}
-							className="w-[100px]"
-						>
-							<span>{mode}</span>
-						</LoaderButton>
-					</Tooltip>
+					<LoaderButton
+						key={mode}
+						isLoading={isLoading}
+						disabled={isPending || mode === state}
+						onClick={modeHandler(mode)}
+						className="w-[100px]"
+					>
+						<span>{mode}</span>
+					</LoaderButton>
 				);
 			})}
 		</div>

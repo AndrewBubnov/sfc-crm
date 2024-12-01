@@ -52,6 +52,10 @@ export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) 
 	const isPrevStepDisabled = isFetching || page === 1;
 	const isNextStepDisabled = isFetching || page === lastPage;
 
+	useEffect(() => {
+		if (lastPage && page > lastPage) setPage(lastPage);
+	}, [lastPage, page]);
+
 	return useMemo(
 		() => ({
 			data: data?.data.items || [],
@@ -66,6 +70,7 @@ export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) 
 				lastPage,
 				limit,
 				onChangeLimit,
+				isFetching,
 			},
 		}),
 		[

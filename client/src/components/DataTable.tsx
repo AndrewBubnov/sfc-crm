@@ -1,8 +1,7 @@
-import { flexRender, getCoreRowModel, RowSelectionState, useReactTable, VisibilityState } from '@tanstack/react-table';
 import { useCallback, useState } from 'react';
+import { flexRender, getCoreRowModel, RowSelectionState, useReactTable, VisibilityState } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table.tsx';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
-import { columns } from '@/columns.tsx';
 import { ColumnManager } from '@/components/ColumnManager.tsx';
 import { Pagination } from '@/components/Pagination.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
@@ -10,6 +9,7 @@ import { LimitManager } from '@/components/LimitManager.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
 import { ClearFilters } from '@/components/ClearFilters.tsx';
+import { columns } from '@/columns.tsx';
 
 export const DataTable = () => {
 	const [sortBy, setSortBy] = useState<string>('');
@@ -52,7 +52,7 @@ export const DataTable = () => {
 				</Skeleton>
 			</div>
 			<div className="rounded-md border">
-				<Skeleton isLoading={isInitFetching} className="w-full h-[568px] rounded-md">
+				<Skeleton isLoading={isInitFetching} className="w-full h-[488px] rounded-md">
 					<Table>
 						<DataTableHeader
 							headerGroups={table.getHeaderGroups()}

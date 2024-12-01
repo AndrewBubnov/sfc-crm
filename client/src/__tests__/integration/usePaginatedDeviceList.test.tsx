@@ -38,7 +38,9 @@ describe('usePaginatedDeviceListData', () => {
 
 	const wrapper = ({ children }: { children: ReactNode }) => (
 		<QueryClientProvider client={queryClient}>
-			<FilteringContext.Provider value={{ filters: initialFilters, onFilterChange: vi.fn() }}>
+			<FilteringContext.Provider
+				value={{ filters: initialFilters, onFilterChange: vi.fn(), setFilters: vi.fn() }}
+			>
 				{children}
 			</FilteringContext.Provider>
 		</QueryClientProvider>

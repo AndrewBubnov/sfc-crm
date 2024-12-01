@@ -2,10 +2,10 @@ import { useCallback, useContext, useState } from 'react';
 import { FilteringContext } from '@/providers/FilteringContext.ts';
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { SearchX } from 'lucide-react';
-import { capitalize } from '@/utils.ts';
-import { GraphData } from '@/types.ts';
 import { cn } from '@/lib/utils.ts';
 import { ActiveShape } from '@/components/ActiveShape.tsx';
+import { capitalize } from '@/utils.ts';
+import { GraphData } from '@/types.ts';
 
 type ChartProps = {
 	data: GraphData[];

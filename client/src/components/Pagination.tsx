@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button.tsx';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
 import { ChevronLeft, ChevronRight, ChevronFirst, ChevronLast } from 'lucide-react';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { createIndexesList } from '@/utils.ts';
 import { useMemo } from 'react';
+import { PaginationButton } from '@/components/PaginationButton.tsx';
 
 type PaginationProps = {
 	paginationData: ReturnType<typeof usePaginatedDeviceListData>['paginationData'];
@@ -11,80 +11,97 @@ type PaginationProps = {
 };
 
 export const Pagination = ({
-	paginationData: { page, setPage, setNextPage, setPrevPage, isPrevStepDisabled, isNextStepDisabled, lastPage },
+	paginationData: {
+		page,
+		setPage,
+		setNextPage,
+		setPrevPage,
+		isPrevStepDisabled,
+		isNextStepDisabled,
+		lastPage,
+		isFetching,
+	},
 	isLoading,
 }: PaginationProps) => {
+	const pageIndexes = createIndexesList(page, lastPage);
+
 	const pagesList = useMemo(
 		() =>
-			createIndexesList(page, lastPage).map(pageIndex => {
+			pageIndexes.map(pageIndex => {
 				if (pageIndex === page)
 					return (
-						<span
-							key={pageIndex}
-							className="text-lg cursor-pointer font-semibold"
-							onClick={() => setPage(pageIndex)}
-						>
-							{pageIndex}
-						</span>
+						<PaginationButton key={pageIndex} disabled={isFetching} className="text-lg font-semibold">
+							<span>{pageIndex}</span>
+						</PaginationButton>
 					);
 				return (
-					<span key={pageIndex} className="cursor-pointer text-xs" onClick={() => setPage(pageIndex)}>
-						{pageIndex}
-					</span>
+					<PaginationButton
+						key={pageIndex}
+						disabled={isFetching}
+						className="text-xs"
+						onClick={() => setPage(pageIndex)}
+					>
+						<span>{pageIndex}</span>
+					</PaginationButton>
 				);
 			}),
-		[lastPage, page, setPage]
+		[isFetching, page, pageIndexes, setPage]
 	);
 
 	const isPaginationEnabled = pagesList.length > 1;
 
 	return (
 		<div className="flex items-center justify-end space-x-4">
-			<Skeleton isLoading={isLoading} className="w-[20vw] h-8 rounded-md">
+			<Skeleton isLoading={isLoading} className="w-[25vw] h-8 rounded-md">
 				{isPaginationEnabled && (
 					<>
 						<div className="flex items-center">
-							<Button
-								variant="ghost"
-								size="sm"
+							<PaginationButton
+								disabled={page === 1 || isFetching}
 								onClick={() => setPage(1)}
-								disabled={page === 1}
-								data-testid="pagination-first-button"
+								dataTestId="pagination-first-button"
 							>
 								<ChevronFirst />
-							</Button>
-							<Button
-								variant="ghost"
-								size="sm"
+							</PaginationButton>
+							<PaginationButton
+								disabled={isPrevStepDisabled || isFetching}
 								onClick={setPrevPage}
-								disabled={isPrevStepDisabled}
-								data-testid="pagination-previous-button"
+								dataTestId="pagination-previous-button"
 							>
 								<ChevronLeft />
-							</Button>
+							</PaginationButton>
 						</div>
-						<div className="flex items-center gap-4">{pagesList}</div>
 						<div className="flex items-center">
-							<Button
-								variant="ghost"
-								size="sm"
+							{pageIndexes[0] > 1 && (
+								<PaginationButton disabled={isFetching} onClick={() => setPage(Math.max(page - 3, 1))}>
+									...
+								</PaginationButton>
+							)}
+							{pagesList}
+							{(pageIndexes.at(-1) || 1) < lastPage && (
+								<PaginationButton
+									disabled={isFetching}
+									onClick={() => setPage(Math.min(page + 3, lastPage))}
+								>
+									...
+								</PaginationButton>
+							)}
+						</div>
+						<div className="flex items-center">
+							<PaginationButton
+								disabled={isNextStepDisabled || isFetching}
 								onClick={setNextPage}
-								disabled={isNextStepDisabled}
-								className="bg-transparent hover:border-transparent"
-								data-testid="pagination-next-button"
+								dataTestId="pagination-next-button"
 							>
 								<ChevronRight />
-							</Button>
-							<Button
-								variant="ghost"
-								size="sm"
+							</PaginationButton>
+							<PaginationButton
+								disabled={page === lastPage || isFetching}
 								onClick={() => setPage(lastPage)}
-								disabled={page === lastPage}
-								className="bg-transparent hover:border-transparent"
-								data-testid="pagination-last-button"
+								dataTestId="pagination-last-button"
 							>
 								<ChevronLast />
-							</Button>
+							</PaginationButton>
 						</div>
 					</>
 				)}
