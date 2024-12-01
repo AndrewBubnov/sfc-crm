@@ -43,7 +43,7 @@ const queryClient = new QueryClient();
 
 const wrapper = ({ children }: { children: ReactNode }) => (
 	<QueryClientProvider client={queryClient}>
-		<FilteringContext.Provider value={{ filters: initialFilters, onFilterChange: vi.fn() }}>
+		<FilteringContext.Provider value={{ filters: initialFilters, onFilterChange: vi.fn(), setFilters: vi.fn() }}>
 			{children}
 		</FilteringContext.Provider>
 	</QueryClientProvider>
@@ -139,12 +139,11 @@ describe('DataTable', () => {
 		await waitFor(() => {
 			const rows = screen.getAllByRole('row').slice(1);
 			const ids = rows.map(row => {
-				const idCell = row.querySelector('td:first-child');
+				const idCell = row.querySelector('td:nth-child(2)');
 				return idCell ? idCell.textContent : '';
 			});
 
 			const sortedIds = [...mockDevices.items].sort((a, b) => a.id.localeCompare(b.id)).map(device => device.id);
-
 			expect(ids).toStrictEqual(sortedIds);
 		});
 	});
@@ -176,7 +175,7 @@ describe('DataTable', () => {
 		await waitFor(() => {
 			const rows = screen.getAllByRole('row').slice(1);
 			const ids = rows.map(row => {
-				const idCell = row.querySelector('td:first-child');
+				const idCell = row.querySelector('td:nth-child(2)');
 				return idCell ? idCell.textContent : '';
 			});
 
