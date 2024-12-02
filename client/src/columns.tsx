@@ -1,10 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Device } from '@/types.ts';
 import { NameInput } from '@/components/NameInput.tsx';
-import { cn } from '@/lib/utils.ts';
 import { ModeManger } from '@/components/ModeManager.tsx';
 import { Checkbox } from '@/components/ui/checkbox.tsx';
 import { DeleteManager } from '@/components/DeleteManager.tsx';
+import { AnimatedState } from '@/components/AnimatedState.tsx';
 
 export const columns: ColumnDef<Device>[] = [
 	{
@@ -35,10 +35,7 @@ export const columns: ColumnDef<Device>[] = [
 	{
 		accessorKey: 'state',
 		header: 'State',
-		cell: ({ row }) => {
-			const state = row.getValue('state') as string;
-			return <p className={cn('font-semibold', state === 'error' && 'text-red-400')}>{state}</p>;
-		},
+		cell: ({ row }) => <AnimatedState text={row.getValue('state')} id={row.original.id} />,
 	},
 	{
 		accessorKey: 'mode',
