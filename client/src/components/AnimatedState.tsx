@@ -1,53 +1,45 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils.ts';
 
 type AnimatedStateProps = {
-	id: string;
 	text: string;
+	className?: string;
+	isError?: boolean;
+	errorClassName?: string;
+	onFocus?: () => void;
+	onBlur?: () => void;
 };
 
-export const AnimatedState = ({ text, id }: AnimatedStateProps) => {
-	const [isStateChanged, setIsStateChanged] = useState(false);
-	const [prevText, setPrevText] = useState(text);
+export const AnimatedState = ({ text, className, isError, errorClassName, onFocus, onBlur }: AnimatedStateProps) => {
+	const [state, setState] = useState(text);
 
-	const idRef = useRef(id);
-
-	useEffect(() => {
-		if (text !== prevText && id === idRef.current) {
-			setIsStateChanged(true);
-		}
-		if (id !== idRef.current) {
-			setIsStateChanged(false);
-			idRef.current = id;
-		}
-	}, [id, prevText, text]);
-
-	const onTransitionEnd = () => {
-		setIsStateChanged(false);
-		setPrevText(text);
-	};
+	const isStateChanged = state !== text;
 
 	return (
-		<div className="relative overflow-hidden h-5">
+		<div
+			tabIndex={0}
+			onFocus={onFocus}
+			onBlur={onBlur}
+			className="relative overflow-hidden h-5"
+			data-testid="AnimatedState-container"
+		>
 			<div
 				className={cn(
-					'absolute top-0 left-0',
+					'absolute',
 					isStateChanged && 'flex flex-col -translate-y-1/2 transition-transform duration-300'
 				)}
-				onTransitionEnd={onTransitionEnd}
+				onTransitionEnd={() => setState(text)}
 			>
 				<span
 					className={cn(
-						'font-semibold',
-						prevText === 'error' && 'text-red-400',
-						isStateChanged && 'opacity-0 transition-opacity'
+						className,
+						isStateChanged && 'opacity-0 transition-opacity',
+						isError && errorClassName
 					)}
 				>
-					{prevText}
+					{state}
 				</span>
-				{isStateChanged && (
-					<span className={cn('font-semibold', text === 'error' && 'text-red-400')}>{text}</span>
-				)}
+				{isStateChanged && <span className={className}>{text}</span>}
 			</div>
 		</div>
 	);

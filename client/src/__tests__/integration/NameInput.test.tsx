@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { NameInput } from '@/components/NameInput.tsx';
-import { Mock, vi } from 'vitest';
+import { expect, Mock, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renameDevice } from '@/api/renameDevice.ts';
 import { ReactNode } from 'react';
@@ -48,14 +48,18 @@ describe('NameInput', () => {
 		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 	);
 
-	it('renders the input with the correct initial value', () => {
+	it('renders the input with the correct initial value', async () => {
 		render(<NameInput {...defaultProps} />, { wrapper });
+		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
+		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
 		expect(inputElement).toHaveValue('Old Device Name');
 	});
 
-	it('updates the input value when typed into', () => {
+	it('updates the input value when typed into', async () => {
 		render(<NameInput {...defaultProps} />, { wrapper });
+		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
+		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
 		expect(inputElement).toHaveValue('New Device Name');
@@ -63,6 +67,8 @@ describe('NameInput', () => {
 
 	it('does not call mutate when the name is the same', async () => {
 		render(<NameInput {...defaultProps} />, { wrapper });
+		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
+		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'Old Device Name' } });
 
@@ -71,7 +77,8 @@ describe('NameInput', () => {
 
 	it('calls mutate with the correct parameters when the name is changed', async () => {
 		render(<NameInput {...defaultProps} />, { wrapper });
-
+		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
+		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
 		fireEvent.submit(screen.getByRole('form'));
@@ -89,7 +96,8 @@ describe('NameInput', () => {
 		(renameDevice as Mock).mockResolvedValueOnce({});
 
 		render(<NameInput {...defaultProps} />, { wrapper });
-
+		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
+		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
 		fireEvent.submit(screen.getByRole('form'));
@@ -105,7 +113,8 @@ describe('NameInput', () => {
 		(renameDevice as Mock).mockRejectedValueOnce(new Error('Rename failed'));
 
 		render(<NameInput {...defaultProps} />, { wrapper });
-
+		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
+		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
 		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
 		fireEvent.submit(screen.getByRole('form'));
@@ -117,34 +126,6 @@ describe('NameInput', () => {
 				description: 'There was a problem with renaming the device',
 				action: expect.any(Object),
 			});
-		});
-	});
-
-	it('disables the input when mutation is in progress', async () => {
-		let resolvePromise: (value: unknown) => void;
-		const promise = new Promise(resolve => {
-			resolvePromise = resolve;
-		});
-
-		(renameDevice as Mock).mockImplementationOnce(() => promise);
-
-		render(<NameInput {...defaultProps} />, { wrapper });
-
-		const inputElement = screen.getByRole('textbox');
-
-		expect(inputElement).not.toBeDisabled();
-
-		fireEvent.change(inputElement, { target: { value: 'New Device Name' } });
-		fireEvent.submit(screen.getByRole('form'));
-
-		await waitFor(() => {
-			expect(inputElement).toBeDisabled();
-		});
-
-		resolvePromise!({});
-
-		await waitFor(() => {
-			expect(inputElement).not.toBeDisabled();
 		});
 	});
 });

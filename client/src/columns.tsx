@@ -22,6 +22,7 @@ export const columns: ColumnDef<Device>[] = [
 	{
 		accessorKey: 'id',
 		header: 'ID',
+		cell: ({ row }) => <AnimatedState text={row.getValue('id')} />,
 	},
 	{
 		accessorKey: 'name',
@@ -31,11 +32,19 @@ export const columns: ColumnDef<Device>[] = [
 	{
 		accessorKey: 'type',
 		header: 'Type',
+		cell: ({ row }) => <AnimatedState text={row.getValue('type')} />,
 	},
 	{
 		accessorKey: 'state',
 		header: 'State',
-		cell: ({ row }) => <AnimatedState text={row.getValue('state')} id={row.original.id} />,
+		cell: ({ row }) => (
+			<AnimatedState
+				text={row.getValue('state')}
+				className="font-semibold"
+				isError={row.getValue('state') === 'error'}
+				errorClassName="text-red-400"
+			/>
+		),
 	},
 	{
 		accessorKey: 'mode',
