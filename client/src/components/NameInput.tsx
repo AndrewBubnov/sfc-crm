@@ -52,7 +52,7 @@ export const NameInput = ({ deviceId, cellName }: CellInputProps) => {
 
 	return focus ? (
 		<form onSubmit={renameHandler} role="form" onFocus={onFocus} onBlur={renameHandler}>
-			<Input ref={onCreateInput} className="border-none shadow-none" value={name} onChange={onChange} />
+			<Input ref={onCreateInput} className="border-none shadow-none pl-0" value={name} onChange={onChange} />
 		</form>
 	) : (
 		<AnimatedState text={name} onFocus={onFocus} onBlur={onBlur} />
