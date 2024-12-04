@@ -26,8 +26,8 @@ export const DeleteManager = ({ table }: DeleteManagerProps) => {
 
 	return (
 		<Popover>
-			<PopoverTrigger className="bg-transparent border-none hover:border-none focus:outline-none">
-				<Ellipsis className="translate-x-1" />
+			<PopoverTrigger className="flex justify-center w-full bg-transparent border-none hover:border-none focus:outline-none">
+				<Ellipsis />
 			</PopoverTrigger>
 			<PopoverContent className="flex flex-col gap-1 w-fit" side="top">
 				<Label
