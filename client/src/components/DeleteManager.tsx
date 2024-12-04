@@ -38,10 +38,11 @@ export const DeleteManager = ({ table }: DeleteManagerProps) => {
 					)}
 				>
 					<Checkbox
+						className="checkbox-inverted"
 						checked={allRowsSelected}
 						onCheckedChange={evt => multiRowChecker({ target: { value: evt } })}
 					/>
-					<span>{allRowsSelected ? 'Unselect all rows' : 'Select all rows'}</span>
+					<span>All rows</span>
 				</Label>
 				<LoaderButton
 					isLoading={isPending}

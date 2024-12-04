@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  button[role="checkbox"].checkbox-inverted {
+    @apply flex justify-center items-center border-neutral-950 bg-transparent shadow-none;
+    @apply data-[state=checked]:bg-white;
+    @apply data-[state=checked]:text-neutral-950;
+    @apply hover:border-primary;
+  }
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
