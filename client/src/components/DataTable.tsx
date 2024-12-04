@@ -1,7 +1,6 @@
-import { useCallback, useState } from 'react';
-import { flexRender, getCoreRowModel, RowSelectionState, useReactTable, VisibilityState } from '@tanstack/react-table';
+import { useContext } from 'react';
+import { flexRender } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table.tsx';
-import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
 import { ColumnManager } from '@/components/ColumnManager.tsx';
 import { Pagination } from '@/components/Pagination.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
@@ -9,36 +8,13 @@ import { LimitManager } from '@/components/LimitManager.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
 import { ClearFilters } from '@/components/ClearFilters.tsx';
+import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 import { columns } from '@/columns.tsx';
+import { TableContext } from '@/providers/TableContext.ts';
 
 export const DataTable = () => {
-	const [sortBy, setSortBy] = useState<string>('');
-	const [sortDesc, setSortDesc] = useState<boolean>(false);
-	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-
-	const { data, paginationData, isInitFetching } = usePaginatedDeviceListData({
-		sortBy,
-		sortDesc,
-	});
-
-	const onSortChange = useCallback(
-		({ sortedBy, sortedDesc }: { sortedBy: string; sortedDesc: boolean }) => {
-			setSortBy(prevState => (prevState === sortedBy && sortedDesc === sortDesc ? '' : sortedBy));
-			setSortDesc(sortedDesc);
-		},
-		[sortDesc]
-	);
-
-	const table = useReactTable({
-		data,
-		columns,
-		state: { columnVisibility, rowSelection },
-		onColumnVisibilityChange: setColumnVisibility,
-		getCoreRowModel: getCoreRowModel(),
-		columnResizeMode: 'onChange',
-		onRowSelectionChange: setRowSelection,
-	});
+	const table = useContext(TableContext);
+	const { isInitFetching } = useContext(PaginatedDataContext);
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -54,12 +30,7 @@ export const DataTable = () => {
 			<div className="rounded-md border">
 				<Skeleton isLoading={isInitFetching} className="w-full h-[488px] rounded-md">
 					<Table>
-						<DataTableHeader
-							headerGroups={table.getHeaderGroups()}
-							sortBy={sortBy}
-							sortDesc={sortDesc}
-							onSortChange={onSortChange}
-						/>
+						<DataTableHeader headerGroups={table.getHeaderGroups()} />
 						<TableBody>
 							{table.getRowModel().rows?.length ? (
 								table.getRowModel().rows.map(row => (
@@ -86,12 +57,8 @@ export const DataTable = () => {
 				</Skeleton>
 			</div>
 			<div className="flex items-center justify-end gap-8">
-				<LimitManager
-					limit={paginationData.limit}
-					onLimitChange={paginationData.onChangeLimit}
-					isLoading={isInitFetching}
-				/>
-				<Pagination paginationData={paginationData} isLoading={isInitFetching} />
+				<LimitManager />
+				<Pagination />
 			</div>
 		</div>
 	);

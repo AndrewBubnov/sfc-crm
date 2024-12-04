@@ -8,6 +8,8 @@ import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 import { BASE_URL, initialFilters } from '@/constants';
 import { mockDevices } from '@/mocks/mockDevices.ts';
+import { PaginatedDataProvider } from '@/providers/PaginatedDataProvider.tsx';
+import { TableProvider } from '@/providers/TableProvider.tsx';
 
 const server = setupServer(
 	http.get(`${BASE_URL}/devices`, async ({ request }) => {
@@ -44,7 +46,9 @@ const queryClient = new QueryClient();
 const wrapper = ({ children }: { children: ReactNode }) => (
 	<QueryClientProvider client={queryClient}>
 		<FilteringContext.Provider value={{ filters: initialFilters, onFilterChange: vi.fn(), setFilters: vi.fn() }}>
-			{children}
+			<PaginatedDataProvider>
+				<TableProvider>{children}</TableProvider>
+			</PaginatedDataProvider>
 		</FilteringContext.Provider>
 	</QueryClientProvider>
 );

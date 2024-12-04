@@ -1,28 +1,25 @@
-import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData.ts';
 import { ChevronLeft, ChevronRight, ChevronFirst, ChevronLast } from 'lucide-react';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { createIndexesList } from '@/utils.ts';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { PaginationButton } from '@/components/PaginationButton.tsx';
+import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 
-type PaginationProps = {
-	paginationData: ReturnType<typeof usePaginatedDeviceListData>['paginationData'];
-	isLoading: boolean;
-};
+export const Pagination = () => {
+	const {
+		paginationData: {
+			page,
+			setPage,
+			setNextPage,
+			setPrevPage,
+			isPrevStepDisabled,
+			isNextStepDisabled,
+			lastPage,
+			isFetching,
+		},
+		isInitFetching,
+	} = useContext(PaginatedDataContext);
 
-export const Pagination = ({
-	paginationData: {
-		page,
-		setPage,
-		setNextPage,
-		setPrevPage,
-		isPrevStepDisabled,
-		isNextStepDisabled,
-		lastPage,
-		isFetching,
-	},
-	isLoading,
-}: PaginationProps) => {
 	const pageIndexes = createIndexesList(page, lastPage);
 
 	const pagesList = useMemo(
@@ -52,7 +49,7 @@ export const Pagination = ({
 
 	return (
 		<div className="flex items-center justify-end space-x-4">
-			<Skeleton isLoading={isLoading} className="w-[25vw] h-8 rounded-md">
+			<Skeleton isLoading={isInitFetching} className="w-[25vw] h-8 rounded-md">
 				{isPaginationEnabled && (
 					<>
 						<div className="flex items-center">
