@@ -27,13 +27,13 @@ export const DeleteManager = ({ table }: DeleteManagerProps) => {
 	return (
 		<Popover>
 			<PopoverTrigger className="bg-transparent border-none hover:border-none focus:outline-none">
-				<Ellipsis />
+				<Ellipsis className="translate-x-1" />
 			</PopoverTrigger>
 			<PopoverContent className="flex flex-col gap-1 w-fit" side="top">
 				<Label
 					onClick={evt => isPending && evt.preventDefault()}
 					className={cn(
-						'flex items-center justify-start gap-2 py-2 px-4 font-normal rounded-lg hover:bg-secondary',
+						'flex items-center justify-start gap-2 cursor-pointer py-2 px-4 font-normal rounded-lg hover:bg-secondary',
 						isPending && 'opacity-45'
 					)}
 				>
