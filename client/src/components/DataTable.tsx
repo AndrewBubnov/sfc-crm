@@ -65,7 +65,10 @@ export const DataTable = () => {
 								table.getRowModel().rows.map(row => (
 									<TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
 										{row.getVisibleCells().map(cell => (
-											<TableCell key={cell.id} className="border border-gray-100 py-1">
+											<TableCell
+												key={cell.id}
+												className="border border-gray-100 py-1 [&:has([role=checkbox])]:pr-2"
+											>
 												{flexRender(cell.column.columnDef.cell, cell.getContext())}
 											</TableCell>
 										))}

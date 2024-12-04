@@ -4,9 +4,10 @@
 
 @layer components {
   button[role="checkbox"].checkbox-inverted {
-    @apply flex justify-center items-center border-neutral-950 bg-transparent shadow-none;
+    @apply flex justify-center items-center rounded-xl border-neutral-950 bg-transparent shadow-none;
     @apply data-[state=checked]:bg-white;
     @apply data-[state=checked]:text-neutral-950;
+    @apply data-[state=checked]:rounded-sm;
     @apply hover:border-primary;
   }
 }

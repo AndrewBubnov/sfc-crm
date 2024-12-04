@@ -9,15 +9,17 @@ import { AnimatedState } from '@/components/AnimatedState.tsx';
 export const columns: ColumnDef<Device>[] = [
 	{
 		id: 'select-col',
-		size: 30,
+		size: 25,
 		header: ({ table }) => <DeleteManager table={table} />,
 		cell: ({ row }) => (
-			<Checkbox
-				className="checkbox-inverted"
-				checked={row.getIsSelected()}
-				disabled={!row.getCanSelect()}
-				onCheckedChange={row.getToggleSelectedHandler()}
-			/>
+			<div className="flex justify-center">
+				<Checkbox
+					className="checkbox-inverted"
+					checked={row.getIsSelected()}
+					disabled={!row.getCanSelect()}
+					onCheckedChange={row.getToggleSelectedHandler()}
+				/>
+			</div>
 		),
 	},
 	{
