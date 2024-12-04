@@ -9,11 +9,11 @@ import { DataTableHeader } from '@/components/DataTableHeader.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
 import { ClearFilters } from '@/components/ClearFilters.tsx';
 import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
-import { columns } from '@/columns.tsx';
 import { TableContext } from '@/providers/TableContext.ts';
+import { columns } from '@/columns.tsx';
 
 export const DataTable = () => {
-	const table = useContext(TableContext);
+	const { table } = useContext(TableContext);
 	const { isInitFetching } = useContext(PaginatedDataContext);
 
 	return (
@@ -24,7 +24,7 @@ export const DataTable = () => {
 						<RegisterDeviceSheet />
 						<ClearFilters />
 					</div>
-					<ColumnManager columns={table.getAllColumns()} />
+					<ColumnManager />
 				</Skeleton>
 			</div>
 			<div className="rounded-md border">

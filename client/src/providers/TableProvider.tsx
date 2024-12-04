@@ -22,5 +22,5 @@ export const TableProvider = ({ children }: TableProviderProps) => {
 		columnResizeMode: 'onChange',
 		onRowSelectionChange: setRowSelection,
 	});
-	return <TableContext.Provider value={table}>{children}</TableContext.Provider>;
+	return <TableContext.Provider value={{ table }}>{children}</TableContext.Provider>;
 };
