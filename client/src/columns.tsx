@@ -13,6 +13,7 @@ export const columns: ColumnDef<Device>[] = [
 		header: ({ table }) => <DeleteManager table={table} />,
 		cell: ({ row }) => (
 			<Checkbox
+				className="checkbox-inverted"
 				checked={row.getIsSelected()}
 				disabled={!row.getCanSelect()}
 				onCheckedChange={row.getToggleSelectedHandler()}
