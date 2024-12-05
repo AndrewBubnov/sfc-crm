@@ -54,7 +54,7 @@ export const getFilteredDevices = (
 	const filterBy = Array.isArray(filter_by) ? filter_by : [filter_by];
 	const filterField = (Array.isArray(filter_field) ? filter_field : [filter_field]) as Array<keyof Device>;
 	return filterField.reduce((acc, cur, index) => {
-		acc = acc.filter(el => el[cur].toLowerCase().includes(filterBy[index]));
+		acc = acc.filter(el => el[cur].toLowerCase().includes(filterBy[index].toLowerCase()));
 		return acc;
 	}, devices);
 };
