@@ -19,7 +19,7 @@ export const Pagination = () => {
 		},
 		isInitFetching,
 	} = useContext(PaginatedDataContext);
-
+	console.log(useContext(PaginatedDataContext));
 	const pageIndexes = createIndexesList(page, lastPage);
 
 	const pagesList = useMemo(
