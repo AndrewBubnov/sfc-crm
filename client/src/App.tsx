@@ -13,34 +13,32 @@ import { Pagination } from '@/components/Pagination.tsx';
 
 const queryClient = new QueryClient();
 
-const App = () => {
-	return (
-		<QueryClientProvider client={queryClient}>
-			<FilteringProvider>
-				<StatisticsProvider>
-					<PaginatedDataProvider>
-						<div className="flex flex-col p-4">
-							<div className="flex justify-between">
-								<Statistics />
-								<AccountData />
-							</div>
-							<div className="flex flex-col gap-2">
-								<TableProvider>
-									<TableControls />
-									<DataTable />
-								</TableProvider>
-								<div className="flex items-center justify-end gap-8">
-									<LimitManager />
-									<Pagination />
-								</div>
+const App = () => (
+	<QueryClientProvider client={queryClient}>
+		<FilteringProvider>
+			<StatisticsProvider>
+				<PaginatedDataProvider>
+					<div className="flex flex-col p-2 gap-2">
+						<div className="flex justify-between">
+							<Statistics />
+							<AccountData />
+						</div>
+						<div className="flex flex-col gap-2">
+							<TableProvider>
+								<TableControls />
+								<DataTable />
+							</TableProvider>
+							<div className="flex items-center justify-end gap-8">
+								<LimitManager />
+								<Pagination />
 							</div>
 						</div>
-					</PaginatedDataProvider>
-				</StatisticsProvider>
-			</FilteringProvider>
-			<Toaster />
-		</QueryClientProvider>
-	);
-};
+					</div>
+				</PaginatedDataProvider>
+			</StatisticsProvider>
+		</FilteringProvider>
+		<Toaster />
+	</QueryClientProvider>
+);
 
 export default App;

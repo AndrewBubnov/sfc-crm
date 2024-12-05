@@ -4,7 +4,7 @@ import { getStateStats, getTypeStats, sortDevices } from '../utils.js';
 import { devices, filterDevices, filteredDevices } from '../services/deviceService.js';
 import { clients } from '../models/clients.js';
 
-const FETCH_DEVICES_DELAY = 150;
+const FETCH_DEVICES_DELAY = 600;
 
 export const fetchDevicesController = (req: Request<{}, {}, {}, QueryParams>, res: Response) => {
 	let { offset = '0', limit = '10', sort_by, sort_desc, filter_by, filter_field } = req.query;
