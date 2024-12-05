@@ -1,7 +1,7 @@
+import { Request, Response } from 'express';
 import { createDevice, getStateStats, getTypeStats } from '../utils.js';
 import { devices, filteredDevices, updateDevices } from '../services/deviceService.js';
 import { clearInterval } from 'node:timers';
-import { Request, Response } from 'express';
 import { Device } from '../models/device.js';
 import { AUTO_EVENTS_INTERVAL } from '../constants.js';
 import { AutoEventType } from '../models/autoEventType.js';
