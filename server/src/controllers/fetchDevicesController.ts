@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import { QueryParams } from '../models/device.js';
-import { getStateStats, getTypeStats, sortDevices } from '../utils.js';
+import { getStateStats, getTypeStats, sleep, sortDevices } from '../utils.js';
 import { devices, filterDevices, filteredDevices } from '../services/deviceService.js';
 import { clients } from '../models/clients.js';
 
 const FETCH_DEVICES_DELAY = 600;
 
-export const fetchDevicesController = (req: Request<{}, {}, {}, QueryParams>, res: Response) => {
+export const fetchDevicesController = async (req: Request<{}, {}, {}, QueryParams>, res: Response) => {
 	let { offset = '0', limit = '10', sort_by, sort_desc, filter_by, filter_field } = req.query;
 
 	const parsedOffset = Math.max(0, parseInt(offset, 10));
@@ -22,24 +22,25 @@ export const fetchDevicesController = (req: Request<{}, {}, {}, QueryParams>, re
 		Math.max(parsedOffset - parsedLimit, 0),
 		Math.max(parsedOffset, Math.min(parsedLimit, result.length))
 	);
-	setTimeout(() => {
-		res.json({
-			items: result,
-			offset: parsedOffset,
-			limit: parsedLimit,
-			total,
-		});
 
-		clients.forEach(client => {
-			client.write(`event: connected\n`);
-			client.write(
-				`data: ${JSON.stringify({
-					stats: {
-						state: getStateStats(filteredDevices, devices.length),
-						type: getTypeStats(filteredDevices),
-					},
-				})}\n\n`
-			);
-		});
-	}, FETCH_DEVICES_DELAY);
+	await sleep(FETCH_DEVICES_DELAY);
+
+	res.json({
+		items: result,
+		offset: parsedOffset,
+		limit: parsedLimit,
+		total,
+	});
+
+	clients.forEach(client => {
+		client.write(`event: connected\n`);
+		client.write(
+			`data: ${JSON.stringify({
+				stats: {
+					state: getStateStats(filteredDevices, devices.length),
+					type: getTypeStats(filteredDevices),
+				},
+			})}\n\n`
+		);
+	});
 };

@@ -1,6 +1,8 @@
 import { Device, DeviceMode, DeviceState, DeviceType } from './models/device.js';
 import { faker } from '@faker-js/faker';
 
+const INITIAL_DEVICES_NUMBER = 93;
+
 export const getRandomNumber = () => {
 	const random = Math.floor(Math.random() * 10);
 	if (random <= 2) return 1;
@@ -28,7 +30,7 @@ export const createDevice = (): Device => {
 	};
 };
 
-export const createDevices = (): Device[] => Array.from({ length: 93 }, createDevice);
+export const createDevices = (): Device[] => Array.from({ length: INITIAL_DEVICES_NUMBER }, createDevice);
 
 export const sortDevices = (devices: Device[], sortBy?: keyof Device, sortDesc?: boolean): Device[] => {
 	if (!sortBy) return devices;
@@ -52,7 +54,7 @@ export const getFilteredDevices = (
 	const filterBy = Array.isArray(filter_by) ? filter_by : [filter_by];
 	const filterField = (Array.isArray(filter_field) ? filter_field : [filter_field]) as Array<keyof Device>;
 	return filterField.reduce((acc, cur, index) => {
-		acc = acc.filter(el => el[cur].toLowerCase().includes(filterBy[index]));
+		acc = acc.filter(el => el[cur].toLowerCase().includes(filterBy[index].toLowerCase()));
 		return acc;
 	}, devices);
 };
@@ -77,3 +79,5 @@ export const getTypeStats = (filteredDevices: Device[]) => {
 		{} as Record<DeviceType, number>
 	);
 };
+
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
