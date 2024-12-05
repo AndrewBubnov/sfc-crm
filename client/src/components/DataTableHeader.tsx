@@ -4,15 +4,14 @@ import { flexRender, HeaderGroup } from '@tanstack/react-table';
 import { ColumnFilter } from '@/components/ColumnFilter.tsx';
 import { SortSwitch } from '@/components/SortSwitch.tsx';
 import { FilteringContext } from '@/providers/FilteringContext.ts';
+import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 
 type DataTableHeaderProps<T> = {
 	headerGroups: HeaderGroup<T>[];
-	sortBy: string;
-	sortDesc: boolean;
-	onSortChange(arg: { sortedBy: string; sortedDesc: boolean }): void;
 };
 
-export const DataTableHeader = <T,>({ headerGroups, onSortChange, sortBy, sortDesc }: DataTableHeaderProps<T>) => {
+export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) => {
+	const { sortBy, onSortChange, sortDesc } = useContext(PaginatedDataContext);
 	const { filters, onFilterChange } = useContext(FilteringContext);
 
 	return (

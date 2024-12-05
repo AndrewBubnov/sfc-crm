@@ -18,7 +18,8 @@ This is a full stack project that implements a dashboard for managing devices qu
   - Change device mode (Off, Standby, Charging).
   - Action feedback is shown during loading (e.g., spinner).
 - **Rename Devices**: Users can change the name of each device, with action feedback on the operation's status.
+- **Delete Devices**: Users can delete multiple devices after selecting them in the table.
 - **Real-time Updates**: The page is updated automatically when devices are created, updated, or deleted (via SSE from the backend).
-- **Comprehensive Test Coverage**: The core of the project is thoroughly tested using `Vitest`, ensuring high reliability and robustness across various scenarios.
+- **Comprehensive Test Coverage**: The core of the project is thoroughly tested using `Vitest`, `React testing library`, `MSW`, ensuring high reliability and robustness across various scenarios.
 
 
