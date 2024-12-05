@@ -2,9 +2,6 @@ import 'eventsource-polyfill';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from '@/components/Pagination';
 import { ReactElement, ReactNode } from 'react';
-import { PaginatedDataProvider } from '@/providers/PaginatedDataProvider.tsx';
-import { TableProvider } from '@/providers/TableProvider.tsx';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PaginatedDataContext, PaginatedDataContextProps } from '@/providers/PaginatedDataContext.ts';
 
 interface PaginationData {
@@ -29,6 +26,10 @@ type DeepPartial<T> = {
 	[P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
+const mockSetPage = vi.fn();
+const mockSetNextPage = vi.fn();
+const mockSetPrevPage = vi.fn();
+
 const createWrapper = (contextValue: PartialContextValue = {}) => {
 	return ({ children }: { children: ReactNode }) => (
 		<PaginatedDataContext.Provider
@@ -36,17 +37,16 @@ const createWrapper = (contextValue: PartialContextValue = {}) => {
 				{
 					paginationData: {
 						page: 1,
-						setPage: vi.fn(),
-						setNextPage: vi.fn(),
-						setPrevPage: vi.fn(),
+						setPage: mockSetPage,
+						setNextPage: mockSetNextPage,
+						setPrevPage: mockSetPrevPage,
 						isPrevStepDisabled: false,
 						isNextStepDisabled: false,
 						lastPage: 5,
 						isFetching: false,
 						...contextValue.paginationData,
 					},
-					isInitFetching: false,
-					...contextValue,
+					isInitFetching: contextValue.isInitFetching || false,
 				} as PaginatedDataContextProps
 			}
 		>
@@ -61,21 +61,8 @@ const renderWithContext = (ui: ReactElement, contextValue: PartialContextValue =
 	});
 };
 
-const queryClient = new QueryClient();
-
-const wrapper = ({ children }: { children: ReactNode }) => (
-	<QueryClientProvider client={queryClient}>
-		<PaginatedDataProvider>
-			<TableProvider>{children}</TableProvider>
-		</PaginatedDataProvider>
-	</QueryClientProvider>
-);
-
 describe('Pagination', () => {
-	const mockSetNextPage = vi.fn();
-	const mockSetPrevPage = vi.fn();
-
-	it('renders `first`, `previous`, `next` and `last` buttons correctly', () => {
+	it('should render `first`, `previous`, `next` and `last` buttons correctly', () => {
 		renderWithContext(<Pagination />);
 		expect(screen.getByTestId('pagination-first-button')).toBeInTheDocument();
 		expect(screen.getByTestId('pagination-previous-button')).toBeInTheDocument();
@@ -83,7 +70,7 @@ describe('Pagination', () => {
 		expect(screen.getByTestId('pagination-last-button')).toBeInTheDocument();
 	});
 
-	it('calls `setPrevPage` when `previous` button is clicked', () => {
+	it('should call `setPrevPage` when `previous` button is clicked', () => {
 		renderWithContext(<Pagination />);
 
 		const prevButton = screen.getByTestId('pagination-previous-button');
@@ -92,7 +79,7 @@ describe('Pagination', () => {
 		expect(mockSetPrevPage).toHaveBeenCalled();
 	});
 
-	it('calls `setNextPage` when `next` button is clicked', () => {
+	it('should call `setNextPage` when `next` button is clicked', () => {
 		renderWithContext(<Pagination />);
 
 		const nextButton = screen.getByTestId('pagination-next-button');
@@ -100,41 +87,55 @@ describe('Pagination', () => {
 		expect(mockSetNextPage).toHaveBeenCalled();
 	});
 
-	it('disables `previous` button when isPrevStepDisabled is true', () => {
-		render(
-			<Pagination
-				{...{
-					...defaultProps,
-					paginationData: { ...defaultProps.paginationData, isPrevStepDisabled: true },
-				}}
-			/>
-		);
-
+	it('should disable `previous` button when isPrevStepDisabled is true', () => {
+		renderWithContext(<Pagination />, { paginationData: { isPrevStepDisabled: true } });
 		const prevButton = screen.getByTestId('pagination-previous-button');
 		expect(prevButton).toBeDisabled();
 	});
 
-	it('disables `next` button when `isNextStepDisabled` is true', () => {
+	it('should disable `next` button when `isNextStepDisabled` is true', () => {
 		renderWithContext(<Pagination />, { paginationData: { isNextStepDisabled: true } });
-
 		const nextButton = screen.queryByTestId('pagination-next-button');
-		console.log(nextButton);
 		expect(nextButton).toBeDisabled();
 	});
 
-	it('displays `Skeleton` loader when `isLoading` is true', () => {
+	it('should display `Skeleton` loader when `isLoading` is true', () => {
 		renderWithContext(<Pagination />, { isInitFetching: true });
-
 		expect(screen.getByTestId('skeleton')).toBeInTheDocument();
 	});
 
-	it('does not display `Skeleton` loader when isLoading is false', () => {
-		render(<Pagination />, { wrapper });
+	it('should not display `Skeleton` loader when isLoading is false', () => {
+		renderWithContext(<Pagination />, { isInitFetching: false });
 		expect(screen.queryByTestId('skeleton')).not.toBeInTheDocument();
 	});
 
-	it('displays the current page number', () => {
-		render(<Pagination />, { wrapper });
+	it('should display the current page number', () => {
+		renderWithContext(<Pagination />);
 		expect(screen.getByText('1')).toBeInTheDocument();
+	});
+
+	it('should call `setPage` when page number is clicked', () => {
+		renderWithContext(<Pagination />, {
+			paginationData: {
+				page: 1,
+				lastPage: 3,
+			},
+		});
+
+		fireEvent.click(screen.getByText('2'));
+		expect(mockSetPage).toHaveBeenCalledWith(2);
+	});
+
+	it('should disable navigation buttons in `isFetching` state', () => {
+		renderWithContext(<Pagination />, {
+			paginationData: {
+				page: 2,
+				lastPage: 3,
+				isFetching: true,
+			},
+		});
+
+		expect(screen.getByTestId('pagination-next-button')).toBeDisabled();
+		expect(screen.getByTestId('pagination-previous-button')).toBeDisabled();
 	});
 });
