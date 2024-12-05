@@ -19,6 +19,7 @@ describe('Pagination', () => {
 			lastPage: 10,
 			limit: 10,
 			onChangeLimit: mockOnChangeLimit,
+			isFetching: false,
 		},
 		isLoading: false,
 	};
