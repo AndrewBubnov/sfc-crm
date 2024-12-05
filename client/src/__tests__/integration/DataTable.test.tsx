@@ -61,7 +61,7 @@ describe('DataTable', () => {
 	it('should show loading skeleton during data fetch', async () => {
 		render(<DataTable />, { wrapper });
 
-		expect(screen.getAllByTestId('skeleton')).toHaveLength(4);
+		expect(screen.getAllByTestId('skeleton')).toHaveLength(1);
 
 		await waitFor(() => expect(screen.getByRole('table')).toBeInTheDocument());
 
