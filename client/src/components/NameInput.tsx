@@ -46,7 +46,7 @@ export const NameInput = ({ deviceId, cellName }: CellInputProps) => {
 			<Input
 				disabled={isPending}
 				onBlur={renameHandler}
-				className="border-none shadow-none"
+				className="border-none shadow-none pl-0"
 				value={name}
 				onChange={e => setName(e.target.value)}
 			/>
