@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { NameInput } from '@/components/NameInput.tsx';
+import { AnimatedNameInput } from '@/components/AnimatedNameInput.tsx';
 import { expect, Mock, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renameDevice } from '@/api/renameDevice.ts';
@@ -17,7 +17,7 @@ vi.mock('@/api/renameDevice', () => ({
 	renameDevice: vi.fn(),
 }));
 
-describe('NameInput', () => {
+describe('AnimatedNameInput', () => {
 	const mockRenameDevice = vi.fn();
 
 	const defaultProps = {
@@ -49,7 +49,7 @@ describe('NameInput', () => {
 	);
 
 	it('renders the input with the correct initial value', async () => {
-		render(<NameInput {...defaultProps} />, { wrapper });
+		render(<AnimatedNameInput {...defaultProps} />, { wrapper });
 		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
 		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
@@ -57,7 +57,7 @@ describe('NameInput', () => {
 	});
 
 	it('updates the input value when typed into', async () => {
-		render(<NameInput {...defaultProps} />, { wrapper });
+		render(<AnimatedNameInput {...defaultProps} />, { wrapper });
 		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
 		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
@@ -66,7 +66,7 @@ describe('NameInput', () => {
 	});
 
 	it('does not call mutate when the name is the same', async () => {
-		render(<NameInput {...defaultProps} />, { wrapper });
+		render(<AnimatedNameInput {...defaultProps} />, { wrapper });
 		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
 		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
@@ -76,7 +76,7 @@ describe('NameInput', () => {
 	});
 
 	it('calls mutate with the correct parameters when the name is changed', async () => {
-		render(<NameInput {...defaultProps} />, { wrapper });
+		render(<AnimatedNameInput {...defaultProps} />, { wrapper });
 		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
 		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
@@ -95,7 +95,7 @@ describe('NameInput', () => {
 	it('displays success toast on successful mutation', async () => {
 		(renameDevice as Mock).mockResolvedValueOnce({});
 
-		render(<NameInput {...defaultProps} />, { wrapper });
+		render(<AnimatedNameInput {...defaultProps} />, { wrapper });
 		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
 		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
@@ -112,7 +112,7 @@ describe('NameInput', () => {
 	it('displays error toast on failed mutation', async () => {
 		(renameDevice as Mock).mockRejectedValueOnce(new Error('Rename failed'));
 
-		render(<NameInput {...defaultProps} />, { wrapper });
+		render(<AnimatedNameInput {...defaultProps} />, { wrapper });
 		fireEvent.focus(screen.getByTestId('AnimatedState-container'));
 		await waitFor(() => expect(screen.getByRole('textbox')).toBeInTheDocument());
 		const inputElement = screen.getByRole('textbox');
