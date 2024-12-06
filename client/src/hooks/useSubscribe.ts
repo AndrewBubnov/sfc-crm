@@ -46,34 +46,30 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 	useEffect(() => {
 		const eventSource = new EventSource(`${BASE_URL}/subscribe-device-changes`);
 
-		const autoEventListener = (event: MessageEvent) => {
-			try {
-				updateStatistics(event);
-				refetch();
-			} catch (error) {
-				console.error('Error handling autoEventListener:', error);
-			}
+		const fetchListener = (event: MessageEvent) => {
+			updateStatistics(event);
+			refetch();
 		};
 
 		const updateListener = (event: MessageEvent) => {
-			try {
-				updateStatistics(event);
-				updateDevice(event);
-			} catch (error) {
-				console.error('Error handling updateListener:', error);
-			}
+			updateStatistics(event);
+			updateDevice(event);
 		};
 
 		eventSource.addEventListener('connected', updateStatistics);
-		eventSource.addEventListener('deviceCreated', autoEventListener);
-		eventSource.addEventListener('deviceDeleted', autoEventListener);
+		eventSource.addEventListener('deviceCreated', fetchListener);
+		eventSource.addEventListener('deviceDeleted', fetchListener);
+		eventSource.addEventListener('multipleDevicesDeleted', fetchListener);
+		eventSource.addEventListener('registerDevice', fetchListener);
 		eventSource.addEventListener('deviceUpdate', updateListener);
 
 		return () => {
 			eventSource.close();
 			eventSource.removeEventListener('connected', updateStatistics);
-			eventSource.removeEventListener('deviceCreated', autoEventListener);
-			eventSource.removeEventListener('deviceDeleted', autoEventListener);
+			eventSource.removeEventListener('deviceCreated', fetchListener);
+			eventSource.removeEventListener('deviceDeleted', fetchListener);
+			eventSource.removeEventListener('multipleDevicesDeleted', fetchListener);
+			eventSource.removeEventListener('registerDevice', fetchListener);
 			eventSource.removeEventListener('deviceUpdate', updateListener);
 		};
 	}, [refetch, updateDevice, updateStatistics]);

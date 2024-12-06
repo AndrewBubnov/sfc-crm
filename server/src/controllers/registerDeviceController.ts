@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { Device, RegisterDeviceBody } from '../models/device.js';
-import { devices } from '../services/deviceService.js';
+import { devices, filteredDevices } from '../services/deviceService.js';
 import { faker } from '@faker-js/faker';
+import { clients } from '../models/clients.js';
+import { getStateStats, getTypeStats } from '../utils.js';
 
 export const registerDeviceController = (req: Request<{}, {}, RegisterDeviceBody>, res: Response) => {
 	const { name, type, state } = req.body;
@@ -15,5 +17,15 @@ export const registerDeviceController = (req: Request<{}, {}, RegisterDeviceBody
 
 	devices.unshift(device);
 
-	res.json(devices);
+	clients.forEach(client => {
+		client.write(`event: registerDevice\n`);
+		client.write(
+			`data: ${JSON.stringify({
+				event: device,
+				stats: { state: getStateStats(filteredDevices, devices.length), type: getTypeStats(filteredDevices) },
+			})}\n\n`
+		);
+	});
+
+	res.json(device);
 };
