@@ -3,7 +3,7 @@ import { QueryParams } from '../models/device.js';
 import { getStateStats, getTypeStats, sleep, sortDevices } from '../utils.js';
 import { devices, filterDevices } from '../services/deviceService.js';
 import { clients } from '../models/clients.js';
-import { updateFilters, updateOffsetLimits } from '../services/filterService.js';
+import { offsetLimits, updateFilters, updateOffsetLimits } from '../services/filterService.js';
 
 const FETCH_DEVICES_DELAY = 600;
 const LIMIT_VARIANTS = [10, 20];
@@ -30,7 +30,10 @@ export const fetchDevicesController = async (req: Request<{}, {}, {}, QueryParam
 	await sleep(FETCH_DEVICES_DELAY);
 
 	res.json({
-		items: sortDevices(filteredDevices, sort_by, parsedSortDesc),
+		items: sortDevices(filteredDevices, sort_by, parsedSortDesc).slice(
+			Math.max(offsetLimits.offset - offsetLimits.limit, 0),
+			Math.max(offsetLimits.offset, Math.min(offsetLimits.limit, filteredDevices.length))
+		),
 		offset: parsedOffset,
 		limit: parsedLimit,
 		total,
