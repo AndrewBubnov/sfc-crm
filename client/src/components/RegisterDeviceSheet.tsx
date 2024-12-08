@@ -24,6 +24,7 @@ export const RegisterDeviceSheet = () => {
 		});
 		setIsOpen(false);
 	};
+
 	return (
 		<Sheet open={isOpen} onOpenChange={setIsOpen}>
 			<SheetTrigger asChild className="bg-transparent hover:border-transparent">
