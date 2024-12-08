@@ -2,21 +2,18 @@ import { MutableRefObject, useCallback, useContext, useEffect } from 'react';
 import { Device, DeviceDataType, Filter } from '@/types.ts';
 import { QueryKeys } from '@/queryKeys.ts';
 import { BASE_URL } from '@/constants.ts';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 
-type UseSubscribe = {
-	paramsRef: MutableRefObject<{
-		page: number;
-		filters: Filter[];
-		sortBy: string;
-		sortDesc: boolean;
-		limit: number;
-	}>;
-	refetch: ReturnType<typeof useQuery>['refetch'];
-};
+type UseSubscribe = MutableRefObject<{
+	page: number;
+	filters: Filter[];
+	sortBy: string;
+	sortDesc: boolean;
+	limit: number;
+}>;
 
-export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
+export const useSubscribe = (paramsRef: UseSubscribe) => {
 	const queryClient = useQueryClient();
 	const { updateStatistics } = useContext(StatisticsContext);
 
@@ -43,12 +40,27 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 		[paramsRef, queryClient]
 	);
 
+	const updateItems = useCallback(
+		(evt: MessageEvent) => {
+			const updatedItems: Device = JSON.parse(evt.data).items;
+			const { page, sortBy, sortDesc, limit, filters } = paramsRef.current;
+			queryClient.setQueryData(
+				[QueryKeys.Devices, page, sortBy, sortDesc, limit, filters],
+				(oldData?: DeviceDataType) => {
+					if (!oldData) return oldData;
+					return { ...oldData, data: { ...oldData.data, items: updatedItems } };
+				}
+			);
+		},
+		[paramsRef, queryClient]
+	);
+
 	useEffect(() => {
 		const eventSource = new EventSource(`${BASE_URL}/subscribe-device-changes`);
 
-		const fetchListener = (event: MessageEvent) => {
+		const eventsListener = (event: MessageEvent) => {
+			updateItems(event);
 			updateStatistics(event);
-			refetch();
 		};
 
 		const updateListener = (event: MessageEvent) => {
@@ -57,20 +69,20 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 		};
 
 		eventSource.addEventListener('updateStats', updateStatistics);
-		eventSource.addEventListener('deviceCreated', fetchListener);
-		eventSource.addEventListener('deviceDeleted', fetchListener);
-		eventSource.addEventListener('multipleDevicesDeleted', fetchListener);
-		eventSource.addEventListener('registerDevice', fetchListener);
+		eventSource.addEventListener('deviceCreated', eventsListener);
+		eventSource.addEventListener('deviceDeleted', eventsListener);
+		eventSource.addEventListener('multipleDevicesDeleted', eventsListener);
+		eventSource.addEventListener('registerDevice', eventsListener);
 		eventSource.addEventListener('deviceUpdate', updateListener);
 
 		return () => {
 			eventSource.close();
 			eventSource.removeEventListener('updateStats', updateStatistics);
-			eventSource.removeEventListener('deviceCreated', fetchListener);
-			eventSource.removeEventListener('deviceDeleted', fetchListener);
-			eventSource.removeEventListener('multipleDevicesDeleted', fetchListener);
-			eventSource.removeEventListener('registerDevice', fetchListener);
+			eventSource.removeEventListener('deviceCreated', eventsListener);
+			eventSource.removeEventListener('deviceDeleted', eventsListener);
+			eventSource.removeEventListener('multipleDevicesDeleted', eventsListener);
+			eventSource.removeEventListener('registerDevice', eventsListener);
 			eventSource.removeEventListener('deviceUpdate', updateListener);
 		};
-	}, [refetch, updateDevice, updateStatistics]);
+	}, [updateDevice, updateItems, updateStatistics]);
 };

@@ -21,7 +21,7 @@ export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) 
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(BASE_LIMIT);
 
-	const { data, isFetching, refetch } = useQuery<DeviceDataType, Error>({
+	const { data, isFetching } = useQuery<DeviceDataType, Error>({
 		queryKey: [QueryKeys.Devices, page, sortBy, sortDesc, limit, filters],
 		queryFn: () => getDevicesData({ page, sortBy, sortDesc, limit, filters }),
 		placeholderData: keepPreviousData,
@@ -29,9 +29,12 @@ export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) 
 
 	const paramsRef = useLatest({ page, sortBy, sortDesc, limit, filters });
 
-	useSubscribe({ paramsRef, refetch });
+	useSubscribe(paramsRef);
 
 	useEffect(() => setPage(1), [filters]);
+	useEffect(() => {
+		if (page > 1 && !data?.data.items.length) setPage(prevState => prevState - 1);
+	}, [data?.data.items.length, page]);
 
 	const onChangeLimit = useCallback(
 		(limitNumber: number) =>

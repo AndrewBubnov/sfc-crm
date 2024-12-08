@@ -6,6 +6,7 @@ import { AUTO_EVENTS_INTERVAL } from '../constants.js';
 import { AutoEventType } from '../models/autoEventType.js';
 import { clients } from '../models/clients.js';
 import { createDevice, getStateStats, getTypeStats } from '../utils.js';
+import { offsetLimits } from '../services/filterService.js';
 
 type AutoEvent =
 	| { type: AutoEventType.Created; payload: { device: Device; id?: undefined } }
@@ -18,12 +19,13 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 		'Connection': 'keep-alive',
 	});
 
-	const { filteredDevices, total } = filterDevices();
-
 	res.write(`event: connected\n`);
 	res.write(
 		`data: ${JSON.stringify({
-			stats: { state: getStateStats(filteredDevices, devices.length), type: getTypeStats(filteredDevices) },
+			stats: {
+				state: getStateStats(filterDevices().filteredDevices, devices.length),
+				type: getTypeStats(filterDevices().filteredDevices),
+			},
 		})}\n\n`
 	);
 
@@ -55,12 +57,19 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 		const event = events[Math.floor(Math.random() * events.length)];
 
 		updateDevicesList(event);
-
+		console.log(filterDevices().filteredDevices.length);
 		res.write(`event: ${event.type}\n`);
 		res.write(
 			`data: ${JSON.stringify({
 				event: event.payload,
-				stats: { state: getStateStats(filteredDevices, devices.length), type: getTypeStats(filteredDevices) },
+				stats: {
+					state: getStateStats(filterDevices().filteredDevices, devices.length),
+					type: getTypeStats(filterDevices().filteredDevices),
+				},
+				items: filterDevices().filteredDevices.slice(
+					Math.max(offsetLimits.offset - offsetLimits.limit, 0),
+					Math.max(offsetLimits.offset, Math.min(offsetLimits.limit, filterDevices().filteredDevices.length))
+				),
 			})}\n\n`
 		);
 	};

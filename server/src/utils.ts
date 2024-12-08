@@ -1,8 +1,7 @@
 import { Device, DeviceMode, DeviceState, DeviceType } from './models/device.js';
 import { faker } from '@faker-js/faker';
-import { offsetLimits } from './services/filterService.js';
 
-const INITIAL_DEVICES_NUMBER = 93;
+const INITIAL_DEVICES_NUMBER = 91;
 
 export const getRandomNumber = () => {
 	const random = Math.floor(Math.random() * 10);

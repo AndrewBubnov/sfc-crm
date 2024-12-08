@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { RegisterDeviceForm } from '@/components/RegisterDeviceForm.tsx';
@@ -6,8 +6,12 @@ import { RegisterDeviceSchemaType } from '@/schemas.ts';
 import { Plus } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { registerDevice } from '@/api/registerDevice.ts';
+import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 
 export const RegisterDeviceSheet = () => {
+	const {
+		paginationData: { isFetching },
+	} = useContext(PaginatedDataContext);
 	const [isOpen, setIsOpen] = useState(false);
 	const registerDeviceMutation = useMutation({ mutationFn: registerDevice });
 
@@ -18,7 +22,7 @@ export const RegisterDeviceSheet = () => {
 	return (
 		<Sheet open={isOpen} onOpenChange={setIsOpen}>
 			<SheetTrigger asChild className="bg-transparent hover:border-transparent">
-				<Button variant="ghost">
+				<Button variant="ghost" disabled={registerDeviceMutation.isPending || isFetching}>
 					<Plus />
 					Register device
 				</Button>

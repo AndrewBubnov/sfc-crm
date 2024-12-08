@@ -13,9 +13,8 @@ export const deleteDevicesController = async (req: Request<{}, {}, DeleteDeviceB
 
 	updateDevices(updatedDevices);
 
-	addDeviceDeleteEvent(ids);
-
 	await sleep(DELETE_DEVICES_DELAY);
 
 	res.status(200).send(ids);
+	addDeviceDeleteEvent(ids);
 };

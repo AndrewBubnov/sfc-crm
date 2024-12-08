@@ -3,9 +3,12 @@ import { Device, RegisterDeviceBody } from '../models/device.js';
 import { devices, filterDevices } from '../services/deviceService.js';
 import { faker } from '@faker-js/faker';
 import { clients } from '../models/clients.js';
-import { getStateStats, getTypeStats } from '../utils.js';
+import { getStateStats, getTypeStats, sleep } from '../utils.js';
+import { offsetLimits } from '../services/filterService.js';
 
-export const registerDeviceController = (req: Request<{}, {}, RegisterDeviceBody>, res: Response) => {
+const REGISTER_DEVICES_DELAY = 1_000;
+
+export const registerDeviceController = async (req: Request<{}, {}, RegisterDeviceBody>, res: Response) => {
 	const { name, type, state } = req.body;
 
 	const device: Device = {
@@ -15,9 +18,13 @@ export const registerDeviceController = (req: Request<{}, {}, RegisterDeviceBody
 		state,
 	};
 
+	await sleep(REGISTER_DEVICES_DELAY);
+
 	devices.unshift(device);
 
 	const { filteredDevices, total } = filterDevices();
+
+	res.json(device);
 
 	clients.forEach(client => {
 		client.write(`event: registerDevice\n`);
@@ -25,9 +32,11 @@ export const registerDeviceController = (req: Request<{}, {}, RegisterDeviceBody
 			`data: ${JSON.stringify({
 				event: device,
 				stats: { state: getStateStats(filteredDevices, devices.length), type: getTypeStats(filteredDevices) },
+				items: filterDevices().filteredDevices.slice(
+					Math.max(offsetLimits.offset - offsetLimits.limit, 0),
+					Math.max(offsetLimits.offset, Math.min(offsetLimits.limit, filterDevices().filteredDevices.length))
+				),
 			})}\n\n`
 		);
 	});
-
-	res.json(device);
 };
