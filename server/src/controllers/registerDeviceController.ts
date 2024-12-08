@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Device, RegisterDeviceBody } from '../models/device.js';
-import { devices, filteredDevices } from '../services/deviceService.js';
+import { devices, filterDevices } from '../services/deviceService.js';
 import { faker } from '@faker-js/faker';
 import { clients } from '../models/clients.js';
 import { getStateStats, getTypeStats } from '../utils.js';
@@ -16,6 +16,8 @@ export const registerDeviceController = (req: Request<{}, {}, RegisterDeviceBody
 	};
 
 	devices.unshift(device);
+
+	const { filteredDevices, total } = filterDevices();
 
 	clients.forEach(client => {
 		client.write(`event: registerDevice\n`);

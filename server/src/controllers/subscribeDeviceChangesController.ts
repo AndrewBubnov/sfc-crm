@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { createDevice, getStateStats, getTypeStats } from '../utils.js';
-import { devices, filteredDevices, updateDevices } from '../services/deviceService.js';
+import { devices, filterDevices, updateDevices } from '../services/deviceService.js';
 import { clearInterval } from 'node:timers';
 import { Device } from '../models/device.js';
 import { AUTO_EVENTS_INTERVAL } from '../constants.js';
 import { AutoEventType } from '../models/autoEventType.js';
 import { clients } from '../models/clients.js';
+import { createDevice, getStateStats, getTypeStats } from '../utils.js';
 
 type AutoEvent =
 	| { type: AutoEventType.Created; payload: { device: Device; id?: undefined } }
@@ -17,6 +17,8 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 		'Cache-Control': 'no-cache',
 		'Connection': 'keep-alive',
 	});
+
+	const { filteredDevices, total } = filterDevices();
 
 	res.write(`event: connected\n`);
 	res.write(

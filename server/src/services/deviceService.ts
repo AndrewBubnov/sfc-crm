@@ -1,17 +1,20 @@
 import { createDevices, getFilteredDevices } from '../utils.js';
 import { Device } from '../models/device.js';
+import { filters, offsetLimits } from './filterService.js';
 
 export let devices = createDevices();
-export let filteredDevices = devices;
 
-export const filterDevices = (filter_by?: string | string[], filter_field?: string | string[]) => {
-	filteredDevices = getFilteredDevices(devices, filter_by, filter_field as Array<keyof Device>);
+export const filterDevices = () => {
+	const filtered = getFilteredDevices(devices, filters.filterBy, filters.filterField as Array<keyof Device>);
+	return {
+		filteredDevices: filtered.slice(
+			Math.max(offsetLimits.offset - offsetLimits.limit, 0),
+			Math.max(offsetLimits.offset, Math.min(offsetLimits.limit, filtered.length))
+		),
+		total: filtered.length,
+	};
 };
 
 export const updateDevices = (updatedDevices: Device[]) => {
 	devices = updatedDevices;
-};
-
-export const updateFilteredDevices = (updatedDevices: Device[]) => {
-	filteredDevices = updatedDevices;
 };
