@@ -8,8 +8,6 @@ import { updateFilters, updateOffsetLimits } from '../services/filterService.js'
 const FETCH_DEVICES_DELAY = 600;
 const LIMIT_VARIANTS = [10, 20];
 
-let isConnected = false;
-
 export const fetchDevicesController = async (req: Request<{}, {}, {}, QueryParams>, res: Response) => {
 	let { offset = '0', limit = '10', sort_by, sort_desc, filter_by, filter_field } = req.query;
 
@@ -38,18 +36,15 @@ export const fetchDevicesController = async (req: Request<{}, {}, {}, QueryParam
 		total,
 	});
 
-	if (!isConnected) {
-		isConnected = true;
-		clients.forEach(client => {
-			client.write(`event: connected\n`);
-			client.write(
-				`data: ${JSON.stringify({
-					stats: {
-						state: getStateStats(filteredDevices, devices.length),
-						type: getTypeStats(filteredDevices),
-					},
-				})}\n\n`
-			);
-		});
-	}
+	clients.forEach(client => {
+		client.write(`event: updateStats\n`);
+		client.write(
+			`data: ${JSON.stringify({
+				stats: {
+					state: getStateStats(filteredDevices, devices.length),
+					type: getTypeStats(filteredDevices),
+				},
+			})}\n\n`
+		);
+	});
 };

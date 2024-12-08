@@ -56,7 +56,7 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 			updateDevice(event);
 		};
 
-		eventSource.addEventListener('connected', updateStatistics);
+		eventSource.addEventListener('updateStats', updateStatistics);
 		eventSource.addEventListener('deviceCreated', fetchListener);
 		eventSource.addEventListener('deviceDeleted', fetchListener);
 		eventSource.addEventListener('multipleDevicesDeleted', fetchListener);
@@ -65,7 +65,7 @@ export const useSubscribe = ({ paramsRef, refetch }: UseSubscribe) => {
 
 		return () => {
 			eventSource.close();
-			eventSource.removeEventListener('connected', updateStatistics);
+			eventSource.removeEventListener('updateStats', updateStatistics);
 			eventSource.removeEventListener('deviceCreated', fetchListener);
 			eventSource.removeEventListener('deviceDeleted', fetchListener);
 			eventSource.removeEventListener('multipleDevicesDeleted', fetchListener);
