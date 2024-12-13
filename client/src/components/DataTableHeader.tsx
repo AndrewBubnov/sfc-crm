@@ -3,7 +3,6 @@ import { TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
 import { flexRender, HeaderGroup } from '@tanstack/react-table';
 import { ColumnFilter } from '@/components/ColumnFilter.tsx';
 import { SortSwitch } from '@/components/SortSwitch.tsx';
-import { FilteringContext } from '@/providers/FilteringContext.ts';
 import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 import { useManageParams } from '@/hooks/useManageParams.ts';
 
@@ -13,8 +12,7 @@ type DataTableHeaderProps<T> = {
 
 export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) => {
 	const { sortBy, onSortChange, sortDesc } = useContext(PaginatedDataContext);
-	const { filters, onFilterChange } = useContext(FilteringContext);
-	const { setQueryParams } = useManageParams();
+	const { setFilter, filters } = useManageParams();
 
 	return (
 		<TableHeader>
@@ -26,7 +24,7 @@ export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) =
 						const isSearchEnabled = Boolean(filter) && Boolean(filter?.search.length);
 						const onOpenChange = (evt: MouseEvent) => {
 							if (isSearchEnabled) evt.preventDefault();
-							onFilterChange({ field: header.id, search: '' });
+							setFilter({ field: header.id, search: '' });
 						};
 						return (
 							<TableHead
@@ -45,10 +43,7 @@ export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) =
 													isSearchEnabled={isSearchEnabled}
 													value={filter?.search || ''}
 													onOpenChange={onOpenChange}
-													onChange={search => {
-														onFilterChange({ field: header.id, search });
-														setQueryParams({ field: header.id, search });
-													}}
+													onChange={search => setFilter({ field: header.id, search })}
 												/>
 												<SortSwitch
 													id={header.id}

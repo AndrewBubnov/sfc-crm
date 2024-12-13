@@ -1,11 +1,11 @@
-import { useCallback, useContext, useState } from 'react';
-import { FilteringContext } from '@/providers/FilteringContext.ts';
+import { useCallback, useState } from 'react';
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { SearchX } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
 import { ActiveShape } from '@/components/ActiveShape.tsx';
 import { capitalize } from '@/utils.ts';
 import { GraphData } from '@/types.ts';
+import { useManageParams } from '@/hooks/useManageParams.ts';
 
 type ChartProps = {
 	data: GraphData[];
@@ -16,11 +16,11 @@ type ChartProps = {
 
 export const Chart = ({ data, dto, total, name }: ChartProps) => {
 	const [activeIndex, setActiveIndex] = useState(0);
-	const { onFilterChange } = useContext(FilteringContext);
+	const { setFilter } = useManageParams();
 
 	const clickHandler = useCallback(
-		(evt: Record<'name', string>) => onFilterChange({ field: name, search: evt.name }),
-		[name, onFilterChange]
+		(evt: Record<'name', string>) => setFilter({ field: name, search: evt.name }),
+		[name, setFilter]
 	);
 
 	const isFullData = data.length > 2;
@@ -51,7 +51,7 @@ export const Chart = ({ data, dto, total, name }: ChartProps) => {
 				{isFilteredData && (
 					<SearchX
 						className="absolute z-50 text-gray-300 pl-1 cursor-pointer"
-						onClick={() => onFilterChange({ field: name, search: '' })}
+						onClick={() => setFilter({ field: name, search: '' })}
 					/>
 				)}
 			</div>

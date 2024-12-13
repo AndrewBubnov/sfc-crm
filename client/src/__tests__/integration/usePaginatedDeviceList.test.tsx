@@ -4,10 +4,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData';
-import { BASE_URL, initialFilters } from '@/constants';
+import { BASE_URL } from '@/constants';
 import { ReactNode } from 'react';
 import { mockDevices } from '@/mocks/mockDevices.ts';
-import { FilteringContext } from '@/providers/FilteringContext';
 
 const mockFetchFn = vi.fn();
 
@@ -37,13 +36,7 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	const wrapper = ({ children }: { children: ReactNode }) => (
-		<QueryClientProvider client={queryClient}>
-			<FilteringContext.Provider
-				value={{ filters: initialFilters, onFilterChange: vi.fn(), setFilters: vi.fn() }}
-			>
-				{children}
-			</FilteringContext.Provider>
-		</QueryClientProvider>
+		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 	);
 
 	beforeAll(() => server.listen());

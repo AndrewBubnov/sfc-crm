@@ -1,19 +1,30 @@
 import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Filter } from '@/types.ts';
 import { getReducedFilterQueryParams } from '@/utils.ts';
 
 export const useManageParams = () => {
-	const [filters, setFilters] = useState<Filter[]>([]);
 	const [params, setParams] = useSearchParams();
+	const paramsList = useMemo(() => [...params], [params]);
 
-	const setQueryParams = useCallback(
+	const { filters } = useMemo(() => getReducedFilterQueryParams(paramsList), [paramsList]);
+
+	const setFilter = useCallback(
 		(filter: Filter) => {
-			const { queryParams, filters } = getReducedFilterQueryParams([...params], filter);
-			setFilters(filters);
+			const { queryParams } = getReducedFilterQueryParams(paramsList, filter);
 			setParams(queryParams as ParamKeyValuePair[]);
 		},
-		[params, setParams]
+		[paramsList, setParams]
 	);
-	return { setQueryParams, filters };
+
+	const resetFilters = useCallback(() => setParams([]), [setParams]);
+
+	return useMemo(
+		() => ({
+			setFilter,
+			resetFilters,
+			filters,
+		}),
+		[filters, resetFilters, setFilter]
+	);
 };

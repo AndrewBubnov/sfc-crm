@@ -4,7 +4,6 @@ import { DataTable } from '@/components/DataTable.tsx';
 import { Toaster } from '@/components/ui/toaster';
 import { Statistics } from '@/components/Statistics.tsx';
 import { StatisticsProvider } from '@/providers/StatisticsProvider.tsx';
-import { FilteringProvider } from '@/providers/FilteringProvider.tsx';
 import { PaginatedDataProvider } from '@/providers/PaginatedDataProvider.tsx';
 import { TableProvider } from '@/providers/TableProvider.tsx';
 import { TableControls } from '@/components/TableControls.tsx';
@@ -17,28 +16,26 @@ const queryClient = new QueryClient();
 const App = () => (
 	<QueryClientProvider client={queryClient}>
 		<Router>
-			<FilteringProvider>
-				<StatisticsProvider>
-					<PaginatedDataProvider>
-						<div className="flex flex-col p-2 gap-2">
-							<div className="flex justify-between">
-								<Statistics />
-								<AccountData />
-							</div>
-							<div className="flex flex-col gap-2">
-								<TableProvider>
-									<TableControls />
-									<DataTable />
-								</TableProvider>
-								<div className="flex items-center justify-end gap-8">
-									<LimitManager />
-									<Pagination />
-								</div>
+			<StatisticsProvider>
+				<PaginatedDataProvider>
+					<div className="flex flex-col p-2 gap-2">
+						<div className="flex justify-between">
+							<Statistics />
+							<AccountData />
+						</div>
+						<div className="flex flex-col gap-2">
+							<TableProvider>
+								<TableControls />
+								<DataTable />
+							</TableProvider>
+							<div className="flex items-center justify-end gap-8">
+								<LimitManager />
+								<Pagination />
 							</div>
 						</div>
-					</PaginatedDataProvider>
-				</StatisticsProvider>
-			</FilteringProvider>
+					</div>
+				</PaginatedDataProvider>
+			</StatisticsProvider>
 			<Toaster />
 		</Router>
 	</QueryClientProvider>

@@ -1,12 +1,11 @@
 import 'eventsource-polyfill';
 import { ReactNode } from 'react';
-import { FilteringContext } from '@/providers/FilteringContext';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DataTable } from '@/components/DataTable';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { BASE_URL, initialFilters } from '@/constants';
+import { BASE_URL } from '@/constants';
 import { mockDevices } from '@/mocks/mockDevices.ts';
 import { PaginatedDataProvider } from '@/providers/PaginatedDataProvider.tsx';
 import { TableProvider } from '@/providers/TableProvider.tsx';
@@ -45,11 +44,9 @@ const queryClient = new QueryClient();
 
 const wrapper = ({ children }: { children: ReactNode }) => (
 	<QueryClientProvider client={queryClient}>
-		<FilteringContext.Provider value={{ filters: initialFilters, onFilterChange: vi.fn(), setFilters: vi.fn() }}>
-			<PaginatedDataProvider>
-				<TableProvider>{children}</TableProvider>
-			</PaginatedDataProvider>
-		</FilteringContext.Provider>
+		<PaginatedDataProvider>
+			<TableProvider>{children}</TableProvider>
+		</PaginatedDataProvider>
 	</QueryClientProvider>
 );
 

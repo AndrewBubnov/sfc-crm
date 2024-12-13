@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DeviceDataType } from '@/types.ts';
 import { BASE_LIMIT, filterResolver } from '@/constants.ts';
 import { getDevicesData } from '@/api/getDevicesData.ts';
@@ -6,8 +6,8 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '@/queryKeys.ts';
 import { useLatest } from '@/hooks/useLatest.ts';
 import { useSubscribe } from '@/hooks/useSubscribe.ts';
-import { FilteringContext } from '@/providers/FilteringContext.ts';
 import { useDebounced } from '@/hooks/useDebounced.ts';
+import { useManageParams } from '@/hooks/useManageParams.ts';
 
 type UseDeviceData = {
 	sortBy: string;
@@ -15,7 +15,8 @@ type UseDeviceData = {
 };
 
 export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) => {
-	const { filters: rawFilters } = useContext(FilteringContext);
+	const { filters: rawFilters } = useManageParams();
+
 	const filters = useDebounced(rawFilters, filterResolver);
 
 	const [page, setPage] = useState<number>(1);

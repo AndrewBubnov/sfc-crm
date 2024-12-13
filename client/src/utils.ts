@@ -72,7 +72,7 @@ const getGroupedLists = (list: string[][]) => {
 	);
 };
 
-export const getReducedFilterQueryParams = (params: string[][], filter: Filter) => {
+export const getReducedFilterQueryParams = (params: string[][], filter: Filter = {} as Filter) => {
 	const index = params.findIndex(el => el[0] === 'field' && el[1] === filter.field);
 	const updated =
 		index === -1
