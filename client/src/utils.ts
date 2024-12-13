@@ -57,14 +57,9 @@ export const createFilterQueryString = (filters: Filter[]) => {
 
 export const addParam = (param: Record<string, string>): string[][] => Object.keys(param).map(el => [el, param[el]]);
 
-export const getReducedFilterQueryParams = (params: string[][], filter: Filter) => {
-	const index = params.findIndex(el => el[0] === 'field' && el[1] === filter.field);
-	const updated =
-		index === -1
-			? [...params, ...addParam(filter)]
-			: [...params.slice(0, index), ...addParam(filter), ...params.slice(index + 2)];
+const getGroupedLists = (list: string[][]) => {
 	let first: string[] = [];
-	const grouped = updated.reduce(
+	return list.reduce(
 		(acc, cur, currentIndex) => {
 			if (currentIndex % 2 === 0) {
 				first = cur;
@@ -75,10 +70,22 @@ export const getReducedFilterQueryParams = (params: string[][], filter: Filter) 
 		},
 		[] as string[][][]
 	);
+};
+
+export const getReducedFilterQueryParams = (params: string[][], filter: Filter) => {
+	const index = params.findIndex(el => el[0] === 'field' && el[1] === filter.field);
+	const updated =
+		index === -1
+			? [...params, ...addParam(filter)]
+			: [...params.slice(0, index), ...addParam(filter), ...params.slice(index + 2)];
+
+	const grouped = getGroupedLists(updated);
+
 	const filteredGrouped = grouped.filter(el => el[1][1].length);
 	const filters = filteredGrouped.map(el => ({
 		field: el[0][1],
 		search: el[1][1],
 	}));
+
 	return { queryParams: filteredGrouped.flat(1), filters };
 };
