@@ -10,34 +10,37 @@ import { TableProvider } from '@/providers/TableProvider.tsx';
 import { TableControls } from '@/components/TableControls.tsx';
 import { LimitManager } from '@/components/LimitManager.tsx';
 import { Pagination } from '@/components/Pagination.tsx';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const queryClient = new QueryClient();
 
 const App = () => (
 	<QueryClientProvider client={queryClient}>
-		<FilteringProvider>
-			<StatisticsProvider>
-				<PaginatedDataProvider>
-					<div className="flex flex-col p-2 gap-2">
-						<div className="flex justify-between">
-							<Statistics />
-							<AccountData />
-						</div>
-						<div className="flex flex-col gap-2">
-							<TableProvider>
-								<TableControls />
-								<DataTable />
-							</TableProvider>
-							<div className="flex items-center justify-end gap-8">
-								<LimitManager />
-								<Pagination />
+		<Router>
+			<FilteringProvider>
+				<StatisticsProvider>
+					<PaginatedDataProvider>
+						<div className="flex flex-col p-2 gap-2">
+							<div className="flex justify-between">
+								<Statistics />
+								<AccountData />
+							</div>
+							<div className="flex flex-col gap-2">
+								<TableProvider>
+									<TableControls />
+									<DataTable />
+								</TableProvider>
+								<div className="flex items-center justify-end gap-8">
+									<LimitManager />
+									<Pagination />
+								</div>
 							</div>
 						</div>
-					</div>
-				</PaginatedDataProvider>
-			</StatisticsProvider>
-		</FilteringProvider>
-		<Toaster />
+					</PaginatedDataProvider>
+				</StatisticsProvider>
+			</FilteringProvider>
+			<Toaster />
+		</Router>
 	</QueryClientProvider>
 );
 

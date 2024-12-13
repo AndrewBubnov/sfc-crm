@@ -5,6 +5,7 @@ import { ColumnFilter } from '@/components/ColumnFilter.tsx';
 import { SortSwitch } from '@/components/SortSwitch.tsx';
 import { FilteringContext } from '@/providers/FilteringContext.ts';
 import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
+import { useManageParams } from '@/hooks/useManageParams.ts';
 
 type DataTableHeaderProps<T> = {
 	headerGroups: HeaderGroup<T>[];
@@ -13,6 +14,7 @@ type DataTableHeaderProps<T> = {
 export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) => {
 	const { sortBy, onSortChange, sortDesc } = useContext(PaginatedDataContext);
 	const { filters, onFilterChange } = useContext(FilteringContext);
+	const { setQueryParams } = useManageParams();
 
 	return (
 		<TableHeader>
@@ -43,7 +45,10 @@ export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) =
 													isSearchEnabled={isSearchEnabled}
 													value={filter?.search || ''}
 													onOpenChange={onOpenChange}
-													onChange={search => onFilterChange({ field: header.id, search })}
+													onChange={search => {
+														onFilterChange({ field: header.id, search });
+														setQueryParams({ field: header.id, search });
+													}}
 												/>
 												<SortSwitch
 													id={header.id}
