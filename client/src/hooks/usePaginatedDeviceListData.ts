@@ -15,11 +15,10 @@ type UseDeviceData = {
 };
 
 export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) => {
-	const { filters: rawFilters } = useManageParams();
+	const { filters: rawFilters, setPageParam, page } = useManageParams();
 
 	const filters = useDebounced(rawFilters, filterResolver);
 
-	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(BASE_LIMIT);
 
 	const { data, isFetching } = useQuery<DeviceDataType, Error>({
@@ -32,40 +31,36 @@ export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) 
 
 	useSubscribe(paramsRef);
 
-	useEffect(() => setPage(1), [filters]);
 	useEffect(() => {
-		if (page > 1 && !data?.data.items.length) setPage(prevState => prevState - 1);
-	}, [data?.data.items.length, page]);
+		if (page > 1 && !data?.data.items.length && !isFetching) setPageParam(page - 1);
+	}, [data?.data.items.length, isFetching, page, setPageParam]);
 
 	const onChangeLimit = useCallback(
 		(limitNumber: number) =>
 			setLimit(prevLimit => {
-				setPage(prevPage => {
-					const newPage = Math.floor(prevPage * (prevLimit / limitNumber)) || 1;
-					const maxPages = Math.ceil((data?.data.total || 0) / limitNumber);
-					return Math.min(newPage, maxPages) || 1;
-				});
+				const newPage = Math.floor(page * (prevLimit / limitNumber)) || 1;
+				const maxPages = Math.ceil((data?.data.total || 0) / limitNumber);
+				setPageParam(Math.min(newPage, maxPages) || 1);
 				return limitNumber;
 			}),
-		[data?.data.total]
+		[data?.data.total, page, setPageParam]
 	);
 
 	const lastPage = Math.ceil((data?.data.total ?? 0) / limit);
-	const setNextPage = useCallback(() => setPage(prevState => prevState + 1), []);
-	const setPrevPage = useCallback(() => setPage(prevState => prevState - 1), []);
+	const setNextPage = useCallback(() => setPageParam(page + 1), [page, setPageParam]);
+	const setPrevPage = useCallback(() => setPageParam(page - 1), [page, setPageParam]);
 	const isPrevStepDisabled = isFetching || page === 1;
 	const isNextStepDisabled = isFetching || page === lastPage;
 
 	useEffect(() => {
-		if (lastPage && page > lastPage) setPage(lastPage);
-	}, [lastPage, page]);
+		if (lastPage && page > lastPage) setPageParam(lastPage);
+	}, [lastPage, page, setPageParam]);
 
 	return useMemo(
 		() => ({
 			data: data?.data.items || [],
 			isInitFetching: isFetching && !data,
 			paginationData: {
-				setPage,
 				setNextPage,
 				setPrevPage,
 				page,

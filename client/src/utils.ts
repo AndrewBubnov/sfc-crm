@@ -59,17 +59,19 @@ export const addParam = (param: Record<string, string>): string[][] => Object.ke
 
 const getGroupedLists = (list: string[][]) => {
 	let first: string[] = [];
-	return list.reduce(
-		(acc, cur, currentIndex) => {
-			if (currentIndex % 2 === 0) {
-				first = cur;
+	return list
+		.filter(el => el[0] === 'field' || el[0] === 'search')
+		.reduce(
+			(acc, cur, currentIndex) => {
+				if (currentIndex % 2 === 0) {
+					first = cur;
+					return acc;
+				}
+				acc.push([first, cur]);
 				return acc;
-			}
-			acc.push([first, cur]);
-			return acc;
-		},
-		[] as string[][][]
-	);
+			},
+			[] as string[][][]
+		);
 };
 
 export const getReducedFilterQueryParams = (params: string[][], filter: Filter = {} as Filter) => {
@@ -82,10 +84,23 @@ export const getReducedFilterQueryParams = (params: string[][], filter: Filter =
 	const grouped = getGroupedLists(updated);
 
 	const filteredGrouped = grouped.filter(el => el[1][1].length);
+
 	const filters = filteredGrouped.map(el => ({
 		field: el[0][1],
 		search: el[1][1],
 	}));
 
 	return { queryParams: filteredGrouped.flat(1), filters };
+};
+
+export const managePageParams = (params: string[][], page: number) => {
+	const index = params.findIndex(el => el[0] === 'page');
+	return index === -1
+		? [...params, ['page', String(page)]]
+		: [...params.slice(0, index), ['page', String(page)], ...params.slice(index + 1)];
+};
+
+export const getPageParam = (params: string[][]) => {
+	const page = params.find(el => el[0] === 'page')?.[1];
+	return page ? +page : 1;
 };
