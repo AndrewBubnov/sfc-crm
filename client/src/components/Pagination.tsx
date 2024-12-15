@@ -4,11 +4,11 @@ import { createIndexesList } from '@/utils.ts';
 import { useContext, useMemo } from 'react';
 import { PaginationButton } from '@/components/PaginationButton.tsx';
 import { DataContext } from '@/providers/DataContext.ts';
-import { useManageParams } from '@/hooks/useManageParams.ts';
+import { useQueryParams } from '@/hooks/useQueryParams.ts';
 
 export const Pagination = () => {
 	const { setPageParam, setNextPage, setPrevPage, isPrevStepDisabled, isNextStepDisabled, page, lastPage } =
-		useManageParams();
+		useQueryParams();
 	const { isInitFetching, isFetching } = useContext(DataContext);
 	const pageIndexes = createIndexesList(page, lastPage);
 

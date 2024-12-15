@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils.ts';
 import { ActiveShape } from '@/components/ActiveShape.tsx';
 import { capitalize } from '@/utils.ts';
 import { GraphData } from '@/types.ts';
-import { useManageParams } from '@/hooks/useManageParams.ts';
+import { useQueryParams } from '@/hooks/useQueryParams.ts';
 
 type ChartProps = {
 	data: GraphData[];
@@ -16,7 +16,7 @@ type ChartProps = {
 
 export const Chart = ({ data, dto, total, name }: ChartProps) => {
 	const [activeIndex, setActiveIndex] = useState(0);
-	const { setFilter } = useManageParams();
+	const { setFilter } = useQueryParams();
 
 	const clickHandler = useCallback(
 		(evt: Record<'name', string>) => setFilter({ field: name, search: evt.name }),

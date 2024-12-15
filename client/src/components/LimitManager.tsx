@@ -8,11 +8,11 @@ import {
 import { Button } from '@/components/ui/button.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { DataContext } from '@/providers/DataContext.ts';
-import { useManageParams } from '@/hooks/useManageParams.ts';
+import { useQueryParams } from '@/hooks/useQueryParams.ts';
 
 export const LimitManager = () => {
 	const { isInitFetching } = useContext(DataContext);
-	const { limit, setLimitParam } = useManageParams();
+	const { limit, setLimitParam } = useQueryParams();
 
 	return (
 		<Skeleton isLoading={isInitFetching} className="w-[15vw] h-8 rounded-md">

@@ -1,7 +1,7 @@
 import { ArrowUpAZ } from 'lucide-react';
 import { ArrowDownAZ } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
-import { useManageParams } from '@/hooks/useManageParams.ts';
+import { useQueryParams } from '@/hooks/useQueryParams.ts';
 
 type SortSwitchProps = {
 	id: string;
@@ -10,7 +10,7 @@ type SortSwitchProps = {
 };
 
 export const SortSwitch = ({ id, sortBy, sortDesc }: SortSwitchProps) => {
-	const { setSortParam } = useManageParams();
+	const { setSortParam } = useQueryParams();
 
 	const upSortHandler = () => setSortParam({ sortBy: id, sortDesc: false });
 

@@ -3,13 +3,13 @@ import { filterResolver } from '@/constants.ts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useSubscribe } from '@/hooks/useSubscribe.ts';
 import { useDebounced } from '@/hooks/useDebounced.ts';
-import { useManageParams } from '@/hooks/useManageParams.ts';
+import { useQueryParams } from '@/hooks/useQueryParams.ts';
 import { getDevicesData } from '@/api/getDevicesData.ts';
 import { QueryKeys } from '@/queryKeys.ts';
 import { DeviceDataType } from '@/types.ts';
 
 export const useData = () => {
-	const { filters: rawFilters, setPageParam, page, sort, limit } = useManageParams();
+	const { filters: rawFilters, setPageParam, page, sort, limit } = useQueryParams();
 
 	const filters = useDebounced(rawFilters, filterResolver);
 

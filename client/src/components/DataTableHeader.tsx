@@ -3,14 +3,14 @@ import { TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
 import { flexRender, HeaderGroup } from '@tanstack/react-table';
 import { ColumnFilter } from '@/components/ColumnFilter.tsx';
 import { SortSwitch } from '@/components/SortSwitch.tsx';
-import { useManageParams } from '@/hooks/useManageParams.ts';
+import { useQueryParams } from '@/hooks/useQueryParams.ts';
 
 type DataTableHeaderProps<T> = {
 	headerGroups: HeaderGroup<T>[];
 };
 
 export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) => {
-	const { setFilter, filters, sort } = useManageParams();
+	const { setFilter, filters, sort } = useQueryParams();
 
 	return (
 		<TableHeader>

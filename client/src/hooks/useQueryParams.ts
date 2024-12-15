@@ -12,7 +12,7 @@ import {
 } from '@/utils.ts';
 import { Filter, Sort } from '@/types.ts';
 
-export const useManageParams = () => {
+export const useQueryParams = () => {
 	const { total, isFetching } = useContext(DataContext);
 	const [params, setParams] = useSearchParams();
 	const paramsList = useMemo(() => [...params], [params]);
