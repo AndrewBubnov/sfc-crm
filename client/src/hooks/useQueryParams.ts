@@ -1,19 +1,16 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
-import { DataContext } from '@/providers/DataContext.ts';
 import {
 	getLimitParam,
 	getPageParam,
 	getReducedFilterQueryParams,
 	getSortParam,
 	updateLimitParam,
-	updatePageParam,
 	updateSortParam,
 } from '@/utils.ts';
 import { Filter, Sort } from '@/types.ts';
 
 export const useQueryParams = () => {
-	const { total, isFetching } = useContext(DataContext);
 	const [params, setParams] = useSearchParams();
 	const paramsList = useMemo(() => [...params], [params]);
 
@@ -38,11 +35,6 @@ export const useQueryParams = () => {
 		]);
 	}, [paramsList, setParams]);
 
-	const setPageParam = useCallback(
-		(page: number) => setParams(updatePageParam(paramsList, page) as ParamKeyValuePair[]),
-		[paramsList, setParams]
-	);
-
 	const setLimitParam = useCallback(
 		(page: number) => setParams(updateLimitParam(paramsList, page) as ParamKeyValuePair[]),
 		[paramsList, setParams]
@@ -53,52 +45,21 @@ export const useQueryParams = () => {
 		[paramsList, setParams]
 	);
 
-	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
 	const sort = useMemo(() => getSortParam(paramsList), [paramsList]);
 	const limit = useMemo(() => getLimitParam(paramsList), [paramsList]);
 
-	const lastPage = Math.ceil(total / limit);
-	const setNextPage = useCallback(() => setPageParam(page + 1), [page, setPageParam]);
-	const setPrevPage = useCallback(() => setPageParam(page - 1), [page, setPageParam]);
-	const isPrevStepDisabled = isFetching || page === 1;
-	const isNextStepDisabled = isFetching || page === lastPage;
-
-	useEffect(() => {
-		if (lastPage && page > lastPage) setPageParam(lastPage);
-	}, [lastPage, page, setPageParam]);
-
 	return useMemo(
 		() => ({
+			paramsList,
+			setParams,
 			setFilter,
 			resetFilters,
 			filters,
 			sort,
 			limit,
 			setLimitParam,
-			setPageParam,
 			setSortParam,
-			page,
-			lastPage,
-			setNextPage,
-			setPrevPage,
-			isNextStepDisabled,
-			isPrevStepDisabled,
 		}),
-		[
-			setFilter,
-			resetFilters,
-			filters,
-			sort,
-			limit,
-			setLimitParam,
-			setPageParam,
-			setSortParam,
-			page,
-			lastPage,
-			setNextPage,
-			setPrevPage,
-			isNextStepDisabled,
-			isPrevStepDisabled,
-		]
+		[filters, limit, paramsList, resetFilters, setFilter, setLimitParam, setParams, setSortParam, sort]
 	);
 };

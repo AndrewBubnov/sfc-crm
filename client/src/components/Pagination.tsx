@@ -4,11 +4,11 @@ import { createIndexesList } from '@/utils.ts';
 import { useContext, useMemo } from 'react';
 import { PaginationButton } from '@/components/PaginationButton.tsx';
 import { DataContext } from '@/providers/DataContext.ts';
-import { useQueryParams } from '@/hooks/useQueryParams.ts';
+import { usePagination } from '@/hooks/usePagination.ts';
 
 export const Pagination = () => {
-	const { setPageParam, setNextPage, setPrevPage, isPrevStepDisabled, isNextStepDisabled, page, lastPage } =
-		useQueryParams();
+	const { setPage, setNextPage, setPrevPage, isPrevStepDisabled, isNextStepDisabled, page, lastPage } =
+		usePagination();
 	const { isInitFetching, isFetching } = useContext(DataContext);
 	const pageIndexes = createIndexesList(page, lastPage);
 
@@ -26,13 +26,13 @@ export const Pagination = () => {
 						key={pageIndex}
 						disabled={isFetching}
 						className="text-xs"
-						onClick={() => setPageParam(pageIndex)}
+						onClick={() => setPage(pageIndex)}
 					>
 						<span>{pageIndex}</span>
 					</PaginationButton>
 				);
 			}),
-		[isFetching, page, pageIndexes, setPageParam]
+		[isFetching, page, pageIndexes, setPage]
 	);
 
 	const isPaginationEnabled = pagesList.length > 1;
@@ -45,7 +45,7 @@ export const Pagination = () => {
 						<div className="flex items-center">
 							<PaginationButton
 								disabled={page === 1 || isFetching}
-								onClick={() => setPageParam(1)}
+								onClick={() => setPage(1)}
 								dataTestId="pagination-first-button"
 							>
 								<ChevronFirst />
@@ -60,10 +60,7 @@ export const Pagination = () => {
 						</div>
 						<div className="flex items-center">
 							{pageIndexes[0] > 1 && (
-								<PaginationButton
-									disabled={isFetching}
-									onClick={() => setPageParam(Math.max(page - 3, 1))}
-								>
+								<PaginationButton disabled={isFetching} onClick={() => setPage(Math.max(page - 3, 1))}>
 									...
 								</PaginationButton>
 							)}
@@ -71,7 +68,7 @@ export const Pagination = () => {
 							{(pageIndexes.at(-1) || 1) < lastPage && (
 								<PaginationButton
 									disabled={isFetching}
-									onClick={() => setPageParam(Math.min(page + 3, lastPage))}
+									onClick={() => setPage(Math.min(page + 3, lastPage))}
 								>
 									...
 								</PaginationButton>
@@ -87,7 +84,7 @@ export const Pagination = () => {
 							</PaginationButton>
 							<PaginationButton
 								disabled={page === lastPage || isFetching}
-								onClick={() => setPageParam(lastPage)}
+								onClick={() => setPage(lastPage)}
 								dataTestId="pagination-last-button"
 							>
 								<ChevronLast />

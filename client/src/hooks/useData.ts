@@ -7,9 +7,11 @@ import { useQueryParams } from '@/hooks/useQueryParams.ts';
 import { getDevicesData } from '@/api/getDevicesData.ts';
 import { QueryKeys } from '@/queryKeys.ts';
 import { DeviceDataType } from '@/types.ts';
+import { usePagination } from '@/hooks/usePagination.ts';
 
 export const useData = () => {
-	const { filters: rawFilters, setPageParam, page, sort, limit } = useQueryParams();
+	const { filters: rawFilters, sort, limit } = useQueryParams();
+	const { page, setPage } = usePagination();
 
 	const filters = useDebounced(rawFilters, filterResolver);
 
@@ -22,8 +24,8 @@ export const useData = () => {
 	useSubscribe();
 
 	useEffect(() => {
-		if (page > 1 && !data?.data.items?.length && !isFetching) setPageParam(page - 1);
-	}, [data?.data.items?.length, isFetching, page, setPageParam]);
+		if (page > 1 && !data?.data.items?.length && !isFetching) setPage(page - 1);
+	}, [data?.data.items?.length, isFetching, page, setPage]);
 
 	return useMemo(
 		() => ({

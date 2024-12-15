@@ -14,13 +14,13 @@ interface PaginatedDataContextType {
 
 type PartialContextValue = Partial<PaginatedDataContextType>;
 
-const mockSetPageParam = vi.fn();
+const mockSetPage = vi.fn();
 const mockSetNextPage = vi.fn();
 const mockSetPrevPage = vi.fn();
 
-const mockUseManageParamsReturnValue = {
+const mockUsePaginationReturnValue = {
 	page: 1,
-	setPageParam: mockSetPageParam,
+	setPage: mockSetPage,
 	setNextPage: mockSetNextPage,
 	setPrevPage: mockSetPrevPage,
 	isPrevStepDisabled: false,
@@ -28,8 +28,8 @@ const mockUseManageParamsReturnValue = {
 	lastPage: 5,
 };
 
-vi.mock('@/hooks/useManageParams.ts', () => ({
-	useManageParams: () => mockUseManageParamsReturnValue,
+vi.mock('@/hooks/usePagination.ts', () => ({
+	usePagination: () => mockUsePaginationReturnValue,
 }));
 
 const createWrapper = (contextValue: PartialContextValue = {}) => {
@@ -77,7 +77,7 @@ describe('Pagination', () => {
 	});
 
 	it('should call `setNextPage` when `next` button is clicked', () => {
-		mockUseManageParamsReturnValue.isNextStepDisabled = false;
+		mockUsePaginationReturnValue.isNextStepDisabled = false;
 		renderWithContext(<Pagination />);
 
 		const nextButton = screen.getByTestId('pagination-next-button');
@@ -86,14 +86,14 @@ describe('Pagination', () => {
 	});
 
 	it('should disable `previous` button when `isPrevStepDisabled` is true', () => {
-		mockUseManageParamsReturnValue.isPrevStepDisabled = true;
+		mockUsePaginationReturnValue.isPrevStepDisabled = true;
 		renderWithContext(<Pagination />);
 		const prevButton = screen.getByTestId('pagination-previous-button');
 		expect(prevButton).toBeDisabled();
 	});
 
 	it('should disable `next` button when `isNextStepDisabled` is true', () => {
-		mockUseManageParamsReturnValue.isNextStepDisabled = true;
+		mockUsePaginationReturnValue.isNextStepDisabled = true;
 		renderWithContext(<Pagination />);
 		const nextButton = screen.queryByTestId('pagination-next-button');
 		expect(nextButton).toBeDisabled();
@@ -115,11 +115,11 @@ describe('Pagination', () => {
 	});
 
 	it('should call `setPage` when page number is clicked', () => {
-		mockUseManageParamsReturnValue.lastPage = 3;
+		mockUsePaginationReturnValue.lastPage = 3;
 		renderWithContext(<Pagination />);
 
 		fireEvent.click(screen.getByText('2'));
-		expect(mockSetPageParam).toHaveBeenCalledWith(2);
+		expect(mockSetPage).toHaveBeenCalledWith(2);
 	});
 
 	it('should disable navigation buttons in `isFetching` state', () => {

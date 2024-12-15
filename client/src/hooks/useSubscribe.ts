@@ -6,11 +6,13 @@ import { useLatest } from '@/hooks/useLatest.ts';
 import { QueryKeys } from '@/queryKeys.ts';
 import { BASE_URL } from '@/constants.ts';
 import { Device, DeviceDataType } from '@/types.ts';
+import { usePagination } from '@/hooks/usePagination.ts';
 
 export const useSubscribe = () => {
 	const queryClient = useQueryClient();
 	const { updateStatistics } = useContext(StatisticsContext);
-	const { filters, page, sort, limit } = useQueryParams();
+	const { filters, sort, limit } = useQueryParams();
+	const { page } = usePagination();
 
 	const paramsRef = useLatest({ page, sort, limit, filters });
 
