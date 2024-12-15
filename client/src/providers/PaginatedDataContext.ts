@@ -6,8 +6,11 @@ export type PaginatedDataContextProps = {
 	sortDesc: boolean;
 	onSortChange(arg: { sortedBy: string; sortedDesc: boolean }): void;
 	data: ReturnType<typeof usePaginatedDeviceListData>['data'];
-	paginationData: ReturnType<typeof usePaginatedDeviceListData>['paginationData'];
+	total: number;
+	isFetching: boolean;
+	limit: number;
 	isInitFetching: boolean;
+	onChangeLimit(arg: number): void;
 };
 
 export const PaginatedDataContext = createContext<PaginatedDataContextProps>({} as PaginatedDataContextProps);

@@ -10,10 +10,7 @@ import { useContext } from 'react';
 import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 
 export const LimitManager = () => {
-	const {
-		paginationData: { limit, onChangeLimit },
-		isInitFetching,
-	} = useContext(PaginatedDataContext);
+	const { isInitFetching, onChangeLimit, limit } = useContext(PaginatedDataContext);
 
 	return (
 		<Skeleton isLoading={isInitFetching} className="w-[15vw] h-8 rounded-md">

@@ -1,9 +1,11 @@
 import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Filter } from '@/types.ts';
 import { getPageParam, getReducedFilterQueryParams, managePageParams } from '@/utils.ts';
+import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 
 export const useManageParams = () => {
+	const { total, isFetching, limit } = useContext(PaginatedDataContext);
 	const [params, setParams] = useSearchParams();
 	const paramsList = useMemo(() => [...params], [params]);
 
@@ -28,6 +30,15 @@ export const useManageParams = () => {
 		[paramsList, setParams]
 	);
 	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
+	const lastPage = Math.ceil(total / limit);
+	const setNextPage = useCallback(() => setPageParam(page + 1), [page, setPageParam]);
+	const setPrevPage = useCallback(() => setPageParam(page - 1), [page, setPageParam]);
+	const isPrevStepDisabled = isFetching || page === 1;
+	const isNextStepDisabled = isFetching || page === lastPage;
+
+	useEffect(() => {
+		if (lastPage && page > lastPage) setPageParam(lastPage);
+	}, [lastPage, page, setPageParam]);
 
 	return useMemo(
 		() => ({
@@ -36,7 +47,23 @@ export const useManageParams = () => {
 			filters,
 			setPageParam,
 			page,
+			lastPage,
+			setNextPage,
+			setPrevPage,
+			isNextStepDisabled,
+			isPrevStepDisabled,
 		}),
-		[filters, page, resetFilters, setFilter, setPageParam]
+		[
+			filters,
+			isNextStepDisabled,
+			isPrevStepDisabled,
+			page,
+			lastPage,
+			resetFilters,
+			setFilter,
+			setNextPage,
+			setPageParam,
+			setPrevPage,
+		]
 	);
 };

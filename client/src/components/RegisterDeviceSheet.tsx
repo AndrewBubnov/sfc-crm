@@ -12,7 +12,7 @@ import { RegisterDeviceSchemaType } from '@/schemas.ts';
 export const RegisterDeviceSheet = () => {
 	const { toast } = useToast();
 
-	const { paginationData } = useContext(PaginatedDataContext);
+	const { isFetching } = useContext(PaginatedDataContext);
 
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -28,7 +28,7 @@ export const RegisterDeviceSheet = () => {
 	return (
 		<Sheet open={isOpen} onOpenChange={setIsOpen}>
 			<SheetTrigger asChild className="bg-transparent hover:border-transparent">
-				<Button variant="ghost" disabled={registerDeviceMutation.isPending || paginationData.isFetching}>
+				<Button variant="ghost" disabled={registerDeviceMutation.isPending || isFetching}>
 					<Plus />
 					Register device
 				</Button>

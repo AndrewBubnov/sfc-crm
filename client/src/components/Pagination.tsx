@@ -7,19 +7,9 @@ import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 import { useManageParams } from '@/hooks/useManageParams.ts';
 
 export const Pagination = () => {
-	const { setPageParam } = useManageParams();
-	const {
-		paginationData: {
-			page,
-			setNextPage,
-			setPrevPage,
-			isPrevStepDisabled,
-			isNextStepDisabled,
-			lastPage,
-			isFetching,
-		},
-		isInitFetching,
-	} = useContext(PaginatedDataContext);
+	const { setPageParam, setNextPage, setPrevPage, isPrevStepDisabled, isNextStepDisabled, page, lastPage } =
+		useManageParams();
+	const { isInitFetching, isFetching } = useContext(PaginatedDataContext);
 	const pageIndexes = createIndexesList(page, lastPage);
 
 	const pagesList = useMemo(

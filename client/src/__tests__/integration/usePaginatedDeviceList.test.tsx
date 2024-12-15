@@ -1,12 +1,13 @@
 import 'eventsource-polyfill';
+import { ReactNode } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData';
-import { BASE_URL } from '@/constants';
-import { ReactNode } from 'react';
 import { mockDevices } from '@/mocks/mockDevices.ts';
+import { BASE_URL } from '@/constants';
 
 const mockFetchFn = vi.fn();
 
@@ -36,7 +37,9 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	const wrapper = ({ children }: { children: ReactNode }) => (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		<QueryClientProvider client={queryClient}>
+			<Router>{children}</Router>
+		</QueryClientProvider>
 	);
 
 	beforeAll(() => server.listen());
@@ -88,32 +91,6 @@ describe('usePaginatedDeviceListData', () => {
 			const updatedDeviceInList = result.current.data.find(device => device.id === updatedDevice.id);
 			expect(updatedDeviceInList).toBeDefined();
 			expect(updatedDeviceInList?.name).toBe(updatedDevice.name);
-		});
-	});
-
-	it('should handle pagination correctly', async () => {
-		const { result } = renderHook(() => usePaginatedDeviceListData(defaultArgs), {
-			wrapper,
-		});
-
-		await waitFor(() => {
-			expect(result.current.data).toBeDefined();
-		});
-
-		act(() => {
-			result.current.paginationData.setNextPage();
-		});
-
-		await waitFor(() => {
-			expect(result.current.paginationData.page).toBe(2);
-		});
-
-		act(() => {
-			result.current.paginationData.setPrevPage();
-		});
-
-		await waitFor(() => {
-			expect(result.current.paginationData.page).toBe(1);
 		});
 	});
 

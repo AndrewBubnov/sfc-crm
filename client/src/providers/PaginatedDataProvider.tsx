@@ -9,10 +9,7 @@ type PaginatedDataProviderProps = {
 export const PaginatedDataProvider = ({ children }: PaginatedDataProviderProps) => {
 	const [sortBy, setSortBy] = useState<string>('');
 	const [sortDesc, setSortDesc] = useState<boolean>(false);
-	const { data, paginationData, isInitFetching } = usePaginatedDeviceListData({
-		sortBy,
-		sortDesc,
-	});
+	const data = usePaginatedDeviceListData({ sortBy, sortDesc });
 	const onSortChange = useCallback(
 		({ sortedBy, sortedDesc }: { sortedBy: string; sortedDesc: boolean }) => {
 			setSortBy(prevState => (prevState === sortedBy && sortedDesc === sortDesc ? '' : sortedBy));
@@ -25,11 +22,9 @@ export const PaginatedDataProvider = ({ children }: PaginatedDataProviderProps) 
 			sortBy,
 			sortDesc,
 			onSortChange,
-			data,
-			paginationData,
-			isInitFetching,
+			...data,
 		}),
-		[data, isInitFetching, onSortChange, paginationData, sortBy, sortDesc]
+		[data, onSortChange, sortBy, sortDesc]
 	);
 	return <PaginatedDataContext.Provider value={paginatedDataValue}>{children}</PaginatedDataContext.Provider>;
 };

@@ -1,57 +1,51 @@
 import 'eventsource-polyfill';
+import { ReactElement, ReactNode } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from '@/components/Pagination';
-import { ReactElement, ReactNode } from 'react';
-import { PaginatedDataContext, PaginatedDataContextProps } from '@/providers/PaginatedDataContext.ts';
 
-interface PaginationData {
-	page: number;
-	setPage: (page: number) => void;
-	setNextPage: () => void;
-	setPrevPage: () => void;
-	isPrevStepDisabled: boolean;
-	isNextStepDisabled: boolean;
-	lastPage: number;
-	isFetching: boolean;
-}
+import { PaginatedDataContext, PaginatedDataContextProps } from '@/providers/PaginatedDataContext.ts';
+import { vi } from 'vitest';
 
 interface PaginatedDataContextType {
-	paginationData: PaginationData;
+	isFetching: boolean;
 	isInitFetching: boolean;
 }
 
-type PartialContextValue = DeepPartial<PaginatedDataContextType>;
+type PartialContextValue = Partial<PaginatedDataContextType>;
 
-type DeepPartial<T> = {
-	[P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
-};
-
-const mockSetPage = vi.fn();
+const mockSetPageParam = vi.fn();
 const mockSetNextPage = vi.fn();
 const mockSetPrevPage = vi.fn();
 
+const mockUseManageParamsReturnValue = {
+	page: 1,
+	setPageParam: mockSetPageParam,
+	setNextPage: mockSetNextPage,
+	setPrevPage: mockSetPrevPage,
+	isPrevStepDisabled: false,
+	isNextStepDisabled: false,
+	lastPage: 5,
+};
+
+vi.mock('@/hooks/useManageParams.ts', () => ({
+	useManageParams: () => mockUseManageParamsReturnValue,
+}));
+
 const createWrapper = (contextValue: PartialContextValue = {}) => {
 	return ({ children }: { children: ReactNode }) => (
-		<PaginatedDataContext.Provider
-			value={
-				{
-					paginationData: {
-						page: 1,
-						setPage: mockSetPage,
-						setNextPage: mockSetNextPage,
-						setPrevPage: mockSetPrevPage,
-						isPrevStepDisabled: false,
-						isNextStepDisabled: false,
-						lastPage: 5,
-						isFetching: false,
-						...contextValue.paginationData,
-					},
-					isInitFetching: contextValue.isInitFetching || false,
-				} as PaginatedDataContextProps
-			}
-		>
-			{children}
-		</PaginatedDataContext.Provider>
+		<Router>
+			<PaginatedDataContext.Provider
+				value={
+					{
+						isInitFetching: contextValue.isInitFetching || false,
+						isFetching: contextValue.isFetching || false,
+					} as PaginatedDataContextProps
+				}
+			>
+				{children}
+			</PaginatedDataContext.Provider>
+		</Router>
 	);
 };
 
@@ -62,6 +56,9 @@ const renderWithContext = (ui: ReactElement, contextValue: PartialContextValue =
 };
 
 describe('Pagination', () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
 	it('should render `first`, `previous`, `next` and `last` buttons correctly', () => {
 		renderWithContext(<Pagination />);
 		expect(screen.getByTestId('pagination-first-button')).toBeInTheDocument();
@@ -80,6 +77,7 @@ describe('Pagination', () => {
 	});
 
 	it('should call `setNextPage` when `next` button is clicked', () => {
+		mockUseManageParamsReturnValue.isNextStepDisabled = false;
 		renderWithContext(<Pagination />);
 
 		const nextButton = screen.getByTestId('pagination-next-button');
@@ -87,14 +85,16 @@ describe('Pagination', () => {
 		expect(mockSetNextPage).toHaveBeenCalled();
 	});
 
-	it('should disable `previous` button when isPrevStepDisabled is true', () => {
-		renderWithContext(<Pagination />, { paginationData: { isPrevStepDisabled: true } });
+	it('should disable `previous` button when `isPrevStepDisabled` is true', () => {
+		mockUseManageParamsReturnValue.isPrevStepDisabled = true;
+		renderWithContext(<Pagination />);
 		const prevButton = screen.getByTestId('pagination-previous-button');
 		expect(prevButton).toBeDisabled();
 	});
 
 	it('should disable `next` button when `isNextStepDisabled` is true', () => {
-		renderWithContext(<Pagination />, { paginationData: { isNextStepDisabled: true } });
+		mockUseManageParamsReturnValue.isNextStepDisabled = true;
+		renderWithContext(<Pagination />);
 		const nextButton = screen.queryByTestId('pagination-next-button');
 		expect(nextButton).toBeDisabled();
 	});
@@ -115,24 +115,16 @@ describe('Pagination', () => {
 	});
 
 	it('should call `setPage` when page number is clicked', () => {
-		renderWithContext(<Pagination />, {
-			paginationData: {
-				page: 1,
-				lastPage: 3,
-			},
-		});
+		mockUseManageParamsReturnValue.lastPage = 3;
+		renderWithContext(<Pagination />);
 
 		fireEvent.click(screen.getByText('2'));
-		expect(mockSetPage).toHaveBeenCalledWith(2);
+		expect(mockSetPageParam).toHaveBeenCalledWith(2);
 	});
 
 	it('should disable navigation buttons in `isFetching` state', () => {
 		renderWithContext(<Pagination />, {
-			paginationData: {
-				page: 2,
-				lastPage: 3,
-				isFetching: true,
-			},
+			isFetching: true,
 		});
 
 		expect(screen.getByTestId('pagination-next-button')).toBeDisabled();

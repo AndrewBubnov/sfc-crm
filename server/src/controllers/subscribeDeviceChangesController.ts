@@ -57,7 +57,7 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 		const event = events[Math.floor(Math.random() * events.length)];
 
 		updateDevicesList(event);
-		console.log(filterDevices().filteredDevices.length);
+
 		res.write(`event: ${event.type}\n`);
 		res.write(
 			`data: ${JSON.stringify({
