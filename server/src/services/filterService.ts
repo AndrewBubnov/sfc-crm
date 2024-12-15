@@ -3,6 +3,11 @@ type Filters = {
 	filterField?: string[];
 };
 
+type Sort = {
+	sortBy: string | undefined;
+	sortDesc: boolean;
+};
+
 type RawFilters = {
 	filterBy: string[] | string | undefined;
 	filterField: string[] | string | undefined;
@@ -16,6 +21,11 @@ type OffsetLimit = {
 export let filters: Filters = {
 	filterBy: [],
 	filterField: [],
+};
+
+export let sort: Sort = {
+	sortBy: '',
+	sortDesc: false,
 };
 
 export let offsetLimits: OffsetLimit = {
@@ -42,4 +52,8 @@ export const updateFilters = (updatedFilters: RawFilters) => {
 
 export const updateOffsetLimits = (updatedLimits: OffsetLimit) => {
 	offsetLimits = updatedLimits;
+};
+
+export const updateSort = (updatedSort: Sort) => {
+	sort = updatedSort;
 };

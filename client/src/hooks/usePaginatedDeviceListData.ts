@@ -33,8 +33,8 @@ export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) 
 
 	useEffect(() => setPage(1), [filters]);
 	useEffect(() => {
-		if (page > 1 && !data?.data.items.length) setPage(prevState => prevState - 1);
-	}, [data?.data.items.length, page]);
+		if (page > 1 && !data?.data.items?.length) setPage(prevState => prevState - 1);
+	}, [data?.data.items?.length, page]);
 
 	const onChangeLimit = useCallback(
 		(limitNumber: number) =>

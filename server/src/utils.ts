@@ -1,5 +1,6 @@
 import { Device, DeviceMode, DeviceState, DeviceType } from './models/device.js';
 import { faker } from '@faker-js/faker';
+import { sort } from './services/filterService.js';
 
 const INITIAL_DEVICES_NUMBER = 91;
 
@@ -32,12 +33,14 @@ export const createDevice = (): Device => {
 
 export const createDevices = (): Device[] => Array.from({ length: INITIAL_DEVICES_NUMBER }, createDevice);
 
-export const sortDevices = (devices: Device[], sortBy?: keyof Device, sortDesc?: boolean): Device[] => {
+export const sortDevices = (devices: Device[]): Device[] => {
+	const { sortBy, sortDesc } = sort;
+
 	if (!sortBy) return devices;
 
 	return [...devices].sort((a, b) => {
-		const aVal = a[sortBy];
-		const bVal = b[sortBy];
+		const aVal = a[sortBy as keyof Device];
+		const bVal = b[sortBy as keyof Device];
 
 		if ((aVal || '') < (bVal || '')) return sortDesc ? 1 : -1;
 		if ((aVal || '') > (bVal || '')) return sortDesc ? -1 : 1;

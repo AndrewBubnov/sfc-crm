@@ -22,7 +22,7 @@ export const registerDeviceController = async (req: Request<{}, {}, RegisterDevi
 
 	devices.unshift(device);
 
-	const { filteredDevices, total } = filterDevices();
+	const filteredDevices = filterDevices();
 
 	res.json(device);
 
@@ -32,9 +32,9 @@ export const registerDeviceController = async (req: Request<{}, {}, RegisterDevi
 			`data: ${JSON.stringify({
 				event: device,
 				stats: { state: getStateStats(filteredDevices, devices.length), type: getTypeStats(filteredDevices) },
-				items: filterDevices().filteredDevices.slice(
+				items: filterDevices().slice(
 					Math.max(offsetLimits.offset - offsetLimits.limit, 0),
-					Math.max(offsetLimits.offset, Math.min(offsetLimits.limit, filterDevices().filteredDevices.length))
+					Math.max(offsetLimits.offset, Math.min(offsetLimits.limit, filterDevices().length))
 				),
 			})}\n\n`
 		);

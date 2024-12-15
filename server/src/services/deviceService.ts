@@ -4,13 +4,8 @@ import { filters } from './filterService.js';
 
 export let devices = createDevices();
 
-export const filterDevices = () => {
-	const filteredDevices = getFilteredDevices(devices, filters.filterBy, filters.filterField as Array<keyof Device>);
-	return {
-		filteredDevices,
-		total: filteredDevices.length,
-	};
-};
+export const filterDevices = () =>
+	getFilteredDevices(devices, filters.filterBy, filters.filterField as Array<keyof Device>);
 
 export const updateDevices = (updatedDevices: Device[]) => {
 	devices = updatedDevices;
