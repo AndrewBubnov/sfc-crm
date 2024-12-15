@@ -1,8 +1,8 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { ParamKeyValuePair } from 'react-router-dom';
+import { useQueryParams } from '@/hooks/useQueryParams.ts';
 import { DataContext } from '@/providers/DataContext.ts';
 import { getLimitParam, getPageParam, getSortParam, updatePageParam } from '@/utils.ts';
-import { useQueryParams } from '@/hooks/useQueryParams.ts';
 
 export const usePagination = () => {
 	const { total, isFetching } = useContext(DataContext);
