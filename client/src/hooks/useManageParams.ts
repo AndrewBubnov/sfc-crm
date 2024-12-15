@@ -1,11 +1,19 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
 import { DataContext } from '@/providers/DataContext.ts';
-import { getPageParam, getReducedFilterQueryParams, getSortParam, updatePageParams, updateSortParam } from '@/utils.ts';
+import {
+	getLimitParam,
+	getPageParam,
+	getReducedFilterQueryParams,
+	getSortParam,
+	updateLimitParam,
+	updatePageParam,
+	updateSortParam,
+} from '@/utils.ts';
 import { Filter, Sort } from '@/types.ts';
 
 export const useManageParams = () => {
-	const { total, isFetching, limit } = useContext(DataContext);
+	const { total, isFetching } = useContext(DataContext);
 	const [params, setParams] = useSearchParams();
 	const paramsList = useMemo(() => [...params], [params]);
 
@@ -14,19 +22,29 @@ export const useManageParams = () => {
 	const setFilter = useCallback(
 		(filter: Filter) => {
 			const page = getPageParam(paramsList);
+			const limit = getLimitParam(paramsList);
 			const { queryParams } = getReducedFilterQueryParams(paramsList, filter);
-			setParams([['page', String(page)], ...queryParams] as ParamKeyValuePair[]);
+			setParams([['limit', String(limit)], ['page', String(page)], ...queryParams] as ParamKeyValuePair[]);
 		},
 		[paramsList, setParams]
 	);
 
 	const resetFilters = useCallback(() => {
 		const page = getPageParam(paramsList);
-		setParams([['page', String(page)]]);
+		const limit = getLimitParam(paramsList);
+		setParams([
+			['limit', String(limit)],
+			['page', String(page)],
+		]);
 	}, [paramsList, setParams]);
 
 	const setPageParam = useCallback(
-		(page: number) => setParams(updatePageParams(paramsList, page) as ParamKeyValuePair[]),
+		(page: number) => setParams(updatePageParam(paramsList, page) as ParamKeyValuePair[]),
+		[paramsList, setParams]
+	);
+
+	const setLimitParam = useCallback(
+		(page: number) => setParams(updateLimitParam(paramsList, page) as ParamKeyValuePair[]),
 		[paramsList, setParams]
 	);
 
@@ -37,6 +55,7 @@ export const useManageParams = () => {
 
 	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
 	const sort = useMemo(() => getSortParam(paramsList), [paramsList]);
+	const limit = useMemo(() => getLimitParam(paramsList), [paramsList]);
 
 	const lastPage = Math.ceil(total / limit);
 	const setNextPage = useCallback(() => setPageParam(page + 1), [page, setPageParam]);
@@ -54,6 +73,8 @@ export const useManageParams = () => {
 			resetFilters,
 			filters,
 			sort,
+			limit,
+			setLimitParam,
 			setPageParam,
 			setSortParam,
 			page,
@@ -68,6 +89,8 @@ export const useManageParams = () => {
 			resetFilters,
 			filters,
 			sort,
+			limit,
+			setLimitParam,
 			setPageParam,
 			setSortParam,
 			page,

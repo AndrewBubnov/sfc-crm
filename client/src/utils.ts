@@ -1,4 +1,5 @@
 import { Filter, Sort } from '@/types.ts';
+import { BASE_LIMIT } from '@/constants.ts';
 
 export const createIndexesList = (page: number, lastPage: number) => {
 	const currentPage = Math.min(page, lastPage);
@@ -93,16 +94,28 @@ export const getReducedFilterQueryParams = (params: string[][], filter: Filter =
 	return { queryParams: filteredGrouped.flat(1), filters };
 };
 
-export const updatePageParams = (params: string[][], page: number) => {
+export const getPageParam = (params: string[][]) => {
+	const page = params.find(el => el[0] === 'page')?.[1];
+	return page ? +page : 1;
+};
+
+export const getLimitParam = (params: string[][]) => {
+	const limit = params.find(el => el[0] === 'limit')?.[1];
+	return limit ? +limit : BASE_LIMIT;
+};
+
+export const updatePageParam = (params: string[][], page: number) => {
 	const index = params.findIndex(el => el[0] === 'page');
 	return index === -1
 		? [...params, ['page', String(page)]]
 		: [...params.slice(0, index), ['page', String(page)], ...params.slice(index + 1)];
 };
 
-export const getPageParam = (params: string[][]) => {
-	const page = params.find(el => el[0] === 'page')?.[1];
-	return page ? +page : 1;
+export const updateLimitParam = (params: string[][], limit: number) => {
+	const index = params.findIndex(el => el[0] === 'limit');
+	return index === -1
+		? [...params, ['limit', String(limit)]]
+		: [...params.slice(0, index), ['limit', String(limit)], ...params.slice(index + 1)];
 };
 
 export const getSortParam = (params: string[][]) => {

@@ -1,20 +1,18 @@
-import { MutableRefObject, useCallback, useContext, useEffect } from 'react';
-import { Device, DeviceDataType, Filter, Sort } from '@/types.ts';
-import { QueryKeys } from '@/queryKeys.ts';
-import { BASE_URL } from '@/constants.ts';
+import { useCallback, useContext, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
+import { useManageParams } from '@/hooks/useManageParams.ts';
+import { useLatest } from '@/hooks/useLatest.ts';
+import { QueryKeys } from '@/queryKeys.ts';
+import { BASE_URL } from '@/constants.ts';
+import { Device, DeviceDataType } from '@/types.ts';
 
-type UseSubscribe = MutableRefObject<{
-	page: number;
-	filters: Filter[];
-	sort: Sort;
-	limit: number;
-}>;
-
-export const useSubscribe = (paramsRef: UseSubscribe) => {
+export const useSubscribe = () => {
 	const queryClient = useQueryClient();
 	const { updateStatistics } = useContext(StatisticsContext);
+	const { filters, page, sort, limit } = useManageParams();
+
+	const paramsRef = useLatest({ page, sort, limit, filters });
 
 	const updateDevice = useCallback(
 		(evt: MessageEvent) => {

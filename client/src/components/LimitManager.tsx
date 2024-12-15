@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -6,11 +7,12 @@ import {
 } from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
-import { useContext } from 'react';
 import { DataContext } from '@/providers/DataContext.ts';
+import { useManageParams } from '@/hooks/useManageParams.ts';
 
 export const LimitManager = () => {
-	const { isInitFetching, onChangeLimit, limit } = useContext(DataContext);
+	const { isInitFetching } = useContext(DataContext);
+	const { limit, setLimitParam } = useManageParams();
 
 	return (
 		<Skeleton isLoading={isInitFetching} className="w-[15vw] h-8 rounded-md">
@@ -29,7 +31,7 @@ export const LimitManager = () => {
 							<DropdownMenuCheckboxItem
 								key={limitNumber}
 								checked={limitNumber === limit}
-								onCheckedChange={() => onChangeLimit(limitNumber)}
+								onCheckedChange={() => setLimitParam(limitNumber)}
 							>
 								{limitNumber}
 							</DropdownMenuCheckboxItem>
