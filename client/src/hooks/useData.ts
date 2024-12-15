@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DeviceDataType } from '@/types.ts';
 import { BASE_LIMIT, filterResolver } from '@/constants.ts';
-import { getDevicesData } from '@/api/getDevicesData.ts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { QueryKeys } from '@/queryKeys.ts';
 import { useLatest } from '@/hooks/useLatest.ts';
 import { useSubscribe } from '@/hooks/useSubscribe.ts';
 import { useDebounced } from '@/hooks/useDebounced.ts';
 import { useManageParams } from '@/hooks/useManageParams.ts';
+import { getDevicesData } from '@/api/getDevicesData.ts';
+import { QueryKeys } from '@/queryKeys.ts';
+import { DeviceDataType } from '@/types.ts';
 
 export const useData = () => {
 	const { filters: rawFilters, setPageParam, page, sort } = useManageParams();
