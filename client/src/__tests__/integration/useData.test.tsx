@@ -5,7 +5,7 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { usePaginatedDeviceListData } from '@/hooks/usePaginatedDeviceListData';
+import { useData } from '@/hooks/useData.ts';
 import { mockDevices } from '@/mocks/mockDevices.ts';
 import { BASE_URL } from '@/constants';
 
@@ -24,8 +24,6 @@ const server = setupServer(
 		});
 	})
 );
-
-const defaultArgs = { sortBy: '', sortDesc: false };
 
 describe('usePaginatedDeviceListData', () => {
 	const queryClient = new QueryClient({
@@ -57,7 +55,7 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should fetch initial device data', async () => {
-		const { result } = renderHook(() => usePaginatedDeviceListData(defaultArgs), {
+		const { result } = renderHook(useData, {
 			wrapper,
 		});
 
@@ -69,7 +67,7 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should update device data on `deviceUpdate` event', async () => {
-		const { result } = renderHook(() => usePaginatedDeviceListData(defaultArgs), {
+		const { result } = renderHook(useData, {
 			wrapper,
 		});
 
@@ -95,7 +93,7 @@ describe('usePaginatedDeviceListData', () => {
 	});
 
 	it('should re-fetch data on deviceCreated event', async () => {
-		const { result } = renderHook(() => usePaginatedDeviceListData(defaultArgs), {
+		const { result } = renderHook(useData, {
 			wrapper,
 		});
 

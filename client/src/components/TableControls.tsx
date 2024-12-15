@@ -3,11 +3,11 @@ import { Skeleton } from '@/components/Skeleton.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
 import { ClearFilters } from '@/components/ClearFilters.tsx';
 import { ColumnManager } from '@/components/ColumnManager.tsx';
-import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
+import { DataContext } from '@/providers/DataContext.ts';
 import { AnimationManager } from '@/components/AnimationManager.tsx';
 
 export const TableControls = () => {
-	const { isInitFetching } = useContext(PaginatedDataContext);
+	const { isInitFetching } = useContext(DataContext);
 	return (
 		<div className="flex items-center justify-between">
 			<Skeleton isLoading={isInitFetching} className="w-full h-8 rounded-md">

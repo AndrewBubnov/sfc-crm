@@ -4,7 +4,7 @@ import { DataTable } from '@/components/DataTable.tsx';
 import { Toaster } from '@/components/ui/toaster';
 import { Statistics } from '@/components/Statistics.tsx';
 import { StatisticsProvider } from '@/providers/StatisticsProvider.tsx';
-import { PaginatedDataProvider } from '@/providers/PaginatedDataProvider.tsx';
+import { DataProvider } from '@/providers/DataProvider.tsx';
 import { TableProvider } from '@/providers/TableProvider.tsx';
 import { TableControls } from '@/components/TableControls.tsx';
 import { LimitManager } from '@/components/LimitManager.tsx';
@@ -17,7 +17,7 @@ const App = () => (
 	<QueryClientProvider client={queryClient}>
 		<Router>
 			<StatisticsProvider>
-				<PaginatedDataProvider>
+				<DataProvider>
 					<div className="flex flex-col p-2 gap-2">
 						<div className="flex justify-between">
 							<Statistics />
@@ -34,7 +34,7 @@ const App = () => (
 							</div>
 						</div>
 					</div>
-				</PaginatedDataProvider>
+				</DataProvider>
 			</StatisticsProvider>
 			<Toaster />
 		</Router>

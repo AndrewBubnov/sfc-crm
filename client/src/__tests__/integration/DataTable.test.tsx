@@ -8,7 +8,7 @@ import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 import { BASE_URL } from '@/constants';
 import { mockDevices } from '@/mocks/mockDevices.ts';
-import { PaginatedDataProvider } from '@/providers/PaginatedDataProvider.tsx';
+import { DataProvider } from '@/providers/DataProvider.tsx';
 import { TableProvider } from '@/providers/TableProvider.tsx';
 
 const server = setupServer(
@@ -46,9 +46,9 @@ const queryClient = new QueryClient();
 const wrapper = ({ children }: { children: ReactNode }) => (
 	<QueryClientProvider client={queryClient}>
 		<Router>
-			<PaginatedDataProvider>
+			<DataProvider>
 				<TableProvider>{children}</TableProvider>
-			</PaginatedDataProvider>
+			</DataProvider>
 		</Router>
 	</QueryClientProvider>
 );

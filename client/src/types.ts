@@ -45,3 +45,5 @@ export type GraphData = {
 };
 
 export type Filter = { search: string; field: string };
+
+export type Sort = { sortBy: string; sortDesc: boolean };

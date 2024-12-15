@@ -6,13 +6,13 @@ import { RegisterDeviceForm } from '@/components/RegisterDeviceForm.tsx';
 import { Plus } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { registerDevice } from '@/api/registerDevice.ts';
-import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
+import { DataContext } from '@/providers/DataContext.ts';
 import { RegisterDeviceSchemaType } from '@/schemas.ts';
 
 export const RegisterDeviceSheet = () => {
 	const { toast } = useToast();
 
-	const { isFetching } = useContext(PaginatedDataContext);
+	const { isFetching } = useContext(DataContext);
 
 	const [isOpen, setIsOpen] = useState(false);
 

@@ -1,11 +1,11 @@
-import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
-import { Filter } from '@/types.ts';
-import { getPageParam, getReducedFilterQueryParams, managePageParams } from '@/utils.ts';
-import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
+import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
+import { DataContext } from '@/providers/DataContext.ts';
+import { getPageParam, getReducedFilterQueryParams, getSortParam, updatePageParams, updateSortParam } from '@/utils.ts';
+import { Filter, Sort } from '@/types.ts';
 
 export const useManageParams = () => {
-	const { total, isFetching, limit } = useContext(PaginatedDataContext);
+	const { total, isFetching, limit } = useContext(DataContext);
 	const [params, setParams] = useSearchParams();
 	const paramsList = useMemo(() => [...params], [params]);
 
@@ -26,10 +26,18 @@ export const useManageParams = () => {
 	}, [paramsList, setParams]);
 
 	const setPageParam = useCallback(
-		(page: number) => setParams(managePageParams(paramsList, page) as ParamKeyValuePair[]),
+		(page: number) => setParams(updatePageParams(paramsList, page) as ParamKeyValuePair[]),
 		[paramsList, setParams]
 	);
+
+	const setSortParam = useCallback(
+		(sorting: Sort) => setParams(updateSortParam(paramsList, sorting) as ParamKeyValuePair[]),
+		[paramsList, setParams]
+	);
+
 	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
+	const sort = useMemo(() => getSortParam(paramsList), [paramsList]);
+
 	const lastPage = Math.ceil(total / limit);
 	const setNextPage = useCallback(() => setPageParam(page + 1), [page, setPageParam]);
 	const setPrevPage = useCallback(() => setPageParam(page - 1), [page, setPageParam]);
@@ -45,7 +53,9 @@ export const useManageParams = () => {
 			setFilter,
 			resetFilters,
 			filters,
+			sort,
 			setPageParam,
+			setSortParam,
 			page,
 			lastPage,
 			setNextPage,
@@ -54,16 +64,18 @@ export const useManageParams = () => {
 			isPrevStepDisabled,
 		}),
 		[
+			setFilter,
+			resetFilters,
 			filters,
-			isNextStepDisabled,
-			isPrevStepDisabled,
+			sort,
+			setPageParam,
+			setSortParam,
 			page,
 			lastPage,
-			resetFilters,
-			setFilter,
 			setNextPage,
-			setPageParam,
 			setPrevPage,
+			isNextStepDisabled,
+			isPrevStepDisabled,
 		]
 	);
 };

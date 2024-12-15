@@ -1,4 +1,4 @@
-import { Filter } from '@/types.ts';
+import { Filter, Sort } from '@/types.ts';
 
 export const createIndexesList = (page: number, lastPage: number) => {
 	const currentPage = Math.min(page, lastPage);
@@ -93,7 +93,7 @@ export const getReducedFilterQueryParams = (params: string[][], filter: Filter =
 	return { queryParams: filteredGrouped.flat(1), filters };
 };
 
-export const managePageParams = (params: string[][], page: number) => {
+export const updatePageParams = (params: string[][], page: number) => {
 	const index = params.findIndex(el => el[0] === 'page');
 	return index === -1
 		? [...params, ['page', String(page)]]
@@ -103,4 +103,21 @@ export const managePageParams = (params: string[][], page: number) => {
 export const getPageParam = (params: string[][]) => {
 	const page = params.find(el => el[0] === 'page')?.[1];
 	return page ? +page : 1;
+};
+
+export const getSortParam = (params: string[][]) => {
+	const index = params.findIndex(el => el[0] === 'sortBy');
+	return index > -1 && params[index + 1]
+		? { sortBy: params[index][1], sortDesc: params[index + 1][1] === 'true' }
+		: { sortBy: '', sortDesc: false };
+};
+
+export const updateSortParam = (params: string[][], { sortBy, sortDesc }: Sort) => {
+	const index = params.findIndex(el => el[0] === 'sortBy');
+	if (index === -1) return [['sortBy', sortBy], ['sortDesc', String(sortDesc)], ...params];
+	const sortParams = getSortParam(params);
+	if (sortParams.sortBy === sortBy && sortParams.sortDesc === sortDesc) {
+		return [...params.slice(0, index), ...params.slice(index + 2)];
+	}
+	return [...params.slice(0, index), ['sortBy', sortBy], ['sortDesc', String(sortDesc)], ...params.slice(index + 2)];
 };

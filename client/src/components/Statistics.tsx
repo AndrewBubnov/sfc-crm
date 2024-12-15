@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 import { Chart } from '@/components/Chart.tsx';
-import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
+import { DataContext } from '@/providers/DataContext.ts';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { StateGraphFillDto, TypeGraphFillDto } from '@/constants.ts';
 
 export const Statistics = () => {
 	const { stateStats, typeStats, total } = useContext(StatisticsContext);
-	const { isInitFetching } = useContext(PaginatedDataContext);
+	const { isInitFetching } = useContext(DataContext);
 
 	return (
 		<div className="flex justify-between items-center">

@@ -1,5 +1,5 @@
 import { MutableRefObject, useCallback, useContext, useEffect } from 'react';
-import { Device, DeviceDataType, Filter } from '@/types.ts';
+import { Device, DeviceDataType, Filter, Sort } from '@/types.ts';
 import { QueryKeys } from '@/queryKeys.ts';
 import { BASE_URL } from '@/constants.ts';
 import { useQueryClient } from '@tanstack/react-query';
@@ -8,8 +8,7 @@ import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 type UseSubscribe = MutableRefObject<{
 	page: number;
 	filters: Filter[];
-	sortBy: string;
-	sortDesc: boolean;
+	sort: Sort;
 	limit: number;
 }>;
 
@@ -20,22 +19,19 @@ export const useSubscribe = (paramsRef: UseSubscribe) => {
 	const updateDevice = useCallback(
 		(evt: MessageEvent) => {
 			const updatedDevice: Device = JSON.parse(evt.data).event;
-			const { page, sortBy, sortDesc, limit, filters } = paramsRef.current;
-			queryClient.setQueryData(
-				[QueryKeys.Devices, page, sortBy, sortDesc, limit, filters],
-				(oldData?: DeviceDataType) => {
-					if (!oldData) return oldData;
-					return {
-						...oldData,
-						data: {
-							...oldData.data,
-							items: oldData.data.items.map(device =>
-								device.id === updatedDevice.id ? updatedDevice : device
-							),
-						},
-					};
-				}
-			);
+			const { page, sort, limit, filters } = paramsRef.current;
+			queryClient.setQueryData([QueryKeys.Devices, page, sort, limit, filters], (oldData?: DeviceDataType) => {
+				if (!oldData) return oldData;
+				return {
+					...oldData,
+					data: {
+						...oldData.data,
+						items: oldData.data.items.map(device =>
+							device.id === updatedDevice.id ? updatedDevice : device
+						),
+					},
+				};
+			});
 		},
 		[paramsRef, queryClient]
 	);
@@ -43,14 +39,11 @@ export const useSubscribe = (paramsRef: UseSubscribe) => {
 	const updateItems = useCallback(
 		(evt: MessageEvent) => {
 			const updatedItems: Device = JSON.parse(evt.data).items;
-			const { page, sortBy, sortDesc, limit, filters } = paramsRef.current;
-			queryClient.setQueryData(
-				[QueryKeys.Devices, page, sortBy, sortDesc, limit, filters],
-				(oldData?: DeviceDataType) => {
-					if (!oldData) return oldData;
-					return { ...oldData, data: { ...oldData.data, items: updatedItems } };
-				}
-			);
+			const { page, sort, limit, filters } = paramsRef.current;
+			queryClient.setQueryData([QueryKeys.Devices, page, sort, limit, filters], (oldData?: DeviceDataType) => {
+				if (!oldData) return oldData;
+				return { ...oldData, data: { ...oldData.data, items: updatedItems } };
+			});
 		},
 		[paramsRef, queryClient]
 	);

@@ -9,25 +9,20 @@ import { useSubscribe } from '@/hooks/useSubscribe.ts';
 import { useDebounced } from '@/hooks/useDebounced.ts';
 import { useManageParams } from '@/hooks/useManageParams.ts';
 
-type UseDeviceData = {
-	sortBy: string;
-	sortDesc: boolean;
-};
-
-export const usePaginatedDeviceListData = ({ sortBy, sortDesc }: UseDeviceData) => {
-	const { filters: rawFilters, setPageParam, page } = useManageParams();
+export const useData = () => {
+	const { filters: rawFilters, setPageParam, page, sort } = useManageParams();
 
 	const filters = useDebounced(rawFilters, filterResolver);
 
 	const [limit, setLimit] = useState<number>(BASE_LIMIT);
 
 	const { data, isFetching } = useQuery<DeviceDataType, Error>({
-		queryKey: [QueryKeys.Devices, page, sortBy, sortDesc, limit, filters],
-		queryFn: () => getDevicesData({ page, sortBy, sortDesc, limit, filters }),
+		queryKey: [QueryKeys.Devices, page, sort, limit, filters],
+		queryFn: () => getDevicesData({ page, sort, limit, filters }),
 		placeholderData: keepPreviousData,
 	});
 
-	const paramsRef = useLatest({ page, sortBy, sortDesc, limit, filters });
+	const paramsRef = useLatest({ page, sort, limit, filters });
 
 	useSubscribe(paramsRef);
 

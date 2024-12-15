@@ -1,18 +1,20 @@
 import { ArrowUpAZ } from 'lucide-react';
 import { ArrowDownAZ } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
+import { useManageParams } from '@/hooks/useManageParams.ts';
 
 type SortSwitchProps = {
 	id: string;
 	sortBy: string;
 	sortDesc: boolean;
-	onSortChange(arg: { sortedBy: string; sortedDesc: boolean }): void;
 };
 
-export const SortSwitch = ({ id, sortBy, sortDesc, onSortChange }: SortSwitchProps) => {
-	const upSortHandler = () => onSortChange({ sortedBy: id, sortedDesc: false });
+export const SortSwitch = ({ id, sortBy, sortDesc }: SortSwitchProps) => {
+	const { setSortParam } = useManageParams();
 
-	const downSortHandler = () => onSortChange({ sortedBy: id, sortedDesc: true });
+	const upSortHandler = () => setSortParam({ sortBy: id, sortDesc: false });
+
+	const downSortHandler = () => setSortParam({ sortBy: id, sortDesc: true });
 
 	return (
 		<div className="flex items-center gap-4">

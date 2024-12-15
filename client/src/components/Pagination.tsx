@@ -3,13 +3,13 @@ import { Skeleton } from '@/components/Skeleton.tsx';
 import { createIndexesList } from '@/utils.ts';
 import { useContext, useMemo } from 'react';
 import { PaginationButton } from '@/components/PaginationButton.tsx';
-import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
+import { DataContext } from '@/providers/DataContext.ts';
 import { useManageParams } from '@/hooks/useManageParams.ts';
 
 export const Pagination = () => {
 	const { setPageParam, setNextPage, setPrevPage, isPrevStepDisabled, isNextStepDisabled, page, lastPage } =
 		useManageParams();
-	const { isInitFetching, isFetching } = useContext(PaginatedDataContext);
+	const { isInitFetching, isFetching } = useContext(DataContext);
 	const pageIndexes = createIndexesList(page, lastPage);
 
 	const pagesList = useMemo(

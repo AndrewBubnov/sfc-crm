@@ -7,10 +7,10 @@ import {
 import { Button } from '@/components/ui/button.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { useContext } from 'react';
-import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
+import { DataContext } from '@/providers/DataContext.ts';
 
 export const LimitManager = () => {
-	const { isInitFetching, onChangeLimit, limit } = useContext(PaginatedDataContext);
+	const { isInitFetching, onChangeLimit, limit } = useContext(DataContext);
 
 	return (
 		<Skeleton isLoading={isInitFetching} className="w-[15vw] h-8 rounded-md">

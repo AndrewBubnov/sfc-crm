@@ -1,9 +1,8 @@
-import { MouseEvent, useContext } from 'react';
+import { MouseEvent } from 'react';
 import { TableHead, TableHeader, TableRow } from '@/components/ui/table.tsx';
 import { flexRender, HeaderGroup } from '@tanstack/react-table';
 import { ColumnFilter } from '@/components/ColumnFilter.tsx';
 import { SortSwitch } from '@/components/SortSwitch.tsx';
-import { PaginatedDataContext } from '@/providers/PaginatedDataContext.ts';
 import { useManageParams } from '@/hooks/useManageParams.ts';
 
 type DataTableHeaderProps<T> = {
@@ -11,8 +10,7 @@ type DataTableHeaderProps<T> = {
 };
 
 export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) => {
-	const { sortBy, onSortChange, sortDesc } = useContext(PaginatedDataContext);
-	const { setFilter, filters } = useManageParams();
+	const { setFilter, filters, sort } = useManageParams();
 
 	return (
 		<TableHeader>
@@ -47,9 +45,8 @@ export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) =
 												/>
 												<SortSwitch
 													id={header.id}
-													onSortChange={onSortChange}
-													sortBy={sortBy}
-													sortDesc={sortDesc}
+													sortBy={sort.sortBy}
+													sortDesc={sort.sortDesc}
 												/>
 											</div>
 											<div

@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from '@/components/Pagination';
 
-import { PaginatedDataContext, PaginatedDataContextProps } from '@/providers/PaginatedDataContext.ts';
+import { DataContext, PaginatedDataContextProps } from '@/providers/DataContext.ts';
 import { vi } from 'vitest';
 
 interface PaginatedDataContextType {
@@ -35,7 +35,7 @@ vi.mock('@/hooks/useManageParams.ts', () => ({
 const createWrapper = (contextValue: PartialContextValue = {}) => {
 	return ({ children }: { children: ReactNode }) => (
 		<Router>
-			<PaginatedDataContext.Provider
+			<DataContext.Provider
 				value={
 					{
 						isInitFetching: contextValue.isInitFetching || false,
@@ -44,7 +44,7 @@ const createWrapper = (contextValue: PartialContextValue = {}) => {
 				}
 			>
 				{children}
-			</PaginatedDataContext.Provider>
+			</DataContext.Provider>
 		</Router>
 	);
 };
