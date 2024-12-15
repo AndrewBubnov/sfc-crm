@@ -5,7 +5,7 @@ import { Device } from '../models/device.js';
 import { AUTO_EVENTS_INTERVAL } from '../constants.js';
 import { AutoEventType } from '../models/autoEventType.js';
 import { clients } from '../models/clients.js';
-import { createDevice, getStateStats, getTypeStats } from '../utils.js';
+import { createDevice, getStateStats, getTypeStats, sortDevices } from '../utils.js';
 import { offsetLimits } from '../services/filterService.js';
 
 type AutoEvent =
@@ -23,8 +23,8 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 	res.write(
 		`data: ${JSON.stringify({
 			stats: {
-				state: getStateStats(filterDevices().filteredDevices, devices.length),
-				type: getTypeStats(filterDevices().filteredDevices),
+				state: getStateStats(filterDevices(), devices.length),
+				type: getTypeStats(filterDevices()),
 			},
 		})}\n\n`
 	);
@@ -57,18 +57,18 @@ export const subscribeDeviceChangesController = (req: Request, res: Response) =>
 		const event = events[Math.floor(Math.random() * events.length)];
 
 		updateDevicesList(event);
-
+		const sentDevices = sortDevices(filterDevices());
 		res.write(`event: ${event.type}\n`);
 		res.write(
 			`data: ${JSON.stringify({
 				event: event.payload,
 				stats: {
-					state: getStateStats(filterDevices().filteredDevices, devices.length),
-					type: getTypeStats(filterDevices().filteredDevices),
+					state: getStateStats(sentDevices, devices.length),
+					type: getTypeStats(sentDevices),
 				},
-				items: filterDevices().filteredDevices.slice(
+				items: sentDevices.slice(
 					Math.max(offsetLimits.offset - offsetLimits.limit, 0),
-					Math.max(offsetLimits.offset, Math.min(offsetLimits.limit, filterDevices().filteredDevices.length))
+					Math.max(offsetLimits.offset, Math.min(offsetLimits.limit, sentDevices.length))
 				),
 			})}\n\n`
 		);
