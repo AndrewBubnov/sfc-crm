@@ -26,6 +26,7 @@ export const useGetQueryDetails = () => {
 		() => ({
 			total,
 			isFetching,
+			isInitFetching: isFetching && !total,
 		}),
 		[isFetching, total]
 	);

@@ -1,15 +1,15 @@
 import { TableContext } from '@/providers/TableContext.ts';
-import { ReactNode, useContext, useState } from 'react';
-import { DataContext } from '@/providers/DataContext.ts';
+import { ReactNode, useState } from 'react';
 import { getCoreRowModel, RowSelectionState, useReactTable, VisibilityState } from '@tanstack/react-table';
 import { animatedColumns, columns } from '@/columns.tsx';
+import { useData } from '@/hooks/useData.ts';
 
 type TableProviderProps = {
 	children: ReactNode;
 };
 
 export const TableProvider = ({ children }: TableProviderProps) => {
-	const { data } = useContext(DataContext);
+	const { data } = useData();
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [isAnimated, setIsAnimated] = useState<boolean>(false);

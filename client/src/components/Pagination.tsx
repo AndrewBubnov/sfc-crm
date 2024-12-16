@@ -1,15 +1,15 @@
 import { ChevronLeft, ChevronRight, ChevronFirst, ChevronLast } from 'lucide-react';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { createIndexesList } from '@/utils.ts';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { PaginationButton } from '@/components/PaginationButton.tsx';
-import { DataContext } from '@/providers/DataContext.ts';
 import { usePagination } from '@/hooks/usePagination.ts';
+import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const Pagination = () => {
 	const { setPage, setNextPage, setPrevPage, isPrevStepDisabled, isNextStepDisabled, page, lastPage } =
 		usePagination();
-	const { isInitFetching, isFetching } = useContext(DataContext);
+	const { isInitFetching, isFetching } = useGetQueryDetails();
 	const pageIndexes = createIndexesList(page, lastPage);
 
 	const pagesList = useMemo(

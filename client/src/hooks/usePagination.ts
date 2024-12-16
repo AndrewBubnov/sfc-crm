@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { ParamKeyValuePair } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams.ts';
-import { getPageParam, updatePageParam } from '@/utils.ts';
 import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
+import { getPageParam, updatePageParam } from '@/utils.ts';
 
 export const usePagination = () => {
 	const { total, isFetching } = useGetQueryDetails();

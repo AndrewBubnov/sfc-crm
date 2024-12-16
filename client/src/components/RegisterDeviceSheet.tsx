@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet.tsx';
 import { useToast } from '@/hooks/useToast.ts';
 import { Button } from '@/components/ui/button.tsx';
@@ -6,13 +6,13 @@ import { RegisterDeviceForm } from '@/components/RegisterDeviceForm.tsx';
 import { Plus } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { registerDevice } from '@/api/registerDevice.ts';
-import { DataContext } from '@/providers/DataContext.ts';
 import { RegisterDeviceSchemaType } from '@/schemas.ts';
+import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const RegisterDeviceSheet = () => {
 	const { toast } = useToast();
 
-	const { isFetching } = useContext(DataContext);
+	const { isFetching } = useGetQueryDetails();
 
 	const [isOpen, setIsOpen] = useState(false);
 

@@ -3,13 +3,13 @@ import { flexRender } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { DataTableHeader } from '@/components/DataTableHeader.tsx';
-import { DataContext } from '@/providers/DataContext.ts';
 import { TableContext } from '@/providers/TableContext.ts';
 import { columns } from '@/columns.tsx';
+import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const DataTable = () => {
 	const { table } = useContext(TableContext);
-	const { isInitFetching } = useContext(DataContext);
+	const { isInitFetching } = useGetQueryDetails();
 
 	return (
 		<div className="rounded-md border">

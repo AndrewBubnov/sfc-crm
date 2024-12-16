@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -7,11 +6,11 @@ import {
 } from '@/components/ui/dropdown-menu.tsx';
 import { Button } from '@/components/ui/button.tsx';
 import { Skeleton } from '@/components/Skeleton.tsx';
-import { DataContext } from '@/providers/DataContext.ts';
 import { useQueryParams } from '@/hooks/useQueryParams.ts';
+import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const LimitManager = () => {
-	const { isInitFetching } = useContext(DataContext);
+	const { isInitFetching } = useGetQueryDetails();
 	const { limit, setLimitParam } = useQueryParams();
 
 	return (

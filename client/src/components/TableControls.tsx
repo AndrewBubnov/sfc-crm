@@ -1,13 +1,12 @@
-import { useContext } from 'react';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { RegisterDeviceSheet } from '@/components/RegisterDeviceSheet.tsx';
 import { ClearFilters } from '@/components/ClearFilters.tsx';
 import { ColumnManager } from '@/components/ColumnManager.tsx';
-import { DataContext } from '@/providers/DataContext.ts';
 import { AnimationManager } from '@/components/AnimationManager.tsx';
+import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const TableControls = () => {
-	const { isInitFetching } = useContext(DataContext);
+	const { isInitFetching } = useGetQueryDetails();
 	return (
 		<div className="flex items-center justify-between">
 			<Skeleton isLoading={isInitFetching} className="w-full h-8 rounded-md">

@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 import { Chart } from '@/components/Chart.tsx';
-import { DataContext } from '@/providers/DataContext.ts';
 import { Skeleton } from '@/components/Skeleton.tsx';
 import { StateGraphFillDto, TypeGraphFillDto } from '@/constants.ts';
+import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const Statistics = () => {
 	const { stateStats, typeStats, total } = useContext(StatisticsContext);
-	const { isInitFetching } = useContext(DataContext);
+	const { isInitFetching } = useGetQueryDetails();
 
 	return (
 		<div className="flex justify-between items-center">
