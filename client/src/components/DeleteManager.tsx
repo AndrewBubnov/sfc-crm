@@ -8,19 +8,30 @@ import { deleteDevices } from '@/api/deleteDevices.ts';
 import { LoaderButton } from '@/components/LoaderButton.tsx';
 import { Label } from '@/components/ui/label.tsx';
 import { cn } from '@/lib/utils.ts';
+import { useToast } from '@/hooks/useToast.ts';
+import { getDeleteToastMessage } from '@/utils.ts';
 
 type DeleteManagerProps = {
 	table: Table<Device>;
 };
 
 export const DeleteManager = ({ table }: DeleteManagerProps) => {
+	const { toast } = useToast();
 	const { mutate, isPending } = useMutation({ mutationFn: deleteDevices });
 	const multiRowChecker = table.getToggleAllPageRowsSelectedHandler();
 	const deletedDevicesIds = table.getSelectedRowModel().rows.map(row => row.original.id);
 	const allRowsSelected = table.getIsAllRowsSelected();
 
 	const deleteHandler = () => {
-		mutate({ ids: deletedDevicesIds });
+		mutate(
+			{ ids: deletedDevicesIds },
+			{
+				onSuccess: ({ data }) =>
+					toast({
+						title: getDeleteToastMessage(data),
+					}),
+			}
+		);
 		table.resetRowSelection();
 	};
 

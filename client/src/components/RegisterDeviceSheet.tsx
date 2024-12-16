@@ -1,5 +1,12 @@
 import { useContext, useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet.tsx';
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from '@/components/ui/sheet.tsx';
 import { useToast } from '@/hooks/useToast.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { RegisterDeviceForm } from '@/components/RegisterDeviceForm.tsx';
@@ -11,16 +18,14 @@ import { RegisterDeviceSchemaType } from '@/schemas.ts';
 
 export const RegisterDeviceSheet = () => {
 	const { toast } = useToast();
-
 	const { paginationData } = useContext(PaginatedDataContext);
-
 	const [isOpen, setIsOpen] = useState(false);
-
 	const registerDeviceMutation = useMutation({ mutationFn: registerDevice });
 
 	const onSubmit = (form: RegisterDeviceSchemaType) => {
 		registerDeviceMutation.mutate(form, {
-			onSuccess: () => toast({ title: `Device '${form.name}' has successfully been created` }),
+			onSuccess: data =>
+				toast({ title: `Device '${data.data.name}', ID ${data.data.id}, has successfully been created` }),
 		});
 		setIsOpen(false);
 	};
@@ -36,6 +41,9 @@ export const RegisterDeviceSheet = () => {
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle>Register new device</SheetTitle>
+					<SheetDescription>
+						Type the name of new device or check the auto name generate checkbox
+					</SheetDescription>
 				</SheetHeader>
 				<RegisterDeviceForm onSubmit={onSubmit} />
 			</SheetContent>
