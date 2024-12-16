@@ -1,9 +1,9 @@
+import { ReactNode } from 'react';
+import { expect, Mock, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AnimatedNameInput } from '@/modules/table/components/AnimatedNameInput.tsx';
-import { expect, Mock, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renameDevice } from '@/modules/table/api/renameDevice.ts';
-import { ReactNode } from 'react';
 
 const mockToast = vi.fn();
 
