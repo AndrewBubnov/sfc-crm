@@ -6,7 +6,8 @@ import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const usePagination = () => {
 	const { total, isFetching } = useGetQueryDetails();
-	const { paramsList, setParams, sort, limit } = useQueryParams();
+
+	const { paramsList, setParams, limit } = useQueryParams();
 
 	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
 
@@ -27,8 +28,6 @@ export const usePagination = () => {
 
 	return useMemo(
 		() => ({
-			sort,
-			limit,
 			setPage,
 			page,
 			lastPage,
@@ -37,6 +36,6 @@ export const usePagination = () => {
 			isNextStepDisabled,
 			isPrevStepDisabled,
 		}),
-		[sort, limit, setPage, page, lastPage, setNextPage, setPrevPage, isNextStepDisabled, isPrevStepDisabled]
+		[setPage, page, lastPage, setNextPage, setPrevPage, isNextStepDisabled, isPrevStepDisabled]
 	);
 };
