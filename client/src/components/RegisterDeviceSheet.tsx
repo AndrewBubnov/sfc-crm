@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet.tsx';
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+	SheetDescription,
+} from '@/components/ui/sheet.tsx';
 import { useToast } from '@/hooks/useToast.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { RegisterDeviceForm } from '@/components/RegisterDeviceForm.tsx';
@@ -10,12 +17,9 @@ import { RegisterDeviceSchemaType } from '@/schemas.ts';
 import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const RegisterDeviceSheet = () => {
-	const { toast } = useToast();
-
-	const { isFetching } = useGetQueryDetails();
-
 	const [isOpen, setIsOpen] = useState(false);
-
+	const { toast } = useToast();
+	const { isFetching } = useGetQueryDetails();
 	const registerDeviceMutation = useMutation({ mutationFn: registerDevice });
 
 	const onSubmit = (form: RegisterDeviceSchemaType) => {
