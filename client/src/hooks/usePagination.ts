@@ -1,19 +1,20 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { ParamKeyValuePair } from 'react-router-dom';
 import { useQueryParams } from '@/hooks/useQueryParams.ts';
-import { DataContext } from '@/providers/DataContext.ts';
 import { getPageParam, updatePageParam } from '@/utils.ts';
+import { useGetQueryDetails } from '@/hooks/useGetQueryDetails.ts';
 
 export const usePagination = () => {
-	const { total, isFetching } = useContext(DataContext);
+	const { total, isFetching } = useGetQueryDetails();
 	const { paramsList, setParams, sort, limit } = useQueryParams();
+
+	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
 
 	const setPage = useCallback(
 		(page: number) => setParams(updatePageParam(paramsList, page) as ParamKeyValuePair[]),
 		[paramsList, setParams]
 	);
 
-	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
 	const lastPage = Math.ceil(total / limit);
 	const setNextPage = useCallback(() => setPage(page + 1), [page, setPage]);
 	const setPrevPage = useCallback(() => setPage(page - 1), [page, setPage]);
