@@ -12,6 +12,12 @@
   }
 }
 
+@layer components {
+  td.custom-table-cell {
+    @apply border border-gray-100 py-1 [&:has([role=checkbox])]:pr-2;
+  }
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
