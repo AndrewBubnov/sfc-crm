@@ -4,7 +4,7 @@ import { devices, filterDevices } from './deviceService.js';
 import { clients } from '../models/clients.js';
 
 export const addDeviceUpdateEvent = (event: Device) => {
-	const { filteredDevices, total } = filterDevices();
+	const filteredDevices = filterDevices();
 	clients.forEach(client => {
 		client.write(`event: deviceUpdate\n`);
 		client.write(
