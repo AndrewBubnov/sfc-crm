@@ -7,13 +7,13 @@ import { ReactNode } from 'react';
 
 const mockToast = vi.fn();
 
-vi.mock('@/hooks/useToast', () => ({
+vi.mock('@/modules/shared/hooks/useToast.ts', () => ({
 	useToast: () => ({
 		toast: mockToast,
 	}),
 }));
 
-vi.mock('@/api/renameDevice', () => ({
+vi.mock('@/modules/table/api/renameDevice.ts', () => ({
 	renameDevice: vi.fn(),
 }));
 

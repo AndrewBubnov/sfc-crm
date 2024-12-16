@@ -5,7 +5,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from '@/modules/pagination/components/Pagination.tsx';
 
 import { vi } from 'vitest';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const mockSetPage = vi.fn();
 const mockSetNextPage = vi.fn();
@@ -26,21 +25,15 @@ const mockUseGetQueryDetailsReturnValue = {
 	isInitFetching: false,
 };
 
-vi.mock('@/hooks/usePagination.ts', () => ({
+vi.mock('@/modules/pagination/hooks/usePagination.ts', () => ({
 	usePagination: () => mockUsePaginationReturnValue,
 }));
 
-vi.mock('@/hooks/useGetQueryDetails.ts', () => ({
+vi.mock('@/modules/shared/hooks/useGetQueryDetails.ts', () => ({
 	useGetQueryDetails: () => mockUseGetQueryDetailsReturnValue,
 }));
 
-const queryClient = new QueryClient();
-
-const wrapper = ({ children }: { children: ReactNode }) => (
-	<QueryClientProvider client={queryClient}>
-		<Router>{children}</Router>
-	</QueryClientProvider>
-);
+const wrapper = ({ children }: { children: ReactNode }) => <Router>{children}</Router>;
 
 const renderWithRouter = (ui: ReactElement) => {
 	return render(ui, { wrapper });
