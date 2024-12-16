@@ -1,8 +1,8 @@
 import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 import { GraphData } from '@/types.ts';
-import { setGraphData } from '@/utils.ts';
-import { StateGraphFillDto, TypeGraphFillDto } from '@/constants.ts';
+import { setGraphData } from '@/modules/statistics/utils.ts';
+import { StateGraphFillDto, TypeGraphFillDto } from '@/modules/statistics/constants.ts';
 
 type StatisticsProviderProps = {
 	children: ReactNode;

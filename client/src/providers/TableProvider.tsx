@@ -1,8 +1,8 @@
 import { TableContext } from '@/providers/TableContext.ts';
 import { ReactNode, useState } from 'react';
 import { getCoreRowModel, RowSelectionState, useReactTable, VisibilityState } from '@tanstack/react-table';
-import { animatedColumns, columns } from '@/columns.tsx';
-import { useData } from '@/hooks/useData.ts';
+import { animatedColumns, columns } from '@/modules/table/columns.tsx';
+import { useData } from '@/modules/shared/hooks/useData.ts';
 
 type TableProviderProps = {
 	children: ReactNode;

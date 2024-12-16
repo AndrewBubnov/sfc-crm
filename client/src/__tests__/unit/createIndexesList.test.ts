@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { createIndexesList } from '@/utils.ts';
+
+import { createIndexesList } from '@/modules/pagination/utils.ts';
 
 describe('createIndexesList', () => {
 	it('should return [1] when page is 1 and lastPage is 1', () => {

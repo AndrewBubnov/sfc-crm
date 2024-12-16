@@ -5,9 +5,10 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { useData } from '@/hooks/useData.ts';
-import { mockDevices } from '@/mocks/mockDevices.ts';
-import { BASE_URL } from '@/constants';
+import { useData } from '@/modules/shared/hooks/useData.ts';
+import { mockDevices } from '@/modules/table/mocks/mockDevices.ts';
+
+import { BASE_URL } from '@/modules/shared/constants.ts';
 
 const mockFetchFn = vi.fn();
 

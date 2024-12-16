@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AccountData } from '@/components/AccountData.tsx';
-import { DataTable } from '@/components/DataTable.tsx';
-import { Toaster } from '@/components/ui/toaster';
-import { Statistics } from '@/components/Statistics.tsx';
+import { AccountData } from '@/modules/account/components/AccountData.tsx';
+import { DataTable } from '@/modules/table/components/DataTable.tsx';
+import { Toaster } from '@/ui/toaster';
+import { Statistics } from '@/modules/statistics/components/Statistics.tsx';
 import { StatisticsProvider } from '@/providers/StatisticsProvider.tsx';
 import { TableProvider } from '@/providers/TableProvider.tsx';
-import { TableControls } from '@/components/TableControls.tsx';
-import { LimitManager } from '@/components/LimitManager.tsx';
-import { Pagination } from '@/components/Pagination.tsx';
+import { TableControls } from '@/modules/controls/components/TableControls.tsx';
+import { LimitManager } from '@/modules/pagination/components/LimitManager.tsx';
+import { Pagination } from '@/modules/pagination/components/Pagination.tsx';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const queryClient = new QueryClient();

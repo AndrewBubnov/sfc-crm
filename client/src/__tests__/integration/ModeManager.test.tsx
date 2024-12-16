@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
-import { ModeManger } from '@/components/ModeManager.tsx';
+import { ModeManger } from '@/modules/table/components/ModeManager.tsx';
 import { DeviceState } from '@/types.ts';
 import { ReactNode } from 'react';
 

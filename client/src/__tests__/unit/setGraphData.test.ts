@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { setGraphData } from '@/utils.ts';
+
+import { setGraphData } from '@/modules/statistics/utils.ts';
 
 describe('setGraphData', () => {
 	it('should return data with "rest" when statistics has only one key', () => {

@@ -2,9 +2,10 @@ import 'eventsource-polyfill';
 import { ReactElement, ReactNode } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Pagination } from '@/components/Pagination';
+import { Pagination } from '@/modules/pagination/components/Pagination.tsx';
 
 import { vi } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const mockSetPage = vi.fn();
 const mockSetNextPage = vi.fn();
@@ -33,7 +34,13 @@ vi.mock('@/hooks/useGetQueryDetails.ts', () => ({
 	useGetQueryDetails: () => mockUseGetQueryDetailsReturnValue,
 }));
 
-const wrapper = ({ children }: { children: ReactNode }) => <Router>{children}</Router>;
+const queryClient = new QueryClient();
+
+const wrapper = ({ children }: { children: ReactNode }) => (
+	<QueryClientProvider client={queryClient}>
+		<Router>{children}</Router>
+	</QueryClientProvider>
+);
 
 const renderWithRouter = (ui: ReactElement) => {
 	return render(ui, { wrapper });

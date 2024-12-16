@@ -1,6 +1,6 @@
 import { render, screen, act } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { AnimatedState } from '@/components/AnimatedState';
+import { AnimatedState } from '@/modules/table/components/AnimatedState.tsx';
 
 describe('AnimatedState', () => {
 	it('should display the initial `text`', () => {

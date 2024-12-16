@@ -3,12 +3,12 @@ import { ReactNode } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { DataTable } from '@/components/DataTable';
+import { DataTable } from '@/modules/table/components/DataTable.tsx';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { BASE_URL } from '@/constants';
-import { mockDevices } from '@/mocks/mockDevices.ts';
+import { mockDevices } from '@/modules/table/mocks/mockDevices.ts';
 import { TableProvider } from '@/providers/TableProvider.tsx';
+import { BASE_URL } from '@/modules/shared/constants.ts';
 
 const server = setupServer(
 	http.get(`${BASE_URL}/devices`, async ({ request }) => {

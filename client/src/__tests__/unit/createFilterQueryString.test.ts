@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createFilterQueryString } from '@/utils.ts';
+import { createFilterQueryString } from '@/modules/shared/utils.ts';
 import { Filter } from '@/types.ts';
 
 describe('createFilterQueryString', () => {
