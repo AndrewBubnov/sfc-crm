@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet.tsx';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet.tsx';
 import { useToast } from '@/hooks/useToast.ts';
 import { Button } from '@/components/ui/button.tsx';
 import { RegisterDeviceForm } from '@/components/RegisterDeviceForm.tsx';
@@ -20,7 +20,8 @@ export const RegisterDeviceSheet = () => {
 
 	const onSubmit = (form: RegisterDeviceSchemaType) => {
 		registerDeviceMutation.mutate(form, {
-			onSuccess: () => toast({ title: `Device '${form.name}' has successfully been created` }),
+			onSuccess: data =>
+				toast({ title: `Device '${data.data.name}', ID ${data.data.id}, has successfully been created` }),
 		});
 		setIsOpen(false);
 	};
@@ -36,6 +37,9 @@ export const RegisterDeviceSheet = () => {
 			<SheetContent>
 				<SheetHeader>
 					<SheetTitle>Register new device</SheetTitle>
+					<SheetDescription>
+						Type the name of new device or check the auto name generate checkbox
+					</SheetDescription>
 				</SheetHeader>
 				<RegisterDeviceForm onSubmit={onSubmit} />
 			</SheetContent>
