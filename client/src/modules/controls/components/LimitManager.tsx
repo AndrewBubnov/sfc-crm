@@ -19,7 +19,7 @@ export const LimitManager = () => {
 				<DropdownMenuTrigger asChild>
 					<Button
 						variant="ghost"
-						className="ml-auto bg-transparent text-sm hover:bg-transparent hover:border-transparent"
+						className="bg-transparent text-sm hover:bg-transparent hover:border-transparent"
 					>
 						Lines per page: {limit}
 					</Button>
