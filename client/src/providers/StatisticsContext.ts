@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { GraphData } from '@/types.ts';
 
-type StatisticsContextProps = {
+export type StatisticsContextProps = {
 	stateStats: GraphData[];
 	typeStats: GraphData[];
 	total: number;
