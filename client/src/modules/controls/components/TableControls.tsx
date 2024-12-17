@@ -4,6 +4,7 @@ import { ClearFilters } from '@/modules/controls/components/ClearFilters.tsx';
 import { ColumnManager } from '@/modules/controls/components/ColumnManager.tsx';
 import { AnimationManager } from '@/modules/controls/components/AnimationManager.tsx';
 import { useGetQueryDetails } from '@/modules/shared/hooks/useGetQueryDetails.ts';
+import { LimitManager } from '@/modules/controls/components/LimitManager.tsx';
 
 export const TableControls = () => {
 	const { isInitFetching } = useGetQueryDetails();
@@ -15,7 +16,10 @@ export const TableControls = () => {
 					<AnimationManager />
 					<ClearFilters />
 				</div>
-				<ColumnManager />
+				<div className="flex items-center gap-[100px]">
+					<LimitManager />
+					<ColumnManager />
+				</div>
 			</Skeleton>
 		</div>
 	);

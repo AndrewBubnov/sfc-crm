@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { AccountData } from '@/modules/account/components/AccountData.tsx';
 import { DataTable } from '@/modules/table/components/DataTable.tsx';
 import { Toaster } from '@/ui/toaster';
@@ -6,9 +7,7 @@ import { Statistics } from '@/modules/statistics/components/Statistics.tsx';
 import { StatisticsProvider } from '@/providers/StatisticsProvider.tsx';
 import { TableProvider } from '@/providers/TableProvider.tsx';
 import { TableControls } from '@/modules/controls/components/TableControls.tsx';
-import { LimitManager } from '@/modules/pagination/components/LimitManager.tsx';
 import { Pagination } from '@/modules/pagination/components/Pagination.tsx';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 const queryClient = new QueryClient();
 
@@ -27,7 +26,6 @@ const App = () => (
 							<DataTable />
 						</TableProvider>
 						<div className="flex items-center justify-end gap-8">
-							<LimitManager />
 							<Pagination />
 						</div>
 					</div>
