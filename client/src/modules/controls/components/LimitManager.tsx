@@ -8,6 +8,7 @@ import { Button } from '@/ui/button.tsx';
 import { Skeleton } from '@/modules/shared/components/Skeleton.tsx';
 import { useManageSearchParams } from '@/modules/shared/hooks/useManageSearchParams.ts';
 import { useGetQueryDetails } from '@/modules/shared/hooks/useGetQueryDetails.ts';
+import { LINES_PER_PAGE_VARIANTS } from '@/modules/controls/constants.ts';
 
 export const LimitManager = () => {
 	const { isInitFetching } = useGetQueryDetails();
@@ -25,7 +26,7 @@ export const LimitManager = () => {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
-					{[10, 20].map(limitNumber => {
+					{LINES_PER_PAGE_VARIANTS.map(limitNumber => {
 						return (
 							<DropdownMenuCheckboxItem
 								key={limitNumber}
