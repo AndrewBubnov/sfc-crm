@@ -6,12 +6,12 @@ import {
 } from '@/ui/dropdown-menu.tsx';
 import { Button } from '@/ui/button.tsx';
 import { Skeleton } from '@/modules/shared/components/Skeleton.tsx';
-import { useQueryParams } from '@/modules/shared/hooks/useQueryParams.ts';
+import { useManageSearchParams } from '@/modules/shared/hooks/useManageSearchParams.ts';
 import { useGetQueryDetails } from '@/modules/shared/hooks/useGetQueryDetails.ts';
 
 export const LimitManager = () => {
 	const { isInitFetching } = useGetQueryDetails();
-	const { limit, setLimitParam } = useQueryParams();
+	const { limit, onLimitChange } = useManageSearchParams();
 
 	return (
 		<Skeleton isLoading={isInitFetching} className="w-[15vw] h-8 rounded-md">
@@ -30,7 +30,7 @@ export const LimitManager = () => {
 							<DropdownMenuCheckboxItem
 								key={limitNumber}
 								checked={limitNumber === limit}
-								onCheckedChange={() => setLimitParam(limitNumber)}
+								onCheckedChange={() => onLimitChange(limitNumber)}
 							>
 								{limitNumber}
 							</DropdownMenuCheckboxItem>

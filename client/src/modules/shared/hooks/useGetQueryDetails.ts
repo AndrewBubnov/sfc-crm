@@ -1,26 +1,15 @@
-import { useIsFetching, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useIsFetching } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { QueryKeys } from '@/modules/shared/queryKeys.ts';
-import { useQueryParams } from '@/modules/shared/hooks/useQueryParams.ts';
-import { Device } from '@/types.ts';
-import { getSingleValueParam } from '@/modules/shared/utils.ts';
+import { useManageSearchParams } from '@/modules/shared/hooks/useManageSearchParams.ts';
+import { useGetQueryData } from '@/modules/shared/hooks/useGetQueryData.ts';
 
-type QueryData = Record<'data', { items: Device[]; total: number }>;
+export const useGetQueryDetails = (queryKey = QueryKeys.Devices) => {
+	const { page, sort, limit, filters } = useManageSearchParams();
+	const queryData = useGetQueryData({ page, limit, filters, sort });
+	const isFetching = Boolean(useIsFetching({ queryKey: [queryKey, page, sort, limit, filters] }));
 
-export const useGetQueryDetails = () => {
-	const queryClient = useQueryClient();
-
-	const { paramsList, sort, limit, filters } = useQueryParams();
-
-	const [total, setTotal] = useState<number>(0);
-
-	const page = useMemo(() => getSingleValueParam(paramsList, 'page', 1), [paramsList]);
-	const queryData = queryClient.getQueryData<QueryData>([QueryKeys.Devices, page, sort, limit, filters]);
-	const isFetching = Boolean(useIsFetching({ queryKey: [QueryKeys.Devices, page, sort, limit, filters] }));
-
-	useEffect(() => {
-		if (queryData?.data.total) setTotal(queryData?.data.total);
-	}, [queryData?.data.total]);
+	const total = queryData?.total;
 
 	return useMemo(
 		() => ({

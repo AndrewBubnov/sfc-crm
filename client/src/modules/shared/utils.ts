@@ -60,7 +60,7 @@ export const getSingleValueParam = (params: string[][], paramName: string, defau
 	return page ? +page : defaultValue;
 };
 
-export const updateSingleValueParam = (paramsList: string[][], parameter: number, paramName: string) => {
+export const updateSingleValueParam = (paramsList: string[][], parameter: number, paramName: 'page' | 'limit') => {
 	const index = paramsList.findIndex(el => el[0] === paramName);
 	return index === -1
 		? [...paramsList, [paramName, String(parameter)]]

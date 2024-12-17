@@ -47,3 +47,5 @@ export type GraphData = {
 export type Filter = { search: string; field: string };
 
 export type Sort = { sortBy: string; sortDesc: boolean };
+
+export type QueryData<T = Device> = Record<'data', { items: T[]; total: number }>;

@@ -1,9 +1,9 @@
 import { Button } from '@/ui/button.tsx';
 import { SearchX } from 'lucide-react';
-import { useQueryParams } from '@/modules/shared/hooks/useQueryParams.ts';
+import { useManageSearchParams } from '@/modules/shared/hooks/useManageSearchParams.ts';
 
 export const ClearFilters = () => {
-	const { filters, resetFilters } = useQueryParams();
+	const { filters, resetFilters } = useManageSearchParams();
 	if (filters.some(filter => filter.search.length)) {
 		return (
 			<Button variant="ghost" onClick={resetFilters}>

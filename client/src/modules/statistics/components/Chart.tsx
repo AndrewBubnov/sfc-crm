@@ -4,7 +4,7 @@ import { SearchX } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
 import { ActiveShape } from '@/modules/statistics/components/ActiveShape.tsx';
 import { GraphData } from '@/types.ts';
-import { useQueryParams } from '@/modules/shared/hooks/useQueryParams.ts';
+import { useManageSearchParams } from '@/modules/shared/hooks/useManageSearchParams.ts';
 import { capitalize } from '@/modules/statistics/utils.ts';
 
 type ChartProps = {
@@ -16,7 +16,7 @@ type ChartProps = {
 
 export const Chart = ({ data, dto, total, name }: ChartProps) => {
 	const [activeIndex, setActiveIndex] = useState(0);
-	const { setFilter } = useQueryParams();
+	const { setFilter } = useManageSearchParams();
 
 	const clickHandler = useCallback(
 		(evt: Record<'name', string>) => setFilter({ field: name, search: evt.name }),

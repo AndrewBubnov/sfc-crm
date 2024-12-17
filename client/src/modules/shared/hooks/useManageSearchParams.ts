@@ -9,16 +9,19 @@ import {
 	updateSortParam,
 } from '@/modules/shared/utils.ts';
 import { BASE_LIMIT } from '@/modules/shared/constants.ts';
+import { useGetQueryData } from '@/modules/shared/hooks/useGetQueryData.ts';
 
-export const useQueryParams = () => {
+export const useManageSearchParams = () => {
 	const [params, setParams] = useSearchParams();
+
 	const paramsList = useMemo(() => [...params], [params]);
 
 	const { filters } = useMemo(() => getReducedFilterQueryParams(paramsList), [paramsList]);
-
 	const sort = getSortParam(paramsList);
 	const page = getSingleValueParam(paramsList, 'page', 1);
 	const limit = getSingleValueParam(paramsList, 'limit', BASE_LIMIT);
+
+	const queryData = useGetQueryData({ page, limit, filters, sort });
 
 	const setFilter = useCallback(
 		(filter: Filter) => {
@@ -35,9 +38,21 @@ export const useQueryParams = () => {
 		]);
 	}, [limit, page, setParams]);
 
-	const setLimitParam = useCallback(
-		(limit: number) => setParams(updateSingleValueParam(paramsList, limit, 'limit') as ParamKeyValuePair[]),
-		[paramsList, setParams]
+	const onLimitChange = useCallback(
+		(updatedLimit: number) => {
+			const updatedLimitParamsList = updateSingleValueParam(paramsList, updatedLimit, 'limit');
+			setParams(updatedLimitParamsList as ParamKeyValuePair[]);
+			const newPage = Math.floor(page * (limit / updatedLimit)) || 1;
+			const maxPages = Math.ceil((queryData?.total || 0) / updatedLimit);
+			setParams(
+				updateSingleValueParam(
+					updatedLimitParamsList,
+					Math.min(newPage, maxPages) || 1,
+					'page'
+				) as ParamKeyValuePair[]
+			);
+		},
+		[limit, page, paramsList, queryData?.total, setParams]
 	);
 
 	const setSortParam = useCallback(
@@ -47,6 +62,7 @@ export const useQueryParams = () => {
 
 	return useMemo(
 		() => ({
+			page,
 			paramsList,
 			setParams,
 			setFilter,
@@ -54,9 +70,9 @@ export const useQueryParams = () => {
 			filters,
 			sort,
 			limit,
-			setLimitParam,
+			onLimitChange,
 			setSortParam,
 		}),
-		[filters, limit, paramsList, resetFilters, setFilter, setLimitParam, setParams, setSortParam, sort]
+		[filters, limit, page, paramsList, resetFilters, setFilter, onLimitChange, setParams, setSortParam, sort]
 	);
 };
