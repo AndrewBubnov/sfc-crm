@@ -56,26 +56,31 @@ export const getReducedFilterQueryParams = (params: string[][], filter: Filter =
 
 	return { queryParams: filteredGrouped.flat(1), filters };
 };
+
 export const getPageParam = (params: string[][]) => {
 	const page = params.find(el => el[0] === 'page')?.[1];
 	return page ? +page : 1;
 };
+
 export const getLimitParam = (params: string[][]) => {
 	const limit = params.find(el => el[0] === 'limit')?.[1];
 	return limit ? +limit : BASE_LIMIT;
 };
+
 export const updateLimitParam = (params: string[][], limit: number) => {
 	const index = params.findIndex(el => el[0] === 'limit');
 	return index === -1
 		? [...params, ['limit', String(limit)]]
 		: [...params.slice(0, index), ['limit', String(limit)], ...params.slice(index + 1)];
 };
+
 export const getSortParam = (params: string[][]) => {
 	const index = params.findIndex(el => el[0] === 'sortBy');
 	return index > -1 && params[index + 1]
 		? { sortBy: params[index][1], sortDesc: params[index + 1][1] === 'true' }
 		: { sortBy: '', sortDesc: false };
 };
+
 export const updateSortParam = (params: string[][], { sortBy, sortDesc }: Sort) => {
 	const index = params.findIndex(el => el[0] === 'sortBy');
 	if (index === -1) return [['sortBy', sortBy], ['sortDesc', String(sortDesc)], ...params];
