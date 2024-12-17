@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
-import { Filter, Sort } from '@/types.ts';
+import { Filter, QueryParam, Sort } from '@/types.ts';
 import {
 	getSingleValueParam,
 	getReducedFilterQueryParams,
@@ -9,24 +9,27 @@ import {
 	updateSortParam,
 } from '@/modules/shared/utils.ts';
 import { BASE_LIMIT } from '@/modules/shared/constants.ts';
-import { useGetQueryData } from '@/modules/shared/hooks/useGetQueryData.ts';
+import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 
 export const useManageSearchParams = () => {
+	const { total } = useContext(StatisticsContext);
 	const [params, setParams] = useSearchParams();
 
 	const paramsList = useMemo(() => [...params], [params]);
 
 	const { filters } = useMemo(() => getReducedFilterQueryParams(paramsList), [paramsList]);
 	const sort = getSortParam(paramsList);
-	const page = getSingleValueParam(paramsList, 'page', 1);
-	const limit = getSingleValueParam(paramsList, 'limit', BASE_LIMIT);
-
-	const queryData = useGetQueryData({ page, limit, filters, sort });
+	const page = getSingleValueParam(paramsList, QueryParam.Page, 1);
+	const limit = getSingleValueParam(paramsList, QueryParam.Limit, BASE_LIMIT);
 
 	const setFilter = useCallback(
 		(filter: Filter) => {
 			const { queryParams } = getReducedFilterQueryParams(paramsList, filter);
-			setParams([['limit', String(limit)], ['page', String(page)], ...queryParams] as ParamKeyValuePair[]);
+			setParams([
+				[QueryParam.Limit, String(limit)],
+				[QueryParam.Page, String(page)],
+				...queryParams,
+			] as ParamKeyValuePair[]);
 		},
 		[limit, page, paramsList, setParams]
 	);
@@ -40,19 +43,19 @@ export const useManageSearchParams = () => {
 
 	const onLimitChange = useCallback(
 		(updatedLimit: number) => {
-			const updatedLimitParamsList = updateSingleValueParam(paramsList, updatedLimit, 'limit');
+			const updatedLimitParamsList = updateSingleValueParam(paramsList, updatedLimit, QueryParam.Limit);
 			setParams(updatedLimitParamsList as ParamKeyValuePair[]);
 			const newPage = Math.floor(page * (limit / updatedLimit)) || 1;
-			const maxPages = Math.ceil((queryData?.total || 0) / updatedLimit);
+			const maxPages = Math.ceil(total / updatedLimit);
 			setParams(
 				updateSingleValueParam(
 					updatedLimitParamsList,
 					Math.min(newPage, maxPages) || 1,
-					'page'
+					QueryParam.Page
 				) as ParamKeyValuePair[]
 			);
 		},
-		[limit, page, paramsList, queryData?.total, setParams]
+		[limit, page, paramsList, total, setParams]
 	);
 
 	const setSortParam = useCallback(

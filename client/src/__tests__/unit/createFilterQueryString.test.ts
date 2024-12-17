@@ -54,8 +54,8 @@ describe('createFilterQueryString', () => {
 
 	it('should handle filters with undefined or null fields', () => {
 		const filters: Filter[] = [
-			{ field: null as unknown as string, search: 'value1' },
-			{ field: undefined as unknown as string, search: 'value2' },
+			{ field: null as unknown as Filter['field'], search: 'value1' },
+			{ field: undefined as unknown as Filter['field'], search: 'value2' },
 			{ field: 'name', search: 'device1' },
 		];
 		const result = createFilterQueryString(filters);

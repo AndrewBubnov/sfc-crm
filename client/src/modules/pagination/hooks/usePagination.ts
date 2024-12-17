@@ -3,6 +3,7 @@ import { ParamKeyValuePair } from 'react-router-dom';
 import { useManageSearchParams } from '@/modules/shared/hooks/useManageSearchParams.ts';
 import { useGetQueryDetails } from '@/modules/shared/hooks/useGetQueryDetails.ts';
 import { updateSingleValueParam } from '@/modules/shared/utils.ts';
+import { QueryParam } from '@/types.ts';
 
 export const usePagination = () => {
 	const { total, isFetching } = useGetQueryDetails();
@@ -11,7 +12,7 @@ export const usePagination = () => {
 
 	const setPage = useCallback(
 		(updatedPage: number) =>
-			setParams(updateSingleValueParam(paramsList, updatedPage, 'page') as ParamKeyValuePair[]),
+			setParams(updateSingleValueParam(paramsList, updatedPage, QueryParam.Page) as ParamKeyValuePair[]),
 		[paramsList, setParams]
 	);
 

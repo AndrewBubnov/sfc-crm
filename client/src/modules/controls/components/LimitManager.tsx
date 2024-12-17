@@ -27,7 +27,7 @@ export const LimitManager = () => {
 						<DropdownMenuCheckboxItem
 							key={limitNumber}
 							checked={limitNumber === limit}
-							onCheckedChange={() => onLimitChange(limitNumber)}
+							onCheckedChange={onLimitChange.bind(null, limitNumber)}
 						>
 							{limitNumber}
 						</DropdownMenuCheckboxItem>

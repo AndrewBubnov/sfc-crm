@@ -44,8 +44,19 @@ export type GraphData = {
 	fill: string;
 };
 
-export type Filter = { search: string; field: string };
+export enum QueryParam {
+	Page = 'page',
+	Limit = 'limit',
+	SortBy = 'sortBy',
+	SortDesc = 'sortDesc',
+	Field = 'field',
+	Search = 'search',
+}
 
-export type Sort = { sortBy: string; sortDesc: boolean };
+export type FilterField = 'id' | 'name' | 'type' | 'state';
+
+export type Filter = { [QueryParam.Search]: string; [QueryParam.Field]: FilterField };
+
+export type Sort = { [QueryParam.SortBy]: string; [QueryParam.SortDesc]: boolean };
 
 export type QueryData<T = Device> = Record<'data', { items: T[]; total: number }>;
