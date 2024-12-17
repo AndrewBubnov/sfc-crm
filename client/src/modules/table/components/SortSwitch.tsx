@@ -10,11 +10,11 @@ type SortSwitchProps = {
 };
 
 export const SortSwitch = ({ id, sortBy, sortDesc }: SortSwitchProps) => {
-	const { setSortParam } = useManageSearchParams();
+	const { onSortChange } = useManageSearchParams();
 
-	const upSortHandler = () => setSortParam({ sortBy: id, sortDesc: false });
+	const upSortHandler = () => onSortChange({ sortBy: id, sortDesc: false });
 
-	const downSortHandler = () => setSortParam({ sortBy: id, sortDesc: true });
+	const downSortHandler = () => onSortChange({ sortBy: id, sortDesc: true });
 
 	return (
 		<div className="flex items-center gap-4">

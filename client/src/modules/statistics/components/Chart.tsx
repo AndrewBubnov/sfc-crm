@@ -16,11 +16,11 @@ type ChartProps = {
 
 export const Chart = ({ data, dto, total, name }: ChartProps) => {
 	const [activeIndex, setActiveIndex] = useState(0);
-	const { setFilter } = useManageSearchParams();
+	const { onFilterChange } = useManageSearchParams();
 
 	const clickHandler = useCallback(
-		(evt: Record<'name', string>) => setFilter({ field: name, search: evt.name }),
-		[name, setFilter]
+		(evt: Record<'name', string>) => onFilterChange({ field: name, search: evt.name }),
+		[name, onFilterChange]
 	);
 
 	const isFullData = data.length > 2;
@@ -51,7 +51,7 @@ export const Chart = ({ data, dto, total, name }: ChartProps) => {
 				{isFilteredData && (
 					<SearchX
 						className="absolute z-50 text-gray-300 pl-1 cursor-pointer"
-						onClick={() => setFilter({ field: name, search: '' })}
+						onClick={() => onFilterChange({ field: name, search: '' })}
 					/>
 				)}
 			</div>

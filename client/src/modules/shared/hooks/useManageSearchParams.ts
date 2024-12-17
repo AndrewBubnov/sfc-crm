@@ -22,7 +22,7 @@ export const useManageSearchParams = () => {
 	const page = getSingleValueParam(paramsList, QueryParam.Page, 1);
 	const limit = getSingleValueParam(paramsList, QueryParam.Limit, BASE_LIMIT);
 
-	const setFilter = useCallback(
+	const onFilterChange = useCallback(
 		(filter: Filter) => {
 			const { queryParams } = getReducedFilterQueryParams(paramsList, filter);
 			setParams([
@@ -58,7 +58,7 @@ export const useManageSearchParams = () => {
 		[limit, page, paramsList, total, setParams]
 	);
 
-	const setSortParam = useCallback(
+	const onSortChange = useCallback(
 		(sorting: Sort) => setParams(updateSortParam(paramsList, sorting) as ParamKeyValuePair[]),
 		[paramsList, setParams]
 	);
@@ -68,14 +68,14 @@ export const useManageSearchParams = () => {
 			page,
 			paramsList,
 			setParams,
-			setFilter,
+			onFilterChange,
 			resetFilters,
 			filters,
 			sort,
 			limit,
 			onLimitChange,
-			setSortParam,
+			onSortChange,
 		}),
-		[filters, limit, page, paramsList, resetFilters, setFilter, onLimitChange, setParams, setSortParam, sort]
+		[filters, limit, page, paramsList, resetFilters, onFilterChange, onLimitChange, setParams, onSortChange, sort]
 	);
 };

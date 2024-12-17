@@ -11,7 +11,7 @@ type DataTableHeaderProps<T> = {
 };
 
 export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) => {
-	const { setFilter, filters, sort } = useManageSearchParams();
+	const { onFilterChange, filters, sort } = useManageSearchParams();
 
 	return (
 		<TableHeader>
@@ -23,7 +23,7 @@ export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) =
 						const isSearchEnabled = Boolean(filter) && Boolean(filter?.search.length);
 						const onOpenChange = (evt: MouseEvent) => {
 							if (isSearchEnabled) evt.preventDefault();
-							setFilter({ field: header.id as FilterField, search: '' });
+							onFilterChange({ field: header.id as FilterField, search: '' });
 						};
 						return (
 							<TableHead
@@ -43,7 +43,7 @@ export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) =
 													value={filter?.search || ''}
 													onOpenChange={onOpenChange}
 													onChange={search =>
-														setFilter({ field: header.id as FilterField, search })
+														onFilterChange({ field: header.id as FilterField, search })
 													}
 												/>
 												<SortSwitch
