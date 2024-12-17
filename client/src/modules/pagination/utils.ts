@@ -17,10 +17,3 @@ export const createIndexesList = (page: number, lastPage: number) => {
 		return currentPage + 1;
 	});
 };
-
-export const updatePageParam = (params: string[][], page: number) => {
-	const index = params.findIndex(el => el[0] === 'page');
-	return index === -1
-		? [...params, ['page', String(page)]]
-		: [...params.slice(0, index), ['page', String(page)], ...params.slice(index + 1)];
-};

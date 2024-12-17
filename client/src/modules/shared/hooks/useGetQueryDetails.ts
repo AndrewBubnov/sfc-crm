@@ -3,8 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { QueryKeys } from '@/modules/shared/queryKeys.ts';
 import { useQueryParams } from '@/modules/shared/hooks/useQueryParams.ts';
 import { Device } from '@/types.ts';
-
-import { getPageParam } from '@/modules/shared/utils.ts';
+import { getSingleValueParam } from '@/modules/shared/utils.ts';
 
 type QueryData = Record<'data', { items: Device[]; total: number }>;
 
@@ -15,7 +14,7 @@ export const useGetQueryDetails = () => {
 
 	const [total, setTotal] = useState<number>(0);
 
-	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
+	const page = useMemo(() => getSingleValueParam(paramsList, 'page', 1), [paramsList]);
 	const queryData = queryClient.getQueryData<QueryData>([QueryKeys.Devices, page, sort, limit, filters]);
 	const isFetching = Boolean(useIsFetching({ queryKey: [QueryKeys.Devices, page, sort, limit, filters] }));
 

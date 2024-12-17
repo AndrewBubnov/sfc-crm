@@ -2,18 +2,17 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { ParamKeyValuePair } from 'react-router-dom';
 import { useQueryParams } from '@/modules/shared/hooks/useQueryParams.ts';
 import { useGetQueryDetails } from '@/modules/shared/hooks/useGetQueryDetails.ts';
-import { getPageParam } from '@/modules/shared/utils.ts';
-import { updatePageParam } from '@/modules/pagination/utils.ts';
+import { getSingleValueParam, updateSingleValueParam } from '@/modules/shared/utils.ts';
 
 export const usePagination = () => {
 	const { total, isFetching } = useGetQueryDetails();
 
 	const { paramsList, setParams, limit } = useQueryParams();
 
-	const page = useMemo(() => getPageParam(paramsList), [paramsList]);
+	const page = useMemo(() => getSingleValueParam(paramsList, 'page', 1), [paramsList]);
 
 	const setPage = useCallback(
-		(page: number) => setParams(updatePageParam(paramsList, page) as ParamKeyValuePair[]),
+		(page: number) => setParams(updateSingleValueParam(paramsList, page, 'page') as ParamKeyValuePair[]),
 		[paramsList, setParams]
 	);
 

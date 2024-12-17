@@ -2,13 +2,13 @@ import { useCallback, useMemo } from 'react';
 import { ParamKeyValuePair, useSearchParams } from 'react-router-dom';
 import { Filter, Sort } from '@/types.ts';
 import {
-	getLimitParam,
-	getPageParam,
+	getSingleValueParam,
 	getReducedFilterQueryParams,
 	getSortParam,
-	updateLimitParam,
+	updateSingleValueParam,
 	updateSortParam,
 } from '@/modules/shared/utils.ts';
+import { BASE_LIMIT } from '@/modules/shared/constants.ts';
 
 export const useQueryParams = () => {
 	const [params, setParams] = useSearchParams();
@@ -16,27 +16,27 @@ export const useQueryParams = () => {
 
 	const { filters } = useMemo(() => getReducedFilterQueryParams(paramsList), [paramsList]);
 
+	const sort = getSortParam(paramsList);
+	const page = getSingleValueParam(paramsList, 'page', 1);
+	const limit = getSingleValueParam(paramsList, 'limit', BASE_LIMIT);
+
 	const setFilter = useCallback(
 		(filter: Filter) => {
-			const page = getPageParam(paramsList);
-			const limit = getLimitParam(paramsList);
 			const { queryParams } = getReducedFilterQueryParams(paramsList, filter);
 			setParams([['limit', String(limit)], ['page', String(page)], ...queryParams] as ParamKeyValuePair[]);
 		},
-		[paramsList, setParams]
+		[limit, page, paramsList, setParams]
 	);
 
 	const resetFilters = useCallback(() => {
-		const page = getPageParam(paramsList);
-		const limit = getLimitParam(paramsList);
 		setParams([
 			['limit', String(limit)],
 			['page', String(page)],
 		]);
-	}, [paramsList, setParams]);
+	}, [limit, page, setParams]);
 
 	const setLimitParam = useCallback(
-		(page: number) => setParams(updateLimitParam(paramsList, page) as ParamKeyValuePair[]),
+		(limit: number) => setParams(updateSingleValueParam(paramsList, limit, 'limit') as ParamKeyValuePair[]),
 		[paramsList, setParams]
 	);
 
@@ -44,9 +44,6 @@ export const useQueryParams = () => {
 		(sorting: Sort) => setParams(updateSortParam(paramsList, sorting) as ParamKeyValuePair[]),
 		[paramsList, setParams]
 	);
-
-	const sort = useMemo(() => getSortParam(paramsList), [paramsList]);
-	const limit = useMemo(() => getLimitParam(paramsList), [paramsList]);
 
 	return useMemo(
 		() => ({

@@ -1,7 +1,5 @@
 import { Filter, Sort } from '@/types.ts';
 
-import { BASE_LIMIT } from '@/modules/shared/constants.ts';
-
 export const createFilterQueryString = (filters: Filter[]) => {
 	const filtersToFetch = filters.filter(el => Boolean(el.field) && Boolean(el.search));
 	const searchQueryString = filtersToFetch
@@ -57,21 +55,16 @@ export const getReducedFilterQueryParams = (params: string[][], filter: Filter =
 	return { queryParams: filteredGrouped.flat(1), filters };
 };
 
-export const getPageParam = (params: string[][]) => {
-	const page = params.find(el => el[0] === 'page')?.[1];
-	return page ? +page : 1;
+export const getSingleValueParam = (params: string[][], paramName: string, defaultValue: number) => {
+	const page = params.find(el => el[0] === paramName)?.[1];
+	return page ? +page : defaultValue;
 };
 
-export const getLimitParam = (params: string[][]) => {
-	const limit = params.find(el => el[0] === 'limit')?.[1];
-	return limit ? +limit : BASE_LIMIT;
-};
-
-export const updateLimitParam = (params: string[][], limit: number) => {
-	const index = params.findIndex(el => el[0] === 'limit');
+export const updateSingleValueParam = (paramsList: string[][], parameter: number, paramName: string) => {
+	const index = paramsList.findIndex(el => el[0] === paramName);
 	return index === -1
-		? [...params, ['limit', String(limit)]]
-		: [...params.slice(0, index), ['limit', String(limit)], ...params.slice(index + 1)];
+		? [...paramsList, [paramName, String(parameter)]]
+		: [...paramsList.slice(0, index), [paramName, String(parameter)], ...paramsList.slice(index + 1)];
 };
 
 export const getSortParam = (params: string[][]) => {
