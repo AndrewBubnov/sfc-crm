@@ -1,8 +1,8 @@
-import { TableContext } from '@/providers/TableContext.ts';
 import { ReactNode, useState } from 'react';
+import { TableContext } from '@/providers/TableContext.ts';
 import { getCoreRowModel, RowSelectionState, useReactTable, VisibilityState } from '@tanstack/react-table';
-import { animatedColumns, columns } from '@/modules/table/columns.tsx';
 import { useData } from '@/modules/shared/hooks/useData.ts';
+import { animatedColumns, columns } from '@/modules/table/columns.tsx';
 
 type TableProviderProps = {
 	children: ReactNode;
@@ -12,6 +12,7 @@ export const TableProvider = ({ children }: TableProviderProps) => {
 	const { data } = useData();
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [deletedIdsList, setDeletedIdsList] = useState<string[]>([]);
 	const [isAnimated, setIsAnimated] = useState<boolean>(false);
 
 	const table = useReactTable({
@@ -23,5 +24,9 @@ export const TableProvider = ({ children }: TableProviderProps) => {
 		columnResizeMode: 'onChange',
 		onRowSelectionChange: setRowSelection,
 	});
-	return <TableContext.Provider value={{ table, isAnimated, setIsAnimated }}>{children}</TableContext.Provider>;
+	return (
+		<TableContext.Provider value={{ table, isAnimated, setIsAnimated, deletedIdsList, setDeletedIdsList }}>
+			{children}
+		</TableContext.Provider>
+	);
 };

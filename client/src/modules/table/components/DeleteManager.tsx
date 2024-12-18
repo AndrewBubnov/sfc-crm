@@ -1,16 +1,18 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@/ui/popover.tsx';
-import { Trash, Ellipsis } from 'lucide-react';
+import { useContext } from 'react';
 import { Table } from '@tanstack/react-table';
-import { Device } from '@/types.ts';
-import { Checkbox } from '@/ui/checkbox.tsx';
+import { TableContext } from '@/providers/TableContext.ts';
+import { Popover, PopoverContent, PopoverTrigger } from '@/ui/popover.tsx';
+import { useToast } from '@/modules/shared/hooks/useToast.ts';
 import { useMutation } from '@tanstack/react-query';
 import { deleteDevices } from '@/modules/table/api/deleteDevices.ts';
 import { LoaderButton } from '@/modules/shared/components/LoaderButton.tsx';
 import { Label } from '@/ui/label.tsx';
-import { cn } from '@/lib/utils.ts';
-import { useToast } from '@/modules/shared/hooks/useToast.ts';
-
+import { Checkbox } from '@/ui/checkbox.tsx';
+import { Trash, Ellipsis } from 'lucide-react';
 import { getDeleteToastMessage } from '@/modules/table/utils.ts';
+import { cn } from '@/lib/utils.ts';
+import { MutationKeys } from '@/modules/shared/queryKeys.ts';
+import { Device } from '@/types.ts';
 
 type DeleteManagerProps = {
 	table: Table<Device>;
@@ -18,19 +20,26 @@ type DeleteManagerProps = {
 
 export const DeleteManager = ({ table }: DeleteManagerProps) => {
 	const { toast } = useToast();
-	const { mutate, isPending } = useMutation({ mutationFn: deleteDevices });
-	const multiRowChecker = table.getToggleAllPageRowsSelectedHandler();
+	const { setDeletedIdsList } = useContext(TableContext);
+	const { mutate, isPending } = useMutation({
+		mutationFn: deleteDevices,
+		mutationKey: [MutationKeys.Delete],
+	});
 	const deletedDevicesIds = table.getSelectedRowModel().rows.map(row => row.original.id);
+	const multiRowChecker = table.getToggleAllPageRowsSelectedHandler();
 	const allRowsSelected = table.getIsAllRowsSelected();
 
 	const deleteHandler = () => {
+		setDeletedIdsList(deletedDevicesIds);
 		mutate(
 			{ ids: deletedDevicesIds },
 			{
-				onSuccess: ({ data }) =>
+				onSuccess: ({ data }) => {
+					setDeletedIdsList([]);
 					toast({
 						title: getDeleteToastMessage(data),
-					}),
+					});
+				},
 			}
 		);
 		table.resetRowSelection();

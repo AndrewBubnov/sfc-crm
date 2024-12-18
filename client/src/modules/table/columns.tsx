@@ -2,27 +2,18 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Device } from '@/types.ts';
 import { AnimatedNameInput } from '@/modules/table/components/AnimatedNameInput.tsx';
 import { ModeManger } from '@/modules/table/components/ModeManager.tsx';
-import { Checkbox } from '@/ui/checkbox.tsx';
 import { DeleteManager } from '@/modules/table/components/DeleteManager.tsx';
 import { AnimatedState } from '@/modules/table/components/AnimatedState.tsx';
 import { cn } from '@/lib/utils.ts';
 import { NameInput } from '@/modules/table/components/NameInput.tsx';
+import { RowDeleteCheckbox } from '@/modules/table/components/RowDeleteCheckbox.tsx';
 
 export const animatedColumns: ColumnDef<Device>[] = [
 	{
 		id: 'select-col',
 		size: 25,
 		header: ({ table }) => <DeleteManager table={table} />,
-		cell: ({ row }) => (
-			<div className="flex justify-center">
-				<Checkbox
-					className="checkbox-inverted"
-					checked={row.getIsSelected()}
-					disabled={!row.getCanSelect()}
-					onCheckedChange={row.getToggleSelectedHandler()}
-				/>
-			</div>
-		),
+		cell: ({ row }) => <RowDeleteCheckbox row={row} />,
 	},
 	{
 		accessorKey: 'id',
@@ -63,16 +54,7 @@ export const columns: ColumnDef<Device>[] = [
 		id: 'select-col',
 		size: 25,
 		header: ({ table }) => <DeleteManager table={table} />,
-		cell: ({ row }) => (
-			<div className="flex justify-center">
-				<Checkbox
-					className="checkbox-inverted"
-					checked={row.getIsSelected()}
-					disabled={!row.getCanSelect()}
-					onCheckedChange={row.getToggleSelectedHandler()}
-				/>
-			</div>
-		),
+		cell: ({ row }) => <RowDeleteCheckbox row={row} />,
 	},
 	{
 		accessorKey: 'id',

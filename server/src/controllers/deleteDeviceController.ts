@@ -4,7 +4,7 @@ import { devices, updateDevices } from '../services/deviceService.js';
 import { addDeviceDeleteEvent } from '../services/deleteEventsService.js';
 import { sleep } from '../utils.js';
 
-const DELETE_DEVICES_DELAY = 1_000;
+const DELETE_DEVICES_DELAY = 2_000;
 
 export const deleteDevicesController = async (req: Request<{}, {}, DeleteDeviceBody>, res: Response) => {
 	const { ids } = req.body;
