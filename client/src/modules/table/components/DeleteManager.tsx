@@ -5,10 +5,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/ui/popover.tsx';
 import { useToast } from '@/modules/shared/hooks/useToast.ts';
 import { useMutation } from '@tanstack/react-query';
 import { deleteDevices } from '@/modules/table/api/deleteDevices.ts';
-import { LoaderButton } from '@/modules/shared/components/LoaderButton.tsx';
+import { Button } from '@/ui/button.tsx';
 import { Label } from '@/ui/label.tsx';
 import { Checkbox } from '@/ui/checkbox.tsx';
-import { Trash, Ellipsis } from 'lucide-react';
+import { Trash, Ellipsis, Loader } from 'lucide-react';
 import { getDeleteToastMessage } from '@/modules/table/utils.ts';
 import { cn } from '@/lib/utils.ts';
 import { MutationKeys } from '@/modules/shared/queryKeys.ts';
@@ -65,15 +65,16 @@ export const DeleteManager = ({ table }: DeleteManagerProps) => {
 					/>
 					<span>All rows</span>
 				</Label>
-				<LoaderButton
-					isLoading={isPending}
+				<Button
+					variant="ghost"
 					disabled={!deletedDevicesIds.length || isPending}
 					onClick={deleteHandler}
-					className={cn('flex items-center  gap-2', isPending ? 'justify-center' : 'justify-start')}
+					className={cn('flex items-center justify-between font-normal')}
 				>
-					<Trash size={18} />
+					{isPending && <Loader className="animate-spin" />}
+					{!isPending && <Trash size={18} />}
 					<span>Delete selected rows</span>
-				</LoaderButton>
+				</Button>
 			</PopoverContent>
 		</Popover>
 	);
