@@ -7,13 +7,21 @@ import { useForm } from 'react-hook-form';
 import { Checkbox } from '@/ui/checkbox.tsx';
 import { registerDeviceSchema, RegisterDeviceSchemaType } from '@/modules/controls/schemas.ts';
 import { DeviceMode, DeviceType } from '@/types.ts';
+import { useMutation } from '@tanstack/react-query';
+import { registerDevice } from '@/modules/table/api/registerDevice.ts';
+import { useToast } from '@/modules/shared/hooks/useToast.ts';
+import { Loader } from 'lucide-react';
 
 type RegisterDeviceFormProps = {
-	onSubmit(form: RegisterDeviceSchemaType): void;
-	disabled: boolean;
+	isDevicesListUpdated: boolean;
 };
 
-export const RegisterDeviceForm = ({ onSubmit, disabled }: RegisterDeviceFormProps) => {
+export const RegisterDeviceForm = ({ isDevicesListUpdated }: RegisterDeviceFormProps) => {
+	const registerDeviceMutation = useMutation({ mutationFn: registerDevice });
+	const { toast } = useToast();
+
+	const disabled = isDevicesListUpdated || registerDeviceMutation.isPending;
+
 	const form = useForm({
 		resolver: zodResolver(registerDeviceSchema),
 		defaultValues: {
@@ -24,9 +32,23 @@ export const RegisterDeviceForm = ({ onSubmit, disabled }: RegisterDeviceFormPro
 		},
 	});
 
+	const onSubmit = (formState: RegisterDeviceSchemaType) => {
+		registerDeviceMutation.mutate(formState, {
+			onSuccess: data =>
+				toast({ title: `Device '${data.data.name}', ID ${data.data.id}, has successfully been created` }),
+			onError: () =>
+				toast({
+					variant: 'destructive',
+					title: 'Uh oh! Something went wrong with the creation of a new device',
+					description: 'Please try again',
+				}),
+			onSettled: () => form.reset(),
+		});
+	};
+
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl py-10">
 				<FormField
 					control={form.control}
 					name="name"
@@ -110,9 +132,17 @@ export const RegisterDeviceForm = ({ onSubmit, disabled }: RegisterDeviceFormPro
 						</FormItem>
 					)}
 				/>
-				<Button type="submit" disabled={disabled}>
-					Submit
-				</Button>
+				<div className="flex items-center gap-5">
+					<Button type="submit" disabled={disabled}>
+						Submit
+					</Button>
+					{registerDeviceMutation.isPending ? (
+						<div className="flex items-center gap-3 text-sm">
+							<Loader className="animate-spin w-4 h-4" />
+							<span>New device is being registered</span>
+						</div>
+					) : null}
+				</div>
 			</form>
 		</Form>
 	);
