@@ -6,7 +6,7 @@ import { clients } from '../models/clients.js';
 import { getStateStats, getTypeStats, sleep } from '../utils.js';
 import { offsetLimits } from '../services/filterService.js';
 
-const REGISTER_DEVICES_DELAY = 1_000;
+const REGISTER_DEVICES_DELAY = 2_000;
 
 export const registerDeviceController = async (req: Request<{}, {}, RegisterDeviceBody>, res: Response) => {
 	const { name, type, state } = req.body;

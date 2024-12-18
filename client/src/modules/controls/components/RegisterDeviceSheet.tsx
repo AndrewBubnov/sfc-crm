@@ -17,16 +17,25 @@ export const RegisterDeviceSheet = () => {
 
 	const onSubmit = (form: RegisterDeviceSchemaType) => {
 		registerDeviceMutation.mutate(form, {
-			onSuccess: data =>
-				toast({ title: `Device '${data.data.name}', ID ${data.data.id}, has successfully been created` }),
+			onSuccess: data => {
+				toast({ title: `Device '${data.data.name}', ID ${data.data.id}, has successfully been created` });
+				setIsOpen(false);
+			},
+			onError: () =>
+				toast({
+					variant: 'destructive',
+					title: 'Uh oh! Something went wrong with the creation of a new device',
+					description: 'Please try again',
+				}),
 		});
-		setIsOpen(false);
 	};
+
+	const disabled = registerDeviceMutation.isPending || isFetching;
 
 	return (
 		<Sheet open={isOpen} onOpenChange={setIsOpen}>
 			<SheetTrigger asChild className="bg-transparent hover:border-transparent">
-				<Button variant="ghost" disabled={registerDeviceMutation.isPending || isFetching}>
+				<Button variant="ghost" disabled={disabled}>
 					<Plus />
 					Register device
 				</Button>
@@ -38,7 +47,7 @@ export const RegisterDeviceSheet = () => {
 						Type the name of new device or check the auto name generate checkbox
 					</SheetDescription>
 				</SheetHeader>
-				<RegisterDeviceForm onSubmit={onSubmit} />
+				<RegisterDeviceForm onSubmit={onSubmit} disabled={disabled} />
 			</SheetContent>
 		</Sheet>
 	);

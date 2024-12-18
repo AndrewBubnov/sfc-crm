@@ -10,9 +10,10 @@ import { DeviceMode, DeviceType } from '@/types.ts';
 
 type RegisterDeviceFormProps = {
 	onSubmit(form: RegisterDeviceSchemaType): void;
+	disabled: boolean;
 };
 
-export const RegisterDeviceForm = ({ onSubmit }: RegisterDeviceFormProps) => {
+export const RegisterDeviceForm = ({ onSubmit, disabled }: RegisterDeviceFormProps) => {
 	const form = useForm({
 		resolver: zodResolver(registerDeviceSchema),
 		defaultValues: {
@@ -33,7 +34,7 @@ export const RegisterDeviceForm = ({ onSubmit }: RegisterDeviceFormProps) => {
 						<FormItem>
 							<FormLabel>Device name</FormLabel>
 							<FormControl>
-								<Input placeholder="Enter device name" type="text" {...field} />
+								<Input placeholder="Enter device name" type="text" disabled={disabled} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -46,6 +47,7 @@ export const RegisterDeviceForm = ({ onSubmit }: RegisterDeviceFormProps) => {
 						<FormItem className="flex flex-row items-start space-x-3 space-y-0">
 							<FormControl>
 								<Checkbox
+									disabled={disabled}
 									checked={field.value}
 									onCheckedChange={async value => {
 										field.onChange(value);
@@ -66,7 +68,7 @@ export const RegisterDeviceForm = ({ onSubmit }: RegisterDeviceFormProps) => {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Device type</FormLabel>
-							<Select onValueChange={field.onChange} defaultValue={field.value}>
+							<Select onValueChange={field.onChange} defaultValue={field.value} disabled={disabled}>
 								<FormControl>
 									<SelectTrigger>
 										<SelectValue placeholder={DeviceType.Type1} />
@@ -90,7 +92,7 @@ export const RegisterDeviceForm = ({ onSubmit }: RegisterDeviceFormProps) => {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Device initial state</FormLabel>
-							<Select onValueChange={field.onChange} defaultValue={field.value}>
+							<Select onValueChange={field.onChange} defaultValue={field.value} disabled={disabled}>
 								<FormControl>
 									<SelectTrigger>
 										<SelectValue placeholder={DeviceMode.Off} />
@@ -108,7 +110,9 @@ export const RegisterDeviceForm = ({ onSubmit }: RegisterDeviceFormProps) => {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit">Submit</Button>
+				<Button type="submit" disabled={disabled}>
+					Submit
+				</Button>
 			</form>
 		</Form>
 	);
