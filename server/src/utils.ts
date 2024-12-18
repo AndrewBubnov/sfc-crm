@@ -70,7 +70,7 @@ export const getStateStats = (filteredDevices: Device[], total: number) => {
 		},
 		{} as Record<DeviceState, number>
 	);
-	return { ...reducedData, total };
+	return { ...reducedData, total, filteredTotal: filteredDevices.length };
 };
 
 export const getTypeStats = (filteredDevices: Device[]) => {

@@ -23,8 +23,8 @@ export const usePagination = () => {
 	const isNextStepDisabled = isFetching || page === lastPage;
 
 	useEffect(() => {
-		if (lastPage && page > lastPage) setPage(lastPage);
-	}, [lastPage, page, setPage]);
+		if (total && page > lastPage) setPage(lastPage);
+	}, [lastPage, page, setPage, total]);
 
 	return useMemo(
 		() => ({

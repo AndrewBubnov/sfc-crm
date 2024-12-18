@@ -12,6 +12,7 @@ export const StatisticsProvider = ({ children }: StatisticsProviderProps) => {
 	const [stateStats, setStateStats] = useState<GraphData[]>([]);
 	const [typeStats, setTypeStats] = useState<GraphData[]>([]);
 	const total = useRef<number>(0);
+	const filteredTotal = useRef<number>(0);
 
 	const updateStatistics = useCallback((evt: MessageEvent) => {
 		const {
@@ -19,7 +20,9 @@ export const StatisticsProvider = ({ children }: StatisticsProviderProps) => {
 		} = JSON.parse(evt.data);
 
 		total.current = stateStatistics.total;
+		filteredTotal.current = stateStatistics.filteredTotal;
 		delete stateStatistics.total;
+		delete stateStatistics.filteredTotal;
 		setStateStats(setGraphData(stateStatistics, total.current, StateGraphFillDto));
 		setTypeStats(setGraphData(typeStatistics, total.current, TypeGraphFillDto));
 	}, []);
@@ -28,7 +31,7 @@ export const StatisticsProvider = ({ children }: StatisticsProviderProps) => {
 		() => ({
 			stateStats,
 			typeStats,
-			total: total.current,
+			total: filteredTotal.current,
 			updateStatistics,
 		}),
 		[stateStats, typeStats, updateStatistics]
