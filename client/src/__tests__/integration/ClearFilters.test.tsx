@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, vi, expect } from 'vitest';
 import { ClearFilters } from '@/modules/controls/components/ClearFilters.tsx';
+import { ReactNode } from 'react';
+import { QueryParamProvider } from '@/providers/QueryParamProvider.tsx';
 
 vi.mock('../hooks/useManageSearchParams');
 
@@ -16,9 +18,11 @@ vi.mock('@/modules/shared/hooks/useManageSearchParams.ts', () => ({
 	useManageSearchParams: () => useManageSearchParamsReturnValue,
 }));
 
+const wrapper = ({ children }: { children: ReactNode }) => <QueryParamProvider>{children}</QueryParamProvider>;
+
 describe('ClearFilters', () => {
 	it('should render button when there are active filters', () => {
-		render(<ClearFilters />);
+		render(<ClearFilters />, { wrapper });
 
 		expect(screen.getByRole('button', { name: /clear all filters/i })).toBeInTheDocument();
 		expect(screen.getByText(/name/i)).toBeInTheDocument();
@@ -30,7 +34,7 @@ describe('ClearFilters', () => {
 			{ field: 'type', search: '' },
 		];
 
-		render(<ClearFilters />);
+		render(<ClearFilters />, { wrapper });
 
 		expect(screen.queryByRole('button')).not.toBeInTheDocument();
 	});
@@ -45,7 +49,7 @@ describe('ClearFilters', () => {
 			resetFilters: resetFiltersMock,
 		};
 
-		render(<ClearFilters />);
+		render(<ClearFilters />, { wrapper });
 
 		const button = screen.getByRole('button', { name: /clear all filters/i });
 		fireEvent.click(button);
@@ -59,7 +63,7 @@ describe('ClearFilters', () => {
 			{ field: 'type', search: 'Admin' },
 		];
 
-		render(<ClearFilters />);
+		render(<ClearFilters />, { wrapper });
 
 		expect(screen.getByText(/name, type/i)).toBeInTheDocument();
 	});
@@ -67,7 +71,7 @@ describe('ClearFilters', () => {
 	it('should correctly render with a single active filter', () => {
 		useManageSearchParamsReturnValue.filters = [{ field: 'id', search: '123' }];
 
-		render(<ClearFilters />);
+		render(<ClearFilters />, { wrapper });
 
 		expect(screen.getByRole('button', { name: /clear all filters/i })).toBeInTheDocument();
 		expect(screen.getByText(/id/i)).toBeInTheDocument();

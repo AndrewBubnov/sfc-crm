@@ -1,6 +1,5 @@
 import 'eventsource-polyfill';
 import { ReactNode } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { setupServer } from 'msw/node';
@@ -9,6 +8,7 @@ import { useData } from '@/modules/shared/hooks/useData.ts';
 import { mockDevices } from '@/modules/table/mocks/mockDevices.ts';
 
 import { BASE_URL } from '@/modules/shared/constants.ts';
+import { QueryParamProvider } from '@/providers/QueryParamProvider.tsx';
 
 const mockFetchFn = vi.fn();
 
@@ -37,7 +37,7 @@ describe('useData', () => {
 
 	const wrapper = ({ children }: { children: ReactNode }) => (
 		<QueryClientProvider client={queryClient}>
-			<Router>{children}</Router>
+			<QueryParamProvider>{children}</QueryParamProvider>
 		</QueryClientProvider>
 	);
 
