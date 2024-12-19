@@ -12,7 +12,7 @@ import { BASE_LIMIT } from '@/modules/shared/constants.ts';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 
 export const useManageSearchParams = () => {
-	const { total } = useContext(StatisticsContext);
+	const { filteredTotal: total } = useContext(StatisticsContext);
 	const [, setCount] = useState(0);
 
 	const search = window.location.search;

@@ -5,7 +5,7 @@ import { updateSingleValueParam } from '@/modules/shared/utils.ts';
 import { QueryParam } from '@/types.ts';
 
 export const usePagination = () => {
-	const { total, isFetching } = useGetQueryDetails();
+	const { filteredTotal: total, isFetching } = useGetQueryDetails();
 
 	const { page, paramsList, setParams, limit } = useContext(QueryParamContext);
 

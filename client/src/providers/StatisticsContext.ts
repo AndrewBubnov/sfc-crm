@@ -5,6 +5,7 @@ export type StatisticsContextProps = {
 	stateStats: GraphData[];
 	typeStats: GraphData[];
 	total: number;
+	filteredTotal: number;
 	updateStatistics(evt: MessageEvent): void;
 };
 
