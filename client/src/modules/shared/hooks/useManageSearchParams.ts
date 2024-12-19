@@ -1,5 +1,5 @@
 import { useCallback, useContext, useMemo, useReducer } from 'react';
-import { Filter, QueryParam, Sort } from '@/types.ts';
+import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 import {
 	getSingleValueParam,
 	getReducedFilterQueryParams,
@@ -9,7 +9,7 @@ import {
 	setSearchString,
 } from '@/modules/shared/utils.ts';
 import { BASE_LIMIT } from '@/modules/shared/constants.ts';
-import { StatisticsContext } from '@/providers/StatisticsContext.ts';
+import { Filter, QueryParam, Sort } from '@/types.ts';
 
 export const useManageSearchParams = () => {
 	const { filteredTotal: total } = useContext(StatisticsContext);

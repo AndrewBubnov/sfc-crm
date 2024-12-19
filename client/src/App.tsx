@@ -25,10 +25,7 @@ const App = () => (
 							<TableControls />
 							<DataTable />
 						</TableProvider>
-
-						<div className="flex items-center justify-end gap-8">
-							<Pagination />
-						</div>
+						<Pagination />
 					</div>
 				</div>
 			</SearchParamsProvider>
