@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { Filter, Sort } from '@/types.ts';
 
-type QueryParamContextProps = {
+export type QueryParamContextProps = {
 	page: number;
 	paramsList: string[][];
 	setParams(arg: string[][]): void;
