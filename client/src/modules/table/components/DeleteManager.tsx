@@ -63,7 +63,7 @@ export const DeleteManager = ({ table }: DeleteManagerProps) => {
 						checked={allRowsSelected}
 						onCheckedChange={evt => multiRowChecker({ target: { value: evt } })}
 					/>
-					<span>All rows</span>
+					<span>All page rows</span>
 				</Label>
 				<Button
 					variant="ghost"
