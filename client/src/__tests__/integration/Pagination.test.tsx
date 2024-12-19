@@ -4,7 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from '@/modules/pagination/components/Pagination.tsx';
 
 import { vi } from 'vitest';
-import { QueryParamProvider } from '@/providers/QueryParamProvider.tsx';
+import { SearchParamsProvider } from '@/providers/SearchParamsProvider.tsx';
 
 const mockSetPage = vi.fn();
 const mockSetNextPage = vi.fn();
@@ -33,7 +33,7 @@ vi.mock('@/modules/shared/hooks/useGetQueryDetails.ts', () => ({
 	useGetQueryDetails: () => mockUseGetQueryDetailsReturnValue,
 }));
 
-const wrapper = ({ children }: { children: ReactNode }) => <QueryParamProvider>{children}</QueryParamProvider>;
+const wrapper = ({ children }: { children: ReactNode }) => <SearchParamsProvider>{children}</SearchParamsProvider>;
 
 const renderWithRouter = (ui: ReactElement) => {
 	return render(ui, { wrapper });

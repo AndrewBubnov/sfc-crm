@@ -1,5 +1,5 @@
 import { MouseEvent, useContext } from 'react';
-import { QueryParamContext } from '@/providers/QueryParamContext.ts';
+import { SearchParamsContext } from '@/providers/SearchParamsContext.ts';
 import { TableHead, TableHeader, TableRow } from '@/ui/table.tsx';
 import { flexRender, HeaderGroup } from '@tanstack/react-table';
 import { ColumnFilter } from '@/modules/table/components/ColumnFilter.tsx';
@@ -11,7 +11,7 @@ type DataTableHeaderProps<T> = {
 };
 
 export const DataTableHeader = <T,>({ headerGroups }: DataTableHeaderProps<T>) => {
-	const { onFilterChange, filters, sort } = useContext(QueryParamContext);
+	const { onFilterChange, filters, sort } = useContext(SearchParamsContext);
 
 	return (
 		<TableHeader>

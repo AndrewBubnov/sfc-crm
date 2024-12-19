@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import { QueryParamContext } from '@/providers/QueryParamContext.ts';
+import { SearchParamsContext } from '@/providers/SearchParamsContext.ts';
 import { Button } from '@/ui/button.tsx';
 import { SearchX } from 'lucide-react';
 
 export const ClearFilters = () => {
-	const { filters, resetFilters } = useContext(QueryParamContext);
+	const { filters, resetFilters } = useContext(SearchParamsContext);
 	if (filters.some(filter => filter.search.length)) {
 		return (
 			<Button variant="ghost" onClick={resetFilters}>

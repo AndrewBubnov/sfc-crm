@@ -7,14 +7,14 @@ import { StatisticsProvider } from '@/providers/StatisticsProvider.tsx';
 import { TableProvider } from '@/providers/TableProvider.tsx';
 import { TableControls } from '@/modules/controls/components/TableControls.tsx';
 import { Pagination } from '@/modules/pagination/components/Pagination.tsx';
-import { QueryParamProvider } from '@/providers/QueryParamProvider.tsx';
+import { SearchParamsProvider } from '@/providers/SearchParamsProvider.tsx';
 
 const queryClient = new QueryClient();
 
 const App = () => (
 	<QueryClientProvider client={queryClient}>
 		<StatisticsProvider>
-			<QueryParamProvider>
+			<SearchParamsProvider>
 				<div className="flex flex-col p-2 gap-2">
 					<div className="flex justify-between">
 						<Statistics />
@@ -31,7 +31,7 @@ const App = () => (
 						</div>
 					</div>
 				</div>
-			</QueryParamProvider>
+			</SearchParamsProvider>
 		</StatisticsProvider>
 		<Toaster />
 	</QueryClientProvider>

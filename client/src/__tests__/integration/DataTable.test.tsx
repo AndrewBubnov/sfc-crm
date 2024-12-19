@@ -8,7 +8,7 @@ import { http, HttpResponse } from 'msw';
 import { mockDevices } from '@/modules/table/mocks/mockDevices.ts';
 import { TableProvider } from '@/providers/TableProvider.tsx';
 import { BASE_URL } from '@/modules/shared/constants.ts';
-import { QueryParamProvider } from '@/providers/QueryParamProvider.tsx';
+import { SearchParamsProvider } from '@/providers/SearchParamsProvider.tsx';
 
 const server = setupServer(
 	http.get(`${BASE_URL}/devices`, async ({ request }) => {
@@ -44,9 +44,9 @@ const queryClient = new QueryClient();
 
 const wrapper = ({ children }: { children: ReactNode }) => (
 	<QueryClientProvider client={queryClient}>
-		<QueryParamProvider>
+		<SearchParamsProvider>
 			<TableProvider>{children}</TableProvider>
-		</QueryParamProvider>
+		</SearchParamsProvider>
 	</QueryClientProvider>
 );
 

@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { QueryParamContext, QueryParamContextProps } from '@/providers/QueryParamContext.ts';
+import { SearchParamsContext, SearchParamsContextProps } from '@/providers/SearchParamsContext.ts';
 import { describe, it, vi, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ClearFilters } from '@/modules/controls/components/ClearFilters.tsx';
 
-let mockContextValue: Partial<QueryParamContextProps> = {
+let mockContextValue: Partial<SearchParamsContextProps> = {
 	filters: [
 		{ field: 'name', search: 'John' },
 		{ field: 'type', search: '' },
@@ -13,9 +13,11 @@ let mockContextValue: Partial<QueryParamContextProps> = {
 };
 
 const createWrapper =
-	(value: Partial<QueryParamContextProps>) =>
+	(value: Partial<SearchParamsContextProps>) =>
 	({ children }: { children: ReactNode }) => (
-		<QueryParamContext.Provider value={value as QueryParamContextProps}>{children}</QueryParamContext.Provider>
+		<SearchParamsContext.Provider value={value as SearchParamsContextProps}>
+			{children}
+		</SearchParamsContext.Provider>
 	);
 
 describe('ClearFilters', () => {

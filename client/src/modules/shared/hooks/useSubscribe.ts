@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { QueryParamContext } from '@/providers/QueryParamContext.ts';
+import { SearchParamsContext } from '@/providers/SearchParamsContext.ts';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 import { useLatest } from '@/modules/table/hooks/useLatest.ts';
 import { QueryKeys } from '@/modules/shared/queryKeys.ts';
@@ -11,7 +11,7 @@ import { BASE_URL } from '@/modules/shared/constants.ts';
 export const useSubscribe = () => {
 	const queryClient = useQueryClient();
 	const { updateStatistics } = useContext(StatisticsContext);
-	const { filters, sort, limit } = useContext(QueryParamContext);
+	const { filters, sort, limit } = useContext(SearchParamsContext);
 	const { page } = usePagination();
 
 	const paramsRef = useLatest({ page, sort, limit, filters });

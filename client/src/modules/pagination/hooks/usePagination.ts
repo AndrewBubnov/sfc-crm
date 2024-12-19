@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
-import { QueryParamContext } from '@/providers/QueryParamContext.ts';
+import { SearchParamsContext } from '@/providers/SearchParamsContext.ts';
 import { useGetQueryDetails } from '@/modules/shared/hooks/useGetQueryDetails.ts';
 import { updateSingleValueParam } from '@/modules/shared/utils.ts';
 import { QueryParam } from '@/types.ts';
@@ -7,7 +7,7 @@ import { QueryParam } from '@/types.ts';
 export const usePagination = () => {
 	const { filteredTotal: total, isFetching } = useGetQueryDetails();
 
-	const { page, paramsList, setParams, limit } = useContext(QueryParamContext);
+	const { page, paramsList, setParams, limit } = useContext(SearchParamsContext);
 
 	const setPage = useCallback(
 		(updatedPage: number) => setParams(updateSingleValueParam(paramsList, updatedPage, QueryParam.Page)),

@@ -8,7 +8,7 @@ import { useData } from '@/modules/shared/hooks/useData.ts';
 import { mockDevices } from '@/modules/table/mocks/mockDevices.ts';
 
 import { BASE_URL } from '@/modules/shared/constants.ts';
-import { QueryParamProvider } from '@/providers/QueryParamProvider.tsx';
+import { SearchParamsProvider } from '@/providers/SearchParamsProvider.tsx';
 
 const mockFetchFn = vi.fn();
 
@@ -37,7 +37,7 @@ describe('useData', () => {
 
 	const wrapper = ({ children }: { children: ReactNode }) => (
 		<QueryClientProvider client={queryClient}>
-			<QueryParamProvider>{children}</QueryParamProvider>
+			<SearchParamsProvider>{children}</SearchParamsProvider>
 		</QueryClientProvider>
 	);
 

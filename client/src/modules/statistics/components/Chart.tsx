@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from 'react';
-import { QueryParamContext } from '@/providers/QueryParamContext.ts';
+import { SearchParamsContext } from '@/providers/SearchParamsContext.ts';
 import { Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { SearchX } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
@@ -16,7 +16,7 @@ type ChartProps = {
 
 export const Chart = ({ data, dto, total, name }: ChartProps) => {
 	const [activeIndex, setActiveIndex] = useState(0);
-	const { onFilterChange } = useContext(QueryParamContext);
+	const { onFilterChange } = useContext(SearchParamsContext);
 
 	const clickHandler = useCallback(
 		(evt: Record<'name', string>) => onFilterChange({ field: name, search: evt.name }),

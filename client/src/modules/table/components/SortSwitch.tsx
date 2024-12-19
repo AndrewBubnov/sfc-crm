@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { QueryParamContext } from '@/providers/QueryParamContext.ts';
+import { SearchParamsContext } from '@/providers/SearchParamsContext.ts';
 import { ArrowUpAZ } from 'lucide-react';
 import { ArrowDownAZ } from 'lucide-react';
 import { cn } from '@/lib/utils.ts';
@@ -11,7 +11,7 @@ type SortSwitchProps = {
 };
 
 export const SortSwitch = ({ id, sortBy, sortDesc }: SortSwitchProps) => {
-	const { onSortChange } = useContext(QueryParamContext);
+	const { onSortChange } = useContext(SearchParamsContext);
 
 	const upSortHandler = () => onSortChange({ sortBy: id, sortDesc: false });
 
