@@ -36,8 +36,8 @@ export const useManageSearchParams = () => {
 
 	const resetFilters = useCallback(() => {
 		setParams([
-			['limit', String(limit)],
-			['page', String(page)],
+			[QueryParam.Limit, String(limit)],
+			[QueryParam.Page, String(page)],
 		]);
 	}, [limit, page, setParams]);
 
