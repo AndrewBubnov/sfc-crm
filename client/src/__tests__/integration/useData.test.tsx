@@ -26,7 +26,7 @@ const server = setupServer(
 	})
 );
 
-describe('usePaginatedDeviceListData', () => {
+describe('useData', () => {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
