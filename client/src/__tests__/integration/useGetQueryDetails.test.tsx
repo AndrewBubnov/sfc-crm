@@ -21,18 +21,20 @@ vi.mock('@/modules/shared/hooks/useManageSearchParams', () => ({
 }));
 
 const createWrapper =
-	(total: number) =>
+	(filteredTotal: number, total: number = 100) =>
 	({ children }: { children: ReactNode }) => (
-		<StatisticsContext.Provider value={{ total } as StatisticsContextProps}>{children}</StatisticsContext.Provider>
+		<StatisticsContext.Provider value={{ filteredTotal, total } as StatisticsContextProps}>
+			{children}
+		</StatisticsContext.Provider>
 	);
 
 describe('useGetQueryDetails', () => {
 	it('should return initial fetching state when loading and total is 0', () => {
 		useIsFetchingMockReturnValue = 1;
-		const { result } = renderHook(useGetQueryDetails, { wrapper: createWrapper(0) });
+		const { result } = renderHook(useGetQueryDetails, { wrapper: createWrapper(0, 0) });
 		expect(result.current.isFetching).toBe(true);
 		expect(result.current.isInitFetching).toBe(true);
-		expect(result.current.total).toBe(0);
+		expect(result.current.filteredTotal).toBe(0);
 	});
 
 	it('should return non-initial fetching state when loading and total is greater than 0', () => {
@@ -40,7 +42,7 @@ describe('useGetQueryDetails', () => {
 		const { result } = renderHook(useGetQueryDetails, { wrapper: createWrapper(100) });
 		expect(result.current.isFetching).toBe(true);
 		expect(result.current.isInitFetching).toBe(false);
-		expect(result.current.total).toBe(100);
+		expect(result.current.filteredTotal).toBe(100);
 	});
 
 	it('should return not fetching state when not loading', () => {
@@ -48,6 +50,6 @@ describe('useGetQueryDetails', () => {
 		const { result } = renderHook(useGetQueryDetails, { wrapper: createWrapper(50) });
 		expect(result.current.isFetching).toBe(false);
 		expect(result.current.isInitFetching).toBe(false);
-		expect(result.current.total).toBe(50);
+		expect(result.current.filteredTotal).toBe(50);
 	});
 });

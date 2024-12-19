@@ -31,7 +31,8 @@ export const StatisticsProvider = ({ children }: StatisticsProviderProps) => {
 		() => ({
 			stateStats,
 			typeStats,
-			total: filteredTotal.current,
+			total: total.current,
+			filteredTotal: filteredTotal.current,
 			updateStatistics,
 		}),
 		[stateStats, typeStats, updateStatistics]
