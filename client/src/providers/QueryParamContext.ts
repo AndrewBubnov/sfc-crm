@@ -1,17 +1,6 @@
 import { createContext } from 'react';
-import { Filter, Sort } from '@/types.ts';
+import { useManageSearchParams } from '@/modules/shared/hooks/useManageSearchParams.ts';
 
-export type QueryParamContextProps = {
-	page: number;
-	paramsList: string[][];
-	setParams(arg: string[][]): void;
-	onFilterChange(filter: Filter): void;
-	resetFilters(): void;
-	filters: Filter[];
-	sort: Sort;
-	limit: number;
-	onLimitChange(arg: number): void;
-	onSortChange(arg: Sort): void;
-};
+export type QueryParamContextProps = ReturnType<typeof useManageSearchParams>;
 
 export const QueryParamContext = createContext<QueryParamContextProps>({} as QueryParamContextProps);
