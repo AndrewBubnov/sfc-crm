@@ -97,3 +97,10 @@ export const updateSortParam = (params: string[][], { sortBy, sortDesc }: Sort) 
 		...params.slice(index + 2),
 	];
 };
+
+export const setSearchString = (params: string[][]) => {
+	const searchString = params
+		.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+		.join('&');
+	return window.history.pushState(null, '', `${window.location.pathname}?${searchString}`);
+};

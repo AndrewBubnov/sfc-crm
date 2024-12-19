@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { QueryParamContext } from '@/providers/QueryParamContext.ts';
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -5,11 +7,10 @@ import {
 	DropdownMenuTrigger,
 } from '@/ui/dropdown-menu.tsx';
 import { Button } from '@/ui/button.tsx';
-import { useManageSearchParams } from '@/modules/shared/hooks/useManageSearchParams.ts';
 import { LINES_PER_PAGE_VARIANTS } from '@/modules/controls/constants.ts';
 
 export const LimitManager = () => {
-	const { limit, onLimitChange } = useManageSearchParams();
+	const { limit, onLimitChange } = useContext(QueryParamContext);
 
 	return (
 		<DropdownMenu>
