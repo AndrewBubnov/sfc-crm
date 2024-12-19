@@ -19,6 +19,7 @@ export const DataTableRow = ({ row }: DataTableRowProps) => {
 		<TableRow
 			data-state={row.getIsSelected() && 'selected'}
 			className={cn(isDeleting && 'opacity-35 pointer-events-none')}
+			onClick={row.getToggleSelectedHandler()}
 		>
 			{row.getVisibleCells().map(cell => (
 				<TableCell key={cell.id} className="custom-table-cell">
