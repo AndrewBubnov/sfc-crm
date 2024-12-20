@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useReducer } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { StatisticsContext } from '@/providers/StatisticsContext.ts';
 import {
 	getSingleValueParam,
@@ -6,28 +6,20 @@ import {
 	getSortParam,
 	updateSingleValueParam,
 	updateSortParam,
-	setSearchString,
 } from '@/modules/shared/utils.ts';
 import { BASE_LIMIT } from '@/modules/shared/constants.ts';
 import { Filter, QueryParam, Sort } from '@/types.ts';
+import { useSearchParams } from '@/modules/shared/hooks/useSearchParams.ts';
 
 export const useManageSearchParams = () => {
 	const { filteredTotal: total } = useContext(StatisticsContext);
-	const [, forceUpdate] = useReducer(x => x + 1, 0);
-
-	const search = window.location.search;
-
-	const paramsList = useMemo(() => [...new URLSearchParams(search)], [search]);
+	const [paramsList, setParams] = useSearchParams();
 
 	const { filters } = useMemo(() => getReducedFilterQueryParams(paramsList), [paramsList]);
+
 	const sort = getSortParam(paramsList);
 	const page = getSingleValueParam(paramsList, QueryParam.Page, 1);
 	const limit = getSingleValueParam(paramsList, QueryParam.Limit, BASE_LIMIT);
-
-	const setParams = useCallback((params: string[][]) => {
-		setSearchString(params);
-		forceUpdate();
-	}, []);
 
 	const onFilterChange = useCallback(
 		(filter: Filter) => {
