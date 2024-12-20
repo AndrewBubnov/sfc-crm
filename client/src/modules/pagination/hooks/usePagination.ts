@@ -24,6 +24,10 @@ export const usePagination = () => {
 		if (total && page > lastPage) setPage(lastPage);
 	}, [lastPage, page, setPage, total]);
 
+	useEffect(() => {
+		if (page > 1 && !total && !isFetching) setPage(page - 1);
+	}, [total, isFetching, page, setPage]);
+
 	return useMemo(
 		() => ({
 			setPage,

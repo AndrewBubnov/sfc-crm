@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { SearchParamsContext } from '@/providers/SearchParamsContext.ts';
 import { useSubscribe } from '@/modules/table/hooks/useSubscribe.ts';
@@ -11,7 +11,7 @@ import { DeviceDataType } from '@/types.ts';
 
 export const useData = () => {
 	const { filters: rawFilters, sort, limit } = useContext(SearchParamsContext);
-	const { page, setPage } = usePagination();
+	const { page } = usePagination();
 
 	const filters = useDebounced(rawFilters, filterResolver);
 
@@ -22,10 +22,6 @@ export const useData = () => {
 	});
 
 	useSubscribe();
-
-	useEffect(() => {
-		if (page > 1 && !data?.data.items?.length && !isFetching) setPage(page - 1);
-	}, [data?.data.items?.length, isFetching, page, setPage]);
 
 	return useMemo(
 		() => ({
