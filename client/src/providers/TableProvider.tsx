@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { TableContext } from '@/providers/TableContext.ts';
 import { getCoreRowModel, RowSelectionState, useReactTable, VisibilityState } from '@tanstack/react-table';
-import { useData } from '@/modules/shared/hooks/useData.ts';
+import { useData } from '@/modules/table/hooks/useData.ts';
 import { animatedColumns, columns } from '@/modules/table/columns.tsx';
 
 type TableProviderProps = {
