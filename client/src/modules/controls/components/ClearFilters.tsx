@@ -1,9 +1,9 @@
 import { useContext, useState, AnimationEvent, useEffect } from 'react';
 import { SearchParamsContext } from '@/providers/SearchParamsContext.ts';
 import { Button } from '@/ui/button.tsx';
-import { SearchX, X } from 'lucide-react';
-import { cn } from '@/lib/utils.ts';
+import { SearchX } from 'lucide-react';
 import { FilterField } from '@/types.ts';
+import { Tag } from '@/modules/controls/components/Tag.tsx';
 
 export const ClearFilters = () => {
 	const { filters, resetFilters, onFilterChange } = useContext(SearchParamsContext);
@@ -21,7 +21,7 @@ export const ClearFilters = () => {
 		}
 	}, [fields, filters]);
 
-	const onTransitionEnd = (field: FilterField) => (evt: AnimationEvent<HTMLButtonElement>) => {
+	const onAnimationEnd = (field: FilterField) => (evt: AnimationEvent<HTMLButtonElement>) => {
 		if (evt.target === evt.currentTarget && deletedField) {
 			onFilterChange({ field, search: '' });
 			setFields(prevState => prevState.filter(el => el !== field));
@@ -37,18 +37,13 @@ export const ClearFilters = () => {
 			</Button>
 			<div className="flex items-center gap-1">
 				{fields.map(field => (
-					<Button
+					<Tag
 						key={field}
-						variant="outline"
-						className={cn(
-							'text-gray-500 h-7 p-2 hover:border-gray-200 -mb-0.5 animate-tag-mount',
-							field === deletedField && 'animate-tag-unmount'
-						)}
-						onClick={() => setDeletedField(field)}
-						onAnimationEnd={onTransitionEnd(field)}
-					>
-						<span>{field}</span> <X className="-mb-1" />
-					</Button>
+						text={field}
+						isDeleted={field === deletedField}
+						onDelete={() => setDeletedField(field)}
+						onAnimationEnd={onAnimationEnd(field)}
+					/>
 				))}
 			</div>
 		</div>
