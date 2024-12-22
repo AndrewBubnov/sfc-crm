@@ -16,15 +16,16 @@ type ChartProps = {
 
 export const Chart = ({ data, dto, total, name }: ChartProps) => {
 	const [activeIndex, setActiveIndex] = useState(0);
-	const { onFilterChange } = useContext(SearchParamsContext);
+	const { onFilterChange, filters } = useContext(SearchParamsContext);
 
 	const clickHandler = useCallback(
 		(evt: Record<'name', string>) => onFilterChange({ field: name, search: evt.name }),
 		[name, onFilterChange]
 	);
 
-	const isFullData = data.length > 2;
-	const isFilteredData = data.length === 2;
+	const isFilteredByName = filters.map(el => el.field).includes(name);
+	const isFullData = data.length > 2 || !isFilteredByName;
+	const isFilteredData = data.length === 2 && isFilteredByName;
 
 	return (
 		<div className="flex">
