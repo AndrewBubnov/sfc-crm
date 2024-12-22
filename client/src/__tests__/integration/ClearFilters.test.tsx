@@ -7,7 +7,7 @@ import { ClearFilters } from '@/modules/controls/components/ClearFilters.tsx';
 let mockContextValue: Partial<SearchParamsContextProps> = {
 	filters: [
 		{ field: 'name', search: 'John' },
-		{ field: 'type', search: '' },
+		{ field: 'type', search: '1' },
 	],
 	resetFilters: vi.fn(),
 };
@@ -39,7 +39,7 @@ describe('ClearFilters', () => {
 		expect(screen.queryByRole('button')).not.toBeInTheDocument();
 	});
 
-	it('should call resetFilters when button is clicked', () => {
+	it('should call `resetFilters` when button is clicked', () => {
 		const resetFiltersMock = vi.fn();
 		mockContextValue = {
 			filters: [
@@ -57,7 +57,7 @@ describe('ClearFilters', () => {
 		expect(resetFiltersMock).toHaveBeenCalled();
 	});
 
-	it('should list all active filters in the button text', () => {
+	it('should list all tag buttons with active filters text', () => {
 		mockContextValue.filters = [
 			{ field: 'name', search: 'John' },
 			{ field: 'type', search: 'Admin' },
@@ -65,7 +65,8 @@ describe('ClearFilters', () => {
 
 		render(<ClearFilters />, { wrapper: createWrapper(mockContextValue) });
 
-		expect(screen.getByText(/name, type/i)).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'name' })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'type' })).toBeInTheDocument();
 	});
 
 	it('should correctly render with a single active filter', () => {
